@@ -8,7 +8,7 @@ import { SafeAreaView, Button, View, Text, StyleSheet } from 'react-native';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
-export const Registro = ({navigation}: Props) => {
+export const RegistroScreen = ({navigation}: Props) => {
     
     const styles = StyleSheet.create({
         alreadyAccount : {

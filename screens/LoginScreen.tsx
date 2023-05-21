@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
-export const Login = ({navigation}:Props) => {
+export const LoginScreen = ({navigation}:Props) => {
 
     const styles = StyleSheet.create({
         noAccount : {
