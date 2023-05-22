@@ -2,24 +2,27 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Person from '../@types/Person';
 
-const useAuth = () => {
-  const [user, setUser] = useState<Person | undefined>(undefined);
+const useLogin = () => {
+    const [user, setUser] = useState<Person | undefined>(undefined);
 
-  useEffect(() => {
-    // Recupera el usuario de AsyncStorage al cargar la aplicación
+    useEffect(() => {
+    // Recupera el usuario al inicar la app
     AsyncStorage.getItem('user').then(jsonValue => {
-      if (jsonValue) {
-        setUser(JSON.parse(jsonValue));
-      }
+        if (jsonValue) {
+            setUser(JSON.parse(jsonValue));
+        }
     });
-  }, []);
+    }, []);
 
-  const setUserAndStore = async (newUser:Person) => {
-    setUser(newUser);
-    await AsyncStorage.setItem('user', JSON.stringify(newUser));
-  };
+    const changeUser = async (userSetted:Person) => {
+        setUser(userSetted);
+        if (userSetted===undefined)
+            await AsyncStorage.removeItem('user')
+        else 
+            await AsyncStorage.setItem('user', JSON.stringify(userSetted));
+    };
 
-  return { user, setUser: setUserAndStore };
+    return { user, setUser: changeUser };
 };
 
-export default useAuth;
+export default useLogin;

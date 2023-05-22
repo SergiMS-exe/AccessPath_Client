@@ -5,7 +5,7 @@ import { Titulo } from '../components/Titulo';
 export const ListSitesScreen = () => {
     return (
 
-            <Titulo title='List'/>
+        <Titulo title='List'/>
 
     )
 }

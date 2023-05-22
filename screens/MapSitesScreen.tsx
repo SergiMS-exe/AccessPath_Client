@@ -5,6 +5,6 @@ import { Titulo } from '../components/Titulo';
 export const MapSitesScreen = () => {
     return (
 
-            <Titulo title='Map'/>
+        <Titulo title='Map'/>
     )
 }
