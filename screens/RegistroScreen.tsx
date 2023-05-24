@@ -5,6 +5,7 @@ import { Titulo } from '../components/Titulo';
 import { MyInput } from '../components/MyInput';
 import { SafeAreaView, Button, View, Text, StyleSheet } from 'react-native';
 import { AccNoAcc } from '../components/LoginReg/AccNoAcc';
+import { RegisterForm } from '../components/LoginReg/RegisterForm';
 
 
 interface Props extends NativeStackScreenProps<any, any>{};
@@ -23,14 +24,8 @@ export const RegistroScreen = ({navigation}: Props) => {
         <SafeAreaView>
             <Titulo title='Registro'/>
 
-            <MyInput title='Nombre'/> 
-            <MyInput title='Apellidos'/> 
-            <MyInput title='Email'/> 
-            <MyInput title='Contraseña'/> 
-            <MyInput title='Repita la contraseña'/> 
-
-            <Button title='Registrarse' onPress={()=>{navigation.navigate("home")}}/>
-
+            <RegisterForm navigation={navigation} screenName='home'/>
+            
             <AccNoAcc navigation={navigation} goTo='login'/>
 
         </SafeAreaView>

@@ -5,7 +5,6 @@ import { useForm } from '../../hooks/useForm';
 import { Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { login } from '../../services/UserServices';
-import { TextInput } from 'react-native-paper';
 
 type Props = {
     navigation : NativeStackNavigationProp<any, any>;
