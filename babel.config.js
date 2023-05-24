@@ -9,5 +9,10 @@ module.exports = {
         sage: false,
         allowUndefined: true,
       }]
-    ]
+    ],
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel'],
+      },
+    },
 };

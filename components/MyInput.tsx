@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet} from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 type Props = {
     title: string
@@ -8,6 +9,7 @@ type Props = {
 
 export const MyInput = ({title, onChangeText}:Props) => {
 
+    
     const styles = StyleSheet.create({
         container: {
             marginHorizontal: 30,
@@ -22,13 +24,22 @@ export const MyInput = ({title, onChangeText}:Props) => {
             borderWidth: 1
         }
     })
-
+    
+    const [hidePassword, setHidePassword] = useState(true);
     const isPassword = title.toLowerCase().includes('contraseña')
 
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>{title}</Text>
-            <TextInput style={styles.input} onChange={onChangeText}/>
+            {isPassword? (
+                <TextInput style={styles.input} secureTextEntry={hidePassword}
+                    onChangeText={onChangeText} autoCapitalize='none'
+                    right={<TextInput.Icon icon={hidePassword ? "eye" : "eye-off"} onPress={() => setHidePassword(!hidePassword)} />}
+                    />        
+            ): (
+                <TextInput style={styles.input} autoCapitalize='none' onChangeText={onChangeText}/>
+            )}
+            
         </View>
     )
 }

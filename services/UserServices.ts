@@ -11,8 +11,10 @@ export async function login(email: string, password: string, navigation: NativeS
     {
         email: email,
         password: password
-    }).then(response => response.data);
-    console.log(usuario);
+    }).then(response => response.data
+        ).catch(error=>{
+        console.error(error)
+    });
     
     if (usuario !== null) {
         setUser(usuario);
