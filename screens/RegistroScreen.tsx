@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Titulo } from '../components/Titulo';
 import { MyInput } from '../components/MyInput';
 import { SafeAreaView, Button, View, Text, StyleSheet } from 'react-native';
+import { AccNoAcc } from '../components/LoginReg/AccNoAcc';
 
 
 interface Props extends NativeStackScreenProps<any, any>{};
@@ -30,12 +31,7 @@ export const RegistroScreen = ({navigation}: Props) => {
 
             <Button title='Registrarse' onPress={()=>{navigation.navigate("home")}}/>
 
-            <View style={styles.alreadyAccount}>
-                <Text>¿Ya tienes una cuenta?</Text>
-                <Text style={{color: 'blue'}} onPress={()=>{navigation.navigate('login')}}>
-                    Inicia Sesion
-                </Text>
-            </View>
+            <AccNoAcc navigation={navigation} goTo='login'/>
 
         </SafeAreaView>
     )

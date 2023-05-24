@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Person from '../@types/Person';
 
-const useLogin = () => {
+const useLoginContext = () => {
     const [user, setUser] = useState<Person | undefined>(undefined);
 
     useEffect(() => {
@@ -25,4 +25,4 @@ const useLogin = () => {
     return { user, setUser: changeUser };
 };
 
-export default useLogin;
+export default useLoginContext;

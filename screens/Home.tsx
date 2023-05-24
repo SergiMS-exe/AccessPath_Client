@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SavedScreen } from './SavedScreen';
-import { Feed } from './Feed';
+import { Feed } from './Home/Feed';
 import { ProfileScreen } from './ProfileScreen';
 import { LoginContext } from '../components/Shared/Context';
 import { LoginScreen } from './LoginScreen';

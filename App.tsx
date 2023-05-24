@@ -8,13 +8,13 @@ import { Home } from './screens/Home';
 import { RegistroScreen } from './screens/RegistroScreen';
 import { LoginContext } from './components/Shared/Context';
 
-import useLogin from './hooks/useLogin';
+import useLoginContext from './hooks/useLoginContext';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
 
-    const {user, setUser} = useLogin();
+    const {user, setUser} = useLoginContext();
 
     return (
         <LoginContext.Provider value={{user, setUser}}>
