@@ -1,8 +1,12 @@
 import axios from 'axios';
-import {API_HOST } from '@env';
 
 import { CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { LOCALHOST_ANDROID, LOCALHOST_IOS } from '@env'
+import { Platform } from 'react-native';
+
+const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>, 
                             screen: string, setUser: Function) {
