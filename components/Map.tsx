@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { LatLng, LeafletView } from 'react-native-leaflet-view';
+import { LatLng, LeafletView, MapLayerType } from 'react-native-leaflet-view';
 
 const DEF_LOCATION : LatLng = {
     lat: 43.3603,
@@ -10,7 +10,15 @@ const DEF_LOCATION : LatLng = {
 export const Map = () => {
     const [userCurrentPosition, setUserCurrentPosition] = useState([43.3603, -5.84476]);
     return(
-        <LeafletView 
+        <LeafletView
+        mapLayers={[{
+          attribution:
+            '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          baseLayerIsChecked: true,
+          baseLayerName: 'OpenStreetMap.Mapnik',
+          url: 'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=2DdNjK8laXD22qDxNXdX',
+          layerType: MapLayerType.TILE_LAYER
+        }]}
         mapCenterPosition={DEF_LOCATION}
         mapMarkers={[
             {
