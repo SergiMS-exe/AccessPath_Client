@@ -4,8 +4,8 @@ import { Titulo } from '../components/Titulo';
 
 export const SavedScreen = () => {
     return (
-        <SafeAreaView>
+        <>
             <Titulo title='Saved'/>
-        </SafeAreaView>
+        </>
     )
 }

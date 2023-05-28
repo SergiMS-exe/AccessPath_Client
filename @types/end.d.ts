@@ -1,3 +1,4 @@
 declare module '@env' {
-    export const API_HOST: string;
+    export const LOCALHOST_IOS: string;
+    export const LOCALHOST_ANDROID: string;
 }
