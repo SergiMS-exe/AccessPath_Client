@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { SafeAreaView, View } from 'react-native';
 import { Titulo } from '../../components/Titulo';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FloatingButton } from '../../components/FloatingButton';

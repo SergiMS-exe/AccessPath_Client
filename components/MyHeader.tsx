@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
 type DrawerProp = DrawerNavigationProp<any, any>;
 
 const MyHeader: React.FC = () => {
   const navigation = useNavigation<DrawerProp>();
-  const insets = useSafeAreaInsets();
-  
+
   return (
-    <View style={{...styles.header, paddingTop: insets.top}}>
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Text style={styles.menu}>☰</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>MI TÍTULO</Text>
-      <Text style={styles.title}>P</Text>
-    </View>
+    <SafeAreaView edges={['top', 'left', 'right']}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Text style={styles.menu}>☰</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>MI TÍTULO</Text>
+        <Text style={styles.title}>P</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
