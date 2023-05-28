@@ -1,18 +1,20 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 import { MapSitesScreen } from './MapSitesScreen';
 import { ListSitesScreen } from './ListSitesScreen';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Tab = createMaterialTopTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export const Feed = () => {
-    const insets = useSafeAreaInsets();
-        
+export const Feed = () => {        
     return (
-        <Tab.Navigator tabBarPosition='top' style={{paddingTop:insets.top}}>
-            <Tab.Screen name="Map" component={MapSitesScreen} />
-            <Tab.Screen name="List" component={ListSitesScreen} />
-        </Tab.Navigator>
+        <View style={{flex:1}}>
+            <Stack.Navigator screenOptions={{headerShown: false}} >
+                <Stack.Screen name="Map" component={MapSitesScreen} />
+                <Stack.Screen name="List" component={ListSitesScreen} />
+            </Stack.Navigator>
+        </View>
+        
 
   );
 }

@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { Titulo } from '../../components/Titulo';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FloatingButton } from '../../components/FloatingButton';
 
-export const MapSitesScreen = () => {
+interface Props extends NativeStackScreenProps<any, any>{};
+
+export const MapSitesScreen = ({navigation}: Props) => {
     return (
-
+        <>
         <Titulo title='Map'/>
+        <FloatingButton onPress={()=>navigation.navigate('List')}/>
+        </>
     )
 }
