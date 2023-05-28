@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Person from '../@types/Person';
+import Person from '../../@types/Person';
 
 const useLoginContext = () => {
     const [user, setUser] = useState<Person | undefined>(undefined);
