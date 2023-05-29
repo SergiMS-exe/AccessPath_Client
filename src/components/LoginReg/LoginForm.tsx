@@ -41,7 +41,7 @@ export const LoginForm = ({screenName, navigation} : Props) => {
             onChangeText={(text: string) => onChange(text, 'email')}
             ref={emailRef}
             onKeyPress={(event) => {
-                console.log(event);
+                //console.log(event);
                 handleKeyPress(event, passwordRef)
                 }}/>
 

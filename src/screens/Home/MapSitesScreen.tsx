@@ -12,7 +12,7 @@ export const MapSitesScreen = ({navigation}: Props) => {
         <>
         <Titulo title='Map'/>
         <Map/>
-        <FloatingButton onPress={()=>navigation.navigate('List')}/>
+        <FloatingButton onPress={()=>navigation.navigate('List')} text="Ver Lista"/>
         </>
     )
 }
