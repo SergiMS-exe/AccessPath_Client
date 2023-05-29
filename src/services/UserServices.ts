@@ -5,13 +5,16 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { LOCALHOST_ANDROID, LOCALHOST_IOS } from '@env'
 import { Platform } from 'react-native';
+import { useContext } from 'react';
+import { LoginContext } from '../components/Shared/Context';
 
 const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>, 
                             screen: string, setUser: Function) {
     
-    var usuario = await axios.post(API_HOST+'/login', 
+    
+    const peticion = await axios.post(API_HOST+'/login', 
     {
         email: email,
         password: password
@@ -19,6 +22,8 @@ export async function login(email: string, password: string, navigation: NativeS
         ).catch(error=>{
         console.error(error)
     });
+
+    const usuario = peticion.data.user
     
     if (usuario !== null) {
         setUser(usuario);
@@ -44,18 +49,20 @@ type RegisterType = {
 }
 
 export async function register(params:RegisterType) {
-    var usuario = await axios.post(API_HOST+'/register', 
+    const peticion = await axios.post(API_HOST+'/register', 
     {
         nombre: params.nombre,
         apellidos: params.apellidos,
         email: params.email,
         password: params.password,
         tipoDiscapacidad: params.tipoDiscapacidad
-    }).then(response => response.data.data.user
+    }).then(response => response.data
         ).catch(error=>{
         console.error(error)
     });   
     
+    const usuario = peticion.data.user
+
     if (usuario !== undefined) {
         params.setUser(usuario);
         params.navigation.dispatch(
@@ -66,4 +73,8 @@ export async function register(params:RegisterType) {
             })
         );
     }
+}
+
+export function logout(setUser: Function) {
+    setUser(undefined);
 }
