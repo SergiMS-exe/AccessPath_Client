@@ -3,12 +3,11 @@ import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { LOCALHOST_ANDROID, LOCALHOST_IOS } from '@env'
+import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from '@env'
 import { Platform } from 'react-native';
-import { useContext } from 'react';
-import { LoginContext } from '../components/Shared/Context';
 
-const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+// const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+const API_HOST = REMOTE;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>, 
                             screen: string, setUser: Function) {
