@@ -23,10 +23,10 @@ export const useLocation = ()=>{
             },
             (error) => {
                 // Ver código de error y mensaje
-                console.log(error.code, error.message);
+                console.error(error.code, error.message);
                 setError("Error en la obtencion de la localizacion");
             },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
             );
         },
         () => {
