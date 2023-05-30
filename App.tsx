@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {enableLatestRenderer} from 'react-native-maps';
 
 import { LoginScreen } from './src/screens/LoginScreen';
 import { Home } from './src/screens/Home';
@@ -9,6 +10,8 @@ import { RegistroScreen } from './src/screens/RegistroScreen';
 import { LoginContext } from './src/components/Shared/Context';
 
 import useLoginContext from './src/hooks/useLoginContext';
+
+enableLatestRenderer();
 
 const Stack = createNativeStackNavigator();
 

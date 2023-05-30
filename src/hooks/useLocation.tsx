@@ -15,8 +15,8 @@ export const useLocation = ()=>{
     Geolocation.requestAuthorization(
         () => {
             Geolocation.getCurrentPosition(
-            (position) => {
-                if (!loaded) {
+                (position) => {
+                    if (!loaded) {
                     setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
                     setLoaded(true);
                 }

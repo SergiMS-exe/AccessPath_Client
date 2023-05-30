@@ -10,7 +10,7 @@ interface Props extends NativeStackScreenProps<any, any>{};
 export const MapSitesScreen = ({navigation}: Props) => {
     return (
         <>
-        <Titulo title='Map'/>
+        {/* <Titulo title='Map'/> */}
         <Map/>
         <FloatingButton onPress={()=>navigation.navigate('List')} text="Ver Lista"/>
         </>
