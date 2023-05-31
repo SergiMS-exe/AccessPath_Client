@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View, TouchableOpacity, StyleSheet, GestureResponderEvent, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, GestureResponderEvent, Text, } from 'react-native';
 import {  } from 'react-native-vector-icons'; 
 
 
@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 40,
         right: 25,
+        zIndex: 1
     },
     button: {
         backgroundColor: '#55F1B1F2',
@@ -29,7 +30,7 @@ interface FloatingButtonProps {
     text: string;
 }
 
-export const FloatingButton: FC<FloatingButtonProps> = ({ onPress, text }: FloatingButtonProps) => {
+export const FloatingButton: FC<FloatingButtonProps> = ({ onPress, text}: FloatingButtonProps) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={onPress}>

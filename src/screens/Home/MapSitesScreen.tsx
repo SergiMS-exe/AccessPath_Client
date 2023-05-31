@@ -1,18 +1,25 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Titulo } from '../../components/Titulo';
 import { Map } from '../../components/Map';
 import { FloatingButton } from '../../components/FloatingButton';
 
-interface Props extends NativeStackScreenProps<any, any>{};
+interface Props extends NativeStackScreenProps<any, any> { };
 
-export const MapSitesScreen = ({navigation}: Props) => {
+export const MapSitesScreen = ({ navigation }: Props) => {
+
+    const [showButton, setShowButton] = useState(true);
+
     return (
         <>
-        {/* <Titulo title='Map'/> */}
-        <Map/>
-        <FloatingButton onPress={()=>navigation.navigate('List')} text="Ver Lista"/>
+            {/* <Titulo title='Map'/> */}
+            <Map setShowButton={setShowButton}/>
+            { showButton &&
+            <FloatingButton 
+                text="Ver Lista" 
+                onPress={() => navigation.navigate('List')} 
+            />}
         </>
     )
 }
