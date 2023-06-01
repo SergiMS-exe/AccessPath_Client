@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { LeafletView, MapLayerType } from 'react-native-leaflet-view';
 import { useLocation } from '../hooks/useLocation';
 import MapView, { Marker } from 'react-native-maps';
-import { Card } from './Card';
+import { MapCard } from './Card/MapCard';
 import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
 
@@ -60,6 +60,8 @@ export const Map = ({ setShowButton }: Props) => {
                     latitudeDelta: 0.0522,
                     longitudeDelta: 0.0421,
                 }}
+                maxZoomLevel={19}
+                minZoomLevel={10}
                 onMarkerPress={(e)=>{
                     
                     handleShowCard({});
@@ -71,14 +73,15 @@ export const Map = ({ setShowButton }: Props) => {
                         latitude: location.lat,
                         longitude: location.lng
                     }}
-                    onPress={() => {
+                    onPress={(e) => {
+                        e.nativeEvent.coordinate
                         handleShowCard({});
                         setShowButton(false)
                         
                     }}
                 />
             </MapView>
-            {cardData != null && <Card />}
+            {cardData != null && <MapCard />}
         </>
 
     )

@@ -10,6 +10,7 @@ import { RegistroScreen } from './src/screens/RegistroScreen';
 import { LoginContext } from './src/components/Shared/Context';
 
 import useLoginContext from './src/hooks/useLoginContext';
+import { SearchScreen } from './src/screens/SearchScreen';
 
 enableLatestRenderer();
 
@@ -30,6 +31,7 @@ function App() {
                         <Stack.Screen name="login" component={LoginScreen}/>
                         <Stack.Screen name="register" component={RegistroScreen}/>
                         <Stack.Screen name="home" component={Home}/>
+                        <Stack.Screen name="home" component={SearchScreen}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </SafeAreaProvider>

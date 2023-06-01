@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export const Card = () => {
+export const MapCard = () => {
     return (
         <View style={styles.container}>
             <Text>HI</Text>
