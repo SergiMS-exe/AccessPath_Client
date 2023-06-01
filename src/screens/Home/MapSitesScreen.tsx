@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { Titulo } from '../../components/Titulo';
@@ -10,6 +10,10 @@ interface Props extends NativeStackScreenProps<any, any> { };
 export const MapSitesScreen = ({ navigation }: Props) => {
 
     const [showButton, setShowButton] = useState(true);
+
+    useEffect(()=>{
+
+    }, )
 
     return (
         <>

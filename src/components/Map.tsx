@@ -60,6 +60,11 @@ export const Map = ({ setShowButton }: Props) => {
                     latitudeDelta: 0.0522,
                     longitudeDelta: 0.0421,
                 }}
+                onMarkerPress={(e)=>{
+                    
+                    handleShowCard({});
+                    setShowButton(false)
+                }}
             >
                 <Marker
                     coordinate={{
