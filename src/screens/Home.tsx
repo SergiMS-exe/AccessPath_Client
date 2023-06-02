@@ -13,6 +13,7 @@ import { LoginScreen } from './LoginScreen';
 import { RegistroScreen } from './RegistroScreen';
 import { logout } from '../services/UserServices';
 import { ProfileScreen } from './ProfileScreen';
+import { SearchScreen } from './SearchScreen';
 
 type DrawerButtonProps = {
     screenName?: string;
@@ -174,6 +175,7 @@ export const Home = () => {
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />
+            <Drawer.Screen name="Search" component={SearchScreen} />
         </Drawer.Navigator>
     );
 }
