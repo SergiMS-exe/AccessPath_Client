@@ -170,12 +170,12 @@ export const Home = () => {
                 header: () => <MyHeader />
             }}
         >
-            <Drawer.Screen name="Feed" component={Feed} />
+            <Drawer.Screen name="Feed" component={Feed} options={{header: () => <MyHeader searchBar={true}/>}}/>
             <Drawer.Screen name="Saved" component={SavedScreen} />
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />
-            <Drawer.Screen name="Search" component={SearchScreen} />
+            <Drawer.Screen name="Search" component={SearchScreen} options={{header: () => <MyHeader searchBar={true}/>}}/>
         </Drawer.Navigator>
     );
 }

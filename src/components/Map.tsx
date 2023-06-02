@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { LeafletView, MapLayerType } from 'react-native-leaflet-view';
 import { useLocation } from '../hooks/useLocation';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, UrlTile } from 'react-native-maps';
 import { MapCard } from './Card/MapCard';
 import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
@@ -14,13 +14,18 @@ type Props = {
 export const Map = ({ setShowButton }: Props) => {
     const [mapLoaded, setMapLoaded] = useState(false);
 
-    const { location, error } = useLocation();
+    const { location, error, resetLocation} = useLocation();
     const { cardData, handleShowCard, handleCloseCard } = useCard();
 
     useEffect(()=>{
         console.log(cardData);
         
     }, [cardData])
+
+    useEffect(()=>{
+        resetLocation() //lo llamo la primera vez
+        setInterval(resetLocation, 5000) //intervalo 
+    }, [])
 
     const mapLayers = [{
         attribution: '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -53,8 +58,9 @@ export const Map = ({ setShowButton }: Props) => {
                     setShowButton(true)
                 }}
                 provider='google'
+                
                 style={{ ...StyleSheet.absoluteFillObject, zIndex: 0 }}
-                region={{
+                initialRegion={{
                     latitude: location.lat,
                     longitude: location.lng,
                     latitudeDelta: 0.0522,
@@ -67,6 +73,13 @@ export const Map = ({ setShowButton }: Props) => {
                     handleShowCard({});
                     setShowButton(false)
                 }}
+                loadingEnabled={true}
+                customMapStyle={[{
+                    "featureType": "poi",
+                    "stylers": [
+                      { "visibility": "off" }
+                    ]
+                  }]}
             >
                 <Marker
                     coordinate={{

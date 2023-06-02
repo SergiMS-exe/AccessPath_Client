@@ -1,44 +1,58 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 type DrawerProp = DrawerNavigationProp<any, any>;
+type RoutePropType = RouteProp<any, any>;
 
-const MyHeader: React.FC = () => {
+type Props = {
+    searchBar?: boolean;
+}
+
+const MyHeader = ({ searchBar }: Props) => {
     const navigation = useNavigation<DrawerProp>();
+    const route = useRoute<RoutePropType>();
+
+    const isInSearch = route.name == 'Search'
+
+    const [text, setText] = useState('')
 
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                    <Icon name='bars' size={30} />
+                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => navigation.openDrawer()}>
+                    <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
                 {/* <View style={styles.searchBar}> */}
+                {searchBar &&
                 <SearchBar
                     containerStyle={styles.searchBar}
                     inputContainerStyle={styles.searchBarInput}
                     round
                     lightTheme
                     showCancel
-                    cancelIcon={<Icon name='delete'/>}
-                    value='papa'
+                    cancelIcon={<Icon name='delete' />}
+                    value={text}
                     // onKeyPress={(e)=>{
                     //     if (e.nativeEvent.key=='Enter')
                     //         navigation.navigate('Search')
                     // }}
                     onSubmitEditing={() => {
                         console.log('message submitted...');
-                        navigation.navigate('Search')  
+                        navigation.navigate('Search')
                     }}
-                    onClear={()=>{
-                        navigation.goBack()
-                        
+                    onChangeText={(text)=>{
+                        setText(text)
                     }}
-                />
+                    // onClear={() => {
+                    //     navigation.goBack()
+
+                    // }}
+                />}
                 {/* </View> */}
             </View>
         </SafeAreaView>

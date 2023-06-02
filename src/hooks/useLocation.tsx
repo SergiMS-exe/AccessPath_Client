@@ -12,7 +12,7 @@ export const useLocation = ()=>{
     const [error, setError] = useState('');
     const [loaded, setLoaded] = useState(false)
 
-    Geolocation.requestAuthorization(
+    const resetLocation = ()=>Geolocation.requestAuthorization(
         () => {
             Geolocation.getCurrentPosition(
                 (position) => {
@@ -36,5 +36,5 @@ export const useLocation = ()=>{
         }
     )
 
-    return {location, error};
+    return {location, error, resetLocation};
 }
