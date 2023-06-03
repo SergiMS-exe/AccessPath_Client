@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -11,15 +11,15 @@ type RoutePropType = RouteProp<any, any>;
 
 type Props = {
     searchBar?: boolean;
+    searchText?: string;
+    onSearchTextChange: (text: string) => void;
 }
 
-const MyHeader = ({ searchBar }: Props) => {
+const MyHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
     const navigation = useNavigation<DrawerProp>();
     const route = useRoute<RoutePropType>();
 
     const isInSearch = route.name == 'Search'
-
-    const [text, setText] = useState('')
 
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
@@ -35,14 +35,12 @@ const MyHeader = ({ searchBar }: Props) => {
                     lightTheme
                     showCancel
                     cancelIcon={<Icon name='delete' />}
-                    value={text}
+                    value={searchText}
                     onSubmitEditing={() => {
                         console.log('message submitted...');
-                        navigation.navigate('Search')
+                        navigation.navigate('Search', { searchText: searchText })
                     }}
-                    onChangeText={(text)=>{
-                        setText(text)
-                    }}
+                    onChangeText={onSearchTextChange}
                 />) : (
                 <View style={styles.searchBar}/>
                 )}

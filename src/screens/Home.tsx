@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { SavedScreen } from './SavedScreen';
@@ -14,6 +14,7 @@ import { RegistroScreen } from './RegistroScreen';
 import { logout } from '../services/UserServices';
 import { ProfileScreen } from './ProfileScreen';
 import { SearchScreen } from './SearchScreen';
+import { RouteProp } from '@react-navigation/native';
 
 type DrawerButtonProps = {
     screenName?: string;
@@ -22,7 +23,17 @@ type DrawerButtonProps = {
     navigation?: DrawerNavigationHelpers;
 }
 
-const Drawer = createDrawerNavigator();
+type RootDrawerParamList = {
+    Feed: undefined;
+    Saved: undefined;
+    Perfil: undefined;
+    Login: undefined;
+    Registro: undefined;
+    Search: { searchText?: string };
+};
+
+
+const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 const styles = StyleSheet.create({
     userName: {
@@ -160,22 +171,36 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
     )
 }
 
+type SearchParams = {
+    Search: {
+        searchText?: string;
+    };
+};
+
 export const Home = () => {
+
+    const [searchText, setSearchText] = useState('');
 
     return (
         <Drawer.Navigator
             initialRouteName='Feed'
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
-                header: () => <MyHeader />
+                header: () => <MyHeader searchText={searchText} onSearchTextChange={setSearchText}/>
             }}
         >
-            <Drawer.Screen name="Feed" component={Feed} options={{header: () => <MyHeader searchBar={true}/>}}/>
+            <Drawer.Screen name="Feed" component={Feed} options={{
+                header: () => <MyHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
+                }}
+            />
             <Drawer.Screen name="Saved" component={SavedScreen} />
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />
-            <Drawer.Screen name="Search" component={SearchScreen} options={{header: () => <MyHeader searchBar={true}/>}}/>
+            <Drawer.Screen name="Search" component={SearchScreen} options={({ route }: { route: RouteProp<SearchParams, 'Search'> }) => ({ 
+        header: () => <MyHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
+    })}
+            />
         </Drawer.Navigator>
     );
 }

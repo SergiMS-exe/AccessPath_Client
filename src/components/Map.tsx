@@ -73,12 +73,13 @@ export const Map = ({ setShowButton }: Props) => {
                     setShowButton(false)
                 }}
                 loadingEnabled={true}
-                customMapStyle={[{
-                    "featureType": "poi",
-                    "stylers": [
-                      { "visibility": "off" }
-                    ]
-                  }]}
+                // customMapStyle={[{
+                //     "featureType": "poi",
+                //     "stylers": [
+                //       { "visibility": "off" }
+                //     ]
+                //   }]}
+                onPoiClick={(e)=>console.log(e.nativeEvent.name)}
             >
                 <Marker
                     coordinate={{
