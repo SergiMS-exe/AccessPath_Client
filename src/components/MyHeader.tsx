@@ -27,8 +27,7 @@ const MyHeader = ({ searchBar }: Props) => {
                 <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => navigation.openDrawer()}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
-                {/* <View style={styles.searchBar}> */}
-                {searchBar &&
+                {searchBar ? (
                 <SearchBar
                     containerStyle={styles.searchBar}
                     inputContainerStyle={styles.searchBarInput}
@@ -37,10 +36,6 @@ const MyHeader = ({ searchBar }: Props) => {
                     showCancel
                     cancelIcon={<Icon name='delete' />}
                     value={text}
-                    // onKeyPress={(e)=>{
-                    //     if (e.nativeEvent.key=='Enter')
-                    //         navigation.navigate('Search')
-                    // }}
                     onSubmitEditing={() => {
                         console.log('message submitted...');
                         navigation.navigate('Search')
@@ -48,12 +43,9 @@ const MyHeader = ({ searchBar }: Props) => {
                     onChangeText={(text)=>{
                         setText(text)
                     }}
-                    // onClear={() => {
-                    //     navigation.goBack()
-
-                    // }}
-                />}
-                {/* </View> */}
+                />) : (
+                <View style={styles.searchBar}/>
+                )}
             </View>
         </SafeAreaView>
     );
