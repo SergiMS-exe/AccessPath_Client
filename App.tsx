@@ -31,6 +31,7 @@ function App() {
                         <Stack.Screen name="login" component={LoginScreen}/>
                         <Stack.Screen name="register" component={RegistroScreen}/>
                         <Stack.Screen name="home" component={Home}/>
+                        <Stack.Screen name='search' component={SearchScreen}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </SafeAreaProvider>

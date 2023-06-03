@@ -19,7 +19,7 @@ export const ListSitesScreen = ({navigation}: Props) => {
         <>
         <Titulo title='List'/>
         <View style={styles.container}>
-            <SearchCard/>
+            <SearchCard name='Casa paco' address='C/Independencia' rating={3.5}/>
         </View>
         <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
         </>

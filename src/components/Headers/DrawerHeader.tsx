@@ -15,7 +15,7 @@ type Props = {
     onSearchTextChange: (text: string) => void;
 }
 
-const MyHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
+const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
     const navigation = useNavigation<DrawerProp>();
     const route = useRoute<RoutePropType>();
 
@@ -36,9 +36,9 @@ const MyHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
                     showCancel
                     cancelIcon={<Icon name='delete' />}
                     value={searchText}
-                    onSubmitEditing={() => {
+                    onSubmitEditing={async () => {
                         console.log('message submitted...');
-                        navigation.navigate('Search', { searchText: searchText })
+                        navigation.navigate('search', { searchText: searchText })
                     }}
                     onChangeText={onSearchTextChange}
                 />) : (
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MyHeader;
+export default DrawerHeader;

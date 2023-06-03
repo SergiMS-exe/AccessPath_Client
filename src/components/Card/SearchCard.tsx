@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { AppStyles } from "../Shared/AppStyles";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const styles = StyleSheet.create({
     container: {
@@ -17,11 +18,18 @@ const styles = StyleSheet.create({
     }
 })
 
-export const SearchCard = () => {
+type Props = {
+    name: string;
+    address: string;
+    rating: number;
+}
+
+export const SearchCard = ({name, address, rating}: Props) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Titulo Titulo Titulo</Text>
-            <Text>Subtitle Subtitle Subtitle </Text>
+            <Text style={styles.title}>{name}</Text>
+            <Text>{address}</Text>
+            <Text>{rating}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{borderWidth: 0.5, borderColor:'black'}}/></Text>
         </View>
     );
 }

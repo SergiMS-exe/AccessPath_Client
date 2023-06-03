@@ -4,7 +4,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavig
 import { SavedScreen } from './SavedScreen';
 import { Feed } from './Home/Feed';
 import { LoginContext } from '../components/Shared/Context';
-import MyHeader from '../components/MyHeader';
+import DrawerHeader from '../components/Headers/DrawerHeader';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -186,21 +186,17 @@ export const Home = () => {
             initialRouteName='Feed'
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
-                header: () => <MyHeader searchText={searchText} onSearchTextChange={setSearchText}/>
+                header: () => <DrawerHeader searchText={searchText} onSearchTextChange={setSearchText}/>
             }}
         >
             <Drawer.Screen name="Feed" component={Feed} options={{
-                header: () => <MyHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
+                header: () => <DrawerHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
                 }}
             />
             <Drawer.Screen name="Saved" component={SavedScreen} />
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />
-            <Drawer.Screen name="Search" component={SearchScreen} options={({ route }: { route: RouteProp<SearchParams, 'Search'> }) => ({ 
-        header: () => <MyHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
-    })}
-            />
         </Drawer.Navigator>
     );
 }
