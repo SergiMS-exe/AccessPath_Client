@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Titulo } from "../components/Titulo";
-import { SearchCard } from '../components/Card/SearchCard';
+import { ListCard } from '../components/Card/ListCard';
 import { getPlacesByText } from '../services/PlacesServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackHeader } from '../components/Headers/StackHeader';

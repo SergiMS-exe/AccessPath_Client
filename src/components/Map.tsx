@@ -94,7 +94,7 @@ export const Map = ({ setShowButton }: Props) => {
                     }}
                 />
             </MapView>
-            {cardData != null && <MapCard />}
+            {cardData != null && <MapCard nombre={''} direccion={''} calificacion={0} />}
         </>
 
     )

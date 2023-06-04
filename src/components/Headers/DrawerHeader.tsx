@@ -34,7 +34,7 @@ const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
                     round
                     lightTheme
                     showCancel
-                    cancelIcon={<Icon name='delete' />}
+                    placeholder='Busca un sitio para valorar...'
                     value={searchText}
                     onSubmitEditing={async () => {
                         console.log('message submitted...');

@@ -1,10 +1,6 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-type Location = {
-    latitude: number;
-    longitude: number;
-}
+import { Location } from "../../@types/Site";
 
 const baseUrl ='https://maps.googleapis.com/maps/api/place'
 
@@ -36,20 +32,38 @@ export async function checkIfClickedMarker(location: Location) {
     }
 }
 
+interface PlaceResponse {
+    candidates: Array<{
+      place_id: string;
+      name: string;
+      formatted_address: string;
+      rating: number;
+      geometry: {
+        location: {
+          lat: number;
+          lng: number;
+        };
+      };
+    }>;
+  }
+  
+
 export async function getPlacesByText(text: string) {
     const rectangle = "rectangle:42.88254,-7.18317|43.66653,-4.51059";
     const uri = baseUrl+'/findplacefromtext/json';
-    console.log(text);
     
-    await axios.get(uri, {
+    const response: PlaceResponse = await axios.get(uri, {
         params: {
             key: 'AIzaSyAv1vduVdGosz0qdPCs7hawR7ISgz97nbE',
             input: text,
             inputtype: 'textquery',
             locationbias: rectangle,
-            fields: 'place_id,name,formatted_address,geometry'
+            fields: 'place_id,name,formatted_address,geometry,rating'
         }
-    }).then(res => console.log(JSON.stringify(res.data))
-    ).catch((error)=>console.error(error));
+    }).then(res => res.data)
+    .catch((error)=>console.error(error));
 
+    const candidates=response.candidates
+
+    return candidates
 }

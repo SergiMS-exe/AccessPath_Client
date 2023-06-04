@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Titulo } from '../../components/Titulo';
 import { FloatingButton } from '../../components/FloatingButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SearchCard } from '../../components/Card/SearchCard';
+import { ListCard } from '../../components/Card/ListCard';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
@@ -17,9 +17,9 @@ const styles = StyleSheet.create({
 export const ListSitesScreen = ({navigation}: Props) => {
     return (
         <>
-        <Titulo title='List'/>
+        <Titulo title='Sitios valorados cerca de ti'/>
         <View style={styles.container}>
-            <SearchCard name='Casa paco' address='C/Independencia' rating={3.5}/>
+            <ListCard site={{nombre:'Casa paco', direccion: 'C/Independencia', calificacion:3.4}}/>
         </View>
         <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
         </>

@@ -1,4 +1,7 @@
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Site } from "../../../@types/Site"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
     container: {
@@ -12,14 +15,20 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         borderTopLeftRadius: 20,
-        borderTopRightRadius: 20
+        borderTopRightRadius: 20,
+        padding:6
     }
 })
 
-export const MapCard = () => {
+type StackProps = NativeStackNavigationProp<any, any>;
+
+export const MapCard = (site: Site) => {
+
+    const navigation = useNavigation<StackProps>();
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={()=>navigation.navigate('search')}>
             <Text>HI</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
