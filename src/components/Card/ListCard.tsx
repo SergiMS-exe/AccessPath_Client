@@ -32,7 +32,7 @@ export const ListCard = ({site}: Props) => {
     const navigation = useNavigation<StackProps>();
 
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("search")} style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate("site")} style={styles.container}>
             <Text style={styles.title}>{site.nombre}</Text>
             <Text>{site.direccion}</Text>
             <Text>{site.calificacion}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{borderWidth: 0.5, borderColor:'black'}}/></Text>

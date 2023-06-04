@@ -5,6 +5,7 @@ import { ListCard } from '../components/Card/ListCard';
 import { getPlacesByText } from '../services/PlacesServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackHeader } from '../components/Headers/StackHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
@@ -21,7 +22,7 @@ export const SearchScreen = ({route}: Props) => {
     }, []);
 
     return(
-        <>
+        <SafeAreaView>
             <StackHeader/>
             <Titulo title='Search'/>
             {/* <FlatList
@@ -29,6 +30,6 @@ export const SearchScreen = ({route}: Props) => {
                 keyExtractor={(item) => item.id} // Asegúrate de que "id" es la propiedad correcta para usar como key
                 renderItem={({ item }) => <SearchCard place={item} />}
             /> */}
-        </>
+        </SafeAreaView>
     );
 }

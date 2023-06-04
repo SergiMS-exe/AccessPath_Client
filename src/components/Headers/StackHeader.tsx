@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 
@@ -9,7 +8,6 @@ export const StackHeader = () => {
     const navigation = useNavigation();
 
     return (
-        <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon name='arrow-left' size={30} />
@@ -18,7 +16,6 @@ export const StackHeader = () => {
                 <View style={styles.blank}/>
                 
             </View>
-        </SafeAreaView>
     )
 }
 
