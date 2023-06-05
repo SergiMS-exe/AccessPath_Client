@@ -20,32 +20,8 @@ export const Map = ({ setShowButton }: Props) => {
         console.log(cardData);
         
     }, [cardData])
-
-    // useEffect(()=>{
-    //     resetLocation() //lo llamo la primera vez
-    //     setInterval(resetLocation, 5000) //intervalo 
-    // }, [])
-
-    const mapLayers = [{
-        attribution: '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        baseLayerIsChecked: true,
-        baseLayerName: 'OpenStreetMap.Mapnik',
-        url: 'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=2DdNjK8laXD22qDxNXdX',
-        layerType: MapLayerType.TILE_LAYER
-    }];
-
+    
     return (
-        // <LeafletView
-        // mapLayers={mapLayers}
-        // mapCenterPosition={location}
-        // mapMarkers={[
-        //     {
-        //       position: location,
-        //       icon: '📍',
-        //       size: [32, 32],
-        //     },
-        //   ]}
-        // />
         <>
             <MapView
                 onPress={() => {
