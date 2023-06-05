@@ -6,18 +6,19 @@ import { getPlacesByText } from '../services/PlacesServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackHeader } from '../components/Headers/StackHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Site } from '../../@types/Site';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
 export const SearchScreen = ({route}: Props) => {
-    const [places, setPlaces] = useState([]);
+    const [places, setPlaces] = useState<Site[]>([]);
     
     useEffect(() => {
         const fetchPlaces = async () => {
-            //const response = await getPlacesByText(route.params?.searchText); // Cambia "Asturias" por el texto que desees buscar
-            //setPlaces(response.data); // Asegúrate de que esta es la forma correcta de acceder a los datos de los lugares en la respuesta
+            const response = await getPlacesByText(route.params?.searchText); // Cambia "Asturias" por el texto que desees buscar
+            setPlaces(response); // Asegúrate de que esta es la forma correcta de acceder a los datos de los lugares en la respuesta
+            
         }
-
         fetchPlaces();
     }, []);
 
@@ -25,11 +26,12 @@ export const SearchScreen = ({route}: Props) => {
         <SafeAreaView>
             <StackHeader/>
             <Titulo title='Search'/>
-            {/* <FlatList
+            <FlatList
                 data={places}
-                keyExtractor={(item) => item.id} // Asegúrate de que "id" es la propiedad correcta para usar como key
-                renderItem={({ item }) => <SearchCard place={item} />}
-            /> */}
+                bounces              
+                //key={(item) => item._id?.toString()}
+                renderItem={({ item }) => <ListCard site={item} />}
+            />
         </SafeAreaView>
     );
 }

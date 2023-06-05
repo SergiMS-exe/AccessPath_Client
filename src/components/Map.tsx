@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { LeafletView, MapLayerType } from 'react-native-leaflet-view';
 import { useLocation } from '../hooks/useLocation';
 import MapView, { Marker } from 'react-native-maps';
 import { MapCard } from './Card/MapCard';
@@ -20,7 +19,7 @@ export const Map = ({ setShowButton }: Props) => {
         console.log(cardData);
         
     }, [cardData])
-    
+
     return (
         <>
             <MapView

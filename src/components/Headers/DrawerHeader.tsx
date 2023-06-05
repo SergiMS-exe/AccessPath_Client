@@ -37,7 +37,6 @@ const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
                     placeholder='Busca un sitio para valorar...'
                     value={searchText}
                     onSubmitEditing={async () => {
-                        console.log('message submitted...');
                         navigation.navigate('search', { searchText: searchText })
                     }}
                     onChangeText={onSearchTextChange}

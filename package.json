@@ -10,8 +10,7 @@
     "mobile-clean": "npm run android-clean && npm run ios-clean",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "postinstall": "patch-package"
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-community/geolocation": "^3.0.6",

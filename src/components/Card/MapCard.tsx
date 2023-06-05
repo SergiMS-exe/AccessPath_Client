@@ -27,7 +27,7 @@ export const MapCard = (site: Site) => {
     const navigation = useNavigation<StackProps>();
 
     return (
-        <TouchableOpacity style={styles.container} onPress={()=>navigation.navigate('site')}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate("site", { site })}>
             <Text>HI</Text>
         </TouchableOpacity>
     )
