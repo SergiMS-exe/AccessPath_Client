@@ -12,12 +12,16 @@ export const Titulo = ({title}: Props) => {
             alignContent: 'flex-start',
             alignItems: 'center',
             marginBottom: 25
+        },
+        text: {
+            fontSize: 30,
+            textAlign: 'center'
         }
     })
 
     return (
         <View style={styles.titulo}>
-            <Text style={{fontSize: 30}}>{title}</Text>
+            <Text style={styles.text}>{title}</Text>
         </View>
     )
 }
