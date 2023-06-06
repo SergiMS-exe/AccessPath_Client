@@ -4,7 +4,10 @@ import { StackHeader } from "../components/Headers/StackHeader";
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { save } from "../services/PlacesServices";
+import { LoginContext } from "../components/Shared/Context";
+import Person from "../../@types/Person";
 
 
 type RootStackParamList = {
@@ -38,11 +41,34 @@ const styles = StyleSheet.create({
 export const SiteScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
     const { site } = route.params;
+    const { user, setUser } = useContext(LoginContext);
+
 
     const [isSaved, setIsSaved] = useState(false);
 
-    const handleSave = () => {
-        setIsSaved(!isSaved);
+    useEffect(() => {
+        console.log("User "+user?.saved);
+        console.log("Place "+site.placeId);
+        
+        if (user)
+            if (user?.saved.includes(site.placeId))
+                setIsSaved(true)
+        
+    }, [])
+
+    const handleSave = async () => {
+        if (user){
+            await save(site, user, !isSaved)
+            setIsSaved(!isSaved);
+            const newUser = new Person(user);
+            if (!isSaved) {
+                newUser.save(site.placeId)
+                setUser(newUser)
+            } else {
+                newUser.unSave(site.placeId)
+                setUser(newUser)
+            }
+        }
     }
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
@@ -55,9 +81,10 @@ export const SiteScreen = () => {
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
                     <Text>{site.types[2]}, {site.types[3]}</Text>
+                    {user &&
                     <TouchableOpacity onPress={handleSave}>
                         <Icon name='heart' size={20} solid={isSaved}/>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
                 <Text style={styles.address}>{site.direccion}</Text>
                 <TouchableOpacity onPress={ () => Linking.openURL(googleMapsLink)}>

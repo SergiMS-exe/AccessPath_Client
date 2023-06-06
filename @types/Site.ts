@@ -1,9 +1,9 @@
 export class Site {
-    public _id?: string;
+    public placeId: string;
     public nombre: string;
     public direccion: string;
     public calificacion: number;
-    public location?: Location;
+    public location: Location;
     public types: string[];
   
     constructor(
@@ -11,10 +11,10 @@ export class Site {
       direccion: string,
       calificacion: number,
       types: string[],
-      location?: Location,
-      _id?: string,
+      location: Location,
+      placeId: string,
     ) {
-      this._id = _id;
+      this.placeId = placeId;
       this.nombre = nombre;
       this.direccion = direccion;
       this.calificacion = calificacion;

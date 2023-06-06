@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: AppStyles.card.titleSize,
         marginBottom: 4,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        flex: 1
     },
     address: {
         marginBottom: 4
@@ -46,7 +47,7 @@ export const ListCard = ({site}: Props) => {
     return (
         <TouchableOpacity onPress={() => navigation.navigate("site", { site })} style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>{site.nombre}</Text>
+                <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{site.nombre}</Text>
                 <Icon name='map-marker-alt' size={17} color='red'/>
             </View>
             <Text style={styles.address}>{site.direccion}</Text>
