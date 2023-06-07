@@ -32,13 +32,15 @@ export const Map = ({ setShowButton }: Props) => {
                     setShowButton(true)
                 }}
                 provider='google'
-                
+                showsUserLocation
+                showsMyLocationButton
+                moveOnMarkerPress
                 style={{ ...StyleSheet.absoluteFillObject, zIndex: 0 }}
-                initialRegion={{
+                region={{
                     latitude: location.lat,
                     longitude: location.lng,
-                    latitudeDelta: 0.0522,
-                    longitudeDelta: 0.0421,
+                    latitudeDelta: 0.0122,
+                    longitudeDelta: 0.0121,
                 }}
                 maxZoomLevel={19}
                 minZoomLevel={10}
@@ -69,7 +71,10 @@ export const Map = ({ setShowButton }: Props) => {
                     }}
                 />
             </MapView>
-            {cardData != null && <MapCard nombre={''} direccion={''} calificacion={0} />}
+            {cardData != null && <MapCard nombre={''} direccion={''} calificacion={0} placeId={''} location={{
+                latitude: 0,
+                longitude: 0
+            }} types={[]} />}
         </>
 
     )

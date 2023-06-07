@@ -92,6 +92,17 @@ export async function save(site: Site, user: Person, save: boolean) {
     console.log(response.data);
 }
 
+export async function getSavedSites(user: Person) {
+    const response = await axios.get(API_HOST+'/userSaved', {
+        params: {
+            userId: user._id,
+        }
+    }).then(res=> res.data)
+    console.log(response.data);
+    const sites: Site[] = response.data.sitios
+    return sites
+}
+
 async function makeRequest(query: string, location: Location, radius?: number) {
 
     const rectangle = "rectangle:42.88254,-7.18317|43.66653,-4.51059";

@@ -21,20 +21,20 @@ export async function login(email: string, password: string, navigation: NativeS
         ).catch(error=>{
         console.error(error)
     });
-    console.log(JSON.stringify(peticion));
     
-    const usuario = peticion.data.user
-    
-    if (usuario !== null) {
-        setUser(usuario);
-        navigation.dispatch(
-            CommonActions.reset({
-                routes: [
-                    {name: screen}
-                ]
-            })
-        );
-    }
+    if (peticion!==undefined){
+        const usuario = peticion.data.user
+        
+        if (usuario !== null) {
+            setUser(usuario);
+            navigation.dispatch(
+                CommonActions.reset({
+                    routes: [
+                        {name: screen}
+                    ]
+                })
+            );
+    }}
 }
 
 type RegisterType = {

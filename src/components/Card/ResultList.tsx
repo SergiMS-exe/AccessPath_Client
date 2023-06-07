@@ -6,6 +6,8 @@ import { Text } from "@rneui/base";
 
 type Props = {
     data: Site[];
+    title: string;
+    noItemsMessage: string;
 }
 
 const styles = StyleSheet.create({
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
     },
 })
 
-export const ResultList = ({ data }: Props) => {
+export const ResultList = ({ data, title, noItemsMessage }: Props) => {
     const renderListItem = ({ item }: { item: Site }) => <ListCard site={item} />;
 
     return (
@@ -29,8 +31,8 @@ export const ResultList = ({ data }: Props) => {
                 //keyExtractor={(item) => item._id?.toString() || ''}
                 renderItem={renderListItem}
                 contentContainerStyle={{flexGrow: 1}}
-                ListHeaderComponent={<Titulo title='Elementos valorados cercanos'/>}
-                ListEmptyComponent={<Text style={styles.emptyListMessage}>No hay elementos valorados cerca de ti</Text>}
+                ListHeaderComponent={<Titulo title={title}/>}
+                ListEmptyComponent={<Text style={styles.emptyListMessage}>{noItemsMessage}</Text>}
                 showsVerticalScrollIndicator={false}
             />
         </View>

@@ -20,7 +20,7 @@ export const ListSitesScreen = ({navigation}: Props) => {
     return (
         <>
         {/* <Titulo title='Sitios valorados cerca de ti'/> */}
-        <ResultList data={staticSites}/>
+        <ResultList data={staticSites} title='Sitios valorados cercanos' noItemsMessage='No hat sitios valorados cerca de ti'/>
         <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
         </>
     )
