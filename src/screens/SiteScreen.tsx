@@ -5,11 +5,9 @@ import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "r
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useContext, useEffect, useState } from "react";
-import { save } from "../services/PlacesServices";
 import { LoginContext } from "../components/Shared/Context";
-import Person from "../../@types/Person";
-import { Map } from "../components/Map";
 import MapView from "react-native-maps";
+import { useSiteSaving } from "../hooks/useSiteSaving";
 
 
 type RootStackParamList = {
@@ -48,34 +46,27 @@ const styles = StyleSheet.create({
 export const SiteScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
     const { site } = route.params;
-    const { user, setUser } = useContext(LoginContext);
-
+    const { user } = useContext(LoginContext);
 
     const [isSaved, setIsSaved] = useState(false);
 
+    const { save, unSave, toggleUserContext } = useSiteSaving(site)
+
     useEffect(() => {
-        console.log("User " + user?.saved);
-        console.log("Place " + site.placeId);
-
-        if (user)
-            if (user?.saved.includes(site.placeId))
-                setIsSaved(true)
-
-    }, [])
+        if (user?.saved.includes(site.placeId)) {
+            setIsSaved(true);
+        } else {
+            setIsSaved(false);
+        }
+    }, [site.placeId, user?.saved]);    
 
     const handleSave = async () => {
-        if (user) {
-            await save(site, user, !isSaved)
-            setIsSaved(!isSaved);
-            const newUser = new Person(user);
-            if (!isSaved) {
-                newUser.save(site.placeId)
-                setUser(newUser)
-            } else {
-                newUser.unSave(site.placeId)
-                setUser(newUser)
-            }
-        }
+        if (isSaved)
+            await unSave()
+        else 
+            await save()
+        setIsSaved(!isSaved)
+        toggleUserContext(isSaved);
     }
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;

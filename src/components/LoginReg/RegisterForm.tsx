@@ -6,14 +6,15 @@ import { LoginContext } from '../Shared/Context';
 import { useForm } from '../../hooks/useForm';
 import { MyInput } from '../MyInput';
 import { register } from '../../services/UserServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type Props = {
-    navigation : NativeStackNavigationProp<any, any>;
-    screenName : string
+    navigation: NativeStackNavigationProp<any, any>;
+    screenName: string
 }
 
-export const RegisterForm = ({screenName, navigation}: Props) => {
+export const RegisterForm = ({ screenName, navigation }: Props) => {
 
     const { nombre, apellidos, email, password, repeatPassword, tipoDiscapacidad, onChange, valid } = useForm({
         nombre: "",
@@ -26,17 +27,22 @@ export const RegisterForm = ({screenName, navigation}: Props) => {
 
     const { setUser } = useContext(LoginContext);
 
+    const handleRegister = async () => {
+        await register({ nombre, apellidos, email, password, tipoDiscapacidad, navigation, screen: screenName, setUser });
+        await AsyncStorage.setItem('savedSites', '[]')
+    }
+
     return (
         <>
-            <MyInput title='Nombre' onChangeText={(text: string) => onChange(text, 'nombre')}/>
-            <MyInput title='Apellidos' onChangeText={(text: string) => onChange(text, 'apellidos')}/>
-            <MyInput title='Email' onChangeText={(text: string) => onChange(text, 'email')}/>
-            <MyInput title='Contraseña' onChangeText={(text: string) => onChange(text, 'password')}/>
-            <MyInput title='Repita la Contraseña' onChangeText={(text: string) => onChange(text, 'repeatPassword')}/>
-            <MyInput title='Tipos de discapacidad' onChangeText={(text: string) => onChange(text, 'tipoDiscapacidad')}/>
-            
-            <Button title='Registrarse' 
-                onPress={async () => await register({nombre, apellidos, email, password, tipoDiscapacidad, navigation, screen: screenName, setUser})}/>
+            <MyInput title='Nombre' onChangeText={(text: string) => onChange(text, 'nombre')} />
+            <MyInput title='Apellidos' onChangeText={(text: string) => onChange(text, 'apellidos')} />
+            <MyInput title='Email' onChangeText={(text: string) => onChange(text, 'email')} />
+            <MyInput title='Contraseña' onChangeText={(text: string) => onChange(text, 'password')} />
+            <MyInput title='Repita la Contraseña' onChangeText={(text: string) => onChange(text, 'repeatPassword')} />
+            <MyInput title='Tipos de discapacidad' onChangeText={(text: string) => onChange(text, 'tipoDiscapacidad')} />
+
+            <Button title='Registrarse'
+                onPress={handleRegister} />
         </>
     )
 

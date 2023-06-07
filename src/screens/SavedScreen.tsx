@@ -1,26 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Titulo } from '../components/Titulo';
+import React, { useEffect, useState } from 'react';
 import { ResultList } from '../components/Card/ResultList';
-import { LoginContext } from '../components/Shared/Context';
-import { getSavedSites } from '../services/PlacesServices';
 import { Site } from '../../@types/Site';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SavedScreen = () => {
-    const { user } = useContext(LoginContext);
-
     const [savedSites, setSavedSites] = useState<Site[]>([])
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
-        const fetchData = async () => {
-            if (user !== undefined) {
-                const sites = await getSavedSites(user);
-                setSavedSites(sites);
+        const getSitesFromStorage = async () => {
+            try {
+                const savedSitesJson = await AsyncStorage.getItem("savedSites");
+                if (savedSitesJson) {
+                    const savedSitesFromStorage: Site[] = JSON.parse(savedSitesJson);
+                    setSavedSites(savedSitesFromStorage);
+                }
+            } catch (error) {
+                console.error("Error al obtener sitios guardados de AsyncStorage:", error);
             }
         };
 
-        fetchData();
-    }, [])
+        getSitesFromStorage()
+        
+    }, [isFocused])
 
     return (
         <>

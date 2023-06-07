@@ -82,9 +82,9 @@ export async function getPlacesByText(text: string) {
     return convertToSite(response)
 }
 
-export async function save(site: Site, user: Person, save: boolean) {
-    const endpoint = save ? '/save': '/unSave';
-    
+export async function toggleSave(site: Site, user: Person, save: boolean) {
+    const endpoint = save ? '/save' : '/unSave';
+
     const response = await axios.put(API_HOST + endpoint, {
         site: site,
         userEmail: user.email
@@ -93,12 +93,11 @@ export async function save(site: Site, user: Person, save: boolean) {
 }
 
 export async function getSavedSites(user: Person) {
-    const response = await axios.get(API_HOST+'/userSaved', {
+    const response = await axios.get(API_HOST + '/userSaved', {
         params: {
             userId: user._id,
         }
-    }).then(res=> res.data)
-    console.log(response.data);
+    }).then(res => res.data)
     const sites: Site[] = response.data.sitios
     return sites
 }
