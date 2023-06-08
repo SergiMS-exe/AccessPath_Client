@@ -4,10 +4,11 @@ import { StackHeader } from "../components/Headers/StackHeader";
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { LoginContext } from "../components/Shared/Context";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
+import { FlatList } from "react-native-gesture-handler";
 
 
 type RootStackParamList = {
@@ -18,7 +19,7 @@ type SiteScreenRouteProp = RouteProp<RootStackParamList, "site">;
 
 const styles = StyleSheet.create({
     container: {
-        margin: 15
+        padding: 15
     },
     subContainer: {
         flexDirection: "row",
@@ -32,14 +33,47 @@ const styles = StyleSheet.create({
     address: {
         fontSize: 15,
     },
-    addressButton: {
-        flexDirection: "row",
-        //flex: 1,
-        width: "100%"
+    addressContainer: {
+        width: "100%",
+        alignItems: "center",
+        borderRadius: 10,
+    },
+    addressTextContainer: {
+        width: "100%",
+        alignItems: "center",
+        marginBottom: 7,
+        marginTop: 12
+    },
+    mapContainer: {
+        width: '100%',
+        alignItems: 'center',
+        borderRadius: 10,
+        shadowColor: '#000',
+        backgroundColor: '#fff',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
     },
     rating: {
         fontWeight: "400",
         textAlignVertical: "bottom"
+    },
+    sectionContainer: {
+        marginTop: 30
+    },
+    sectionHeaderContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    sectionTitle: {
+        fontSize: 20
+    },
+    sectionButton: {
+        borderWidth: 0.5,
+        borderColor: 'black',
+        borderRadius: 100,
+        padding: 3,
     }
 })
 
@@ -58,12 +92,12 @@ export const SiteScreen = () => {
         } else {
             setIsSaved(false);
         }
-    }, [site.placeId, user?.saved]);    
+    }, [site.placeId, user?.saved]);
 
     const handleSave = async () => {
         if (isSaved)
             await unSave()
-        else 
+        else
             await save()
         setIsSaved(!isSaved)
         toggleUserContext(isSaved);
@@ -74,8 +108,9 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView>
             <StackHeader />
-            {/* <ScrollView alwaysBounceHorizontal horizontal/> */}
-            <View style={styles.container}>
+            <ScrollView
+                style={styles.container}
+            >
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
                     <Text>{site.types[2]}, {site.types[3]}</Text>
@@ -84,32 +119,72 @@ export const SiteScreen = () => {
                             <Icon name='heart' size={20} solid={isSaved} />
                         </TouchableOpacity>}
                 </View>
-                <View style={styles.addressButton}>
+                <Text style={styles.rating}>{site.calificacion}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
+                <View style={styles.addressContainer}>
 
-                    <Text style={styles.address} numberOfLines={2}>{site.direccion}</Text>
+                    <View style={styles.addressTextContainer}>
+                        <Text style={styles.address}>{site.direccion}</Text>
+                    </View>
                     <TouchableOpacity
-                        style={{ width: "100%", paddingHorizontal: 10 }}
+                        style={styles.mapContainer}
                         onPress={() => Linking.openURL(googleMapsLink)}
                     >
                         <MapView
-                            initialRegion={{
+                            region={{
                                 latitude: site.location.latitude,
                                 longitude: site.location.longitude,
-                                latitudeDelta: 0.0522,
-                                longitudeDelta: 0.0522
+                                latitudeDelta: 0.00322,
+                                longitudeDelta: 0.00722
                             }}
                             scrollEnabled={false}
                             zoomEnabled={false}
                             pitchEnabled={false}
                             rotateEnabled={false}
                             provider="google"
-                            style={{ width: 50, height: 50 }}
-                        />
+                            style={{ width: "100%", height: 100, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
+                        >
+                            <Marker
+                                coordinate={{
+                                    latitude: site.location.latitude,
+                                    longitude: site.location.longitude
+                                }}
+                            />
+                        </MapView>
 
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.rating}>{site.calificacion}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
-            </View>
+
+                {/*Formularios*/}
+                <SectionHeader title="Formularios" onPressButton={() => { }}>
+                </SectionHeader>
+
+                {/*Comentarios*/}
+                <SectionHeader title="Comentarios" >
+                </SectionHeader>
+            </ScrollView>
         </SafeAreaView>
     );
 };
+
+type SectionProps = {
+    title: string;
+    onPressButton?: () => void;
+    children: ReactNode
+}
+const SectionHeader = ({ title, onPressButton, children }: SectionProps) => {
+    return (
+        <View style={styles.sectionContainer}>
+            <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionTitle}>{title}</Text>
+                {onPressButton ? (
+                    <TouchableOpacity onPress={onPressButton} style={styles.sectionButton}>
+                        <Icon name="plus" size={20} />
+                    </TouchableOpacity>
+                ) : (
+                    <View />
+                )}
+            </View>
+            {children}
+        </View>
+    )
+}
