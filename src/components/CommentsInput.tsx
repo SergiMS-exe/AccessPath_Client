@@ -51,7 +51,7 @@ export const CommentsInput: React.FC = () => {
     return (
         <View style={styles.container}>
             <Animated.View style={[styles.sendButtonContainer, sendButtonContainerStyle]}>
-                <TouchableOpacity style={styles.sendButton} onPress={() => { }}>
+                <TouchableOpacity style={styles.sendButton} onPress={() => { console.log("enviando comentario...")}}>
                     <Icon name="paper-plane" style={styles.sendButtonIcon} />
                 </TouchableOpacity>
             </Animated.View>
@@ -61,7 +61,7 @@ export const CommentsInput: React.FC = () => {
                 onContentSizeChange={handleContentSizeChange}
                 blurOnSubmit
                 onChangeText={(text)=>handleChangeText(text)}
-                placeholder="Type something..."
+                placeholder="Escriba un comentario..."
             />
         </View>
     );
@@ -72,14 +72,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-    },
-    textInput: {
-        height: 50,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: 'gray',
+        marginVertical: 10,
+        paddingVertical: 5
+    },
+    textInput: {
+        height: 50,
         paddingLeft: 10,
-        paddingRight: 67
+        marginRight: 67,
+        fontSize: 17
     },
     sendButtonContainer: {
         position: 'absolute',
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         marginRight: 10,
-        marginVertical: 5,
+        marginVertical: 10,
     },
     sendButton: {
         backgroundColor: '#007AFF',
