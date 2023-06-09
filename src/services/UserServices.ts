@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from '@env'
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
 const API_HOST = REMOTE;
@@ -75,6 +76,7 @@ export async function register(params:RegisterType) {
     }
 }
 
-export function logout(setUser: Function) {
+export async function logout(setUser: Function) {
     setUser(undefined);
+    await AsyncStorage.removeItem("savedSites");
 }

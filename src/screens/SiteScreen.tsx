@@ -9,6 +9,7 @@ import { LoginContext } from "../components/Shared/Context";
 import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
 import { FlatList } from "react-native-gesture-handler";
+import { CommentsInput } from "../components/CommentsInput";
 
 
 type RootStackParamList = {
@@ -110,6 +111,7 @@ export const SiteScreen = () => {
             <StackHeader />
             <ScrollView
                 style={styles.container}
+                keyboardDismissMode="on-drag"
             >
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
@@ -160,6 +162,7 @@ export const SiteScreen = () => {
 
                 {/*Comentarios*/}
                 <SectionHeader title="Comentarios" >
+                    <CommentsInput/>
                 </SectionHeader>
             </ScrollView>
         </SafeAreaView>

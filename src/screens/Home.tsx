@@ -161,7 +161,7 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
     const logoutTernary = iconName == 'sign-out-alt' ? '#E94A47' : 'black'
     return (
         <TouchableOpacity
-            onPress={() => { navigation != undefined ? navigation?.navigate(screenName) : logout(setUser) }}
+            onPress={async () => { navigation != undefined ? navigation?.navigate(screenName) : await logout(setUser) }}
             style={styles.button}
         >
             <Icon name={iconName} size={23} style={{ ...styles.icon, color: logoutTernary }}/>
@@ -171,11 +171,6 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
     )
 }
 
-type SearchParams = {
-    Search: {
-        searchText?: string;
-    };
-};
 
 export const Home = () => {
 

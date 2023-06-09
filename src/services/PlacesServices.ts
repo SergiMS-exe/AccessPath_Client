@@ -3,10 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Location, Site } from "../../@types/Site";
 import Person from "../../@types/Person";
 import { Platform } from "react-native";
-import { LOCALHOST_ANDROID, LOCALHOST_IOS } from "@env";
+import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+//const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+const API_HOST = REMOTE;
 
 
 export async function getPlacesByLocation(location: Location) {
