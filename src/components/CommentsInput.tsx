@@ -1,10 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Animated, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput, TouchableOpacity, Animated, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Person from '../../@types/Person';
+import { Site } from '../../@types/Site';
+import { sendComment } from '../services/PlacesServices';
 
-export const CommentsInput: React.FC = () => {
+type Props = {
+    user: Person,
+    site: Site;
+    onCommentSent: (newComment: any) => void;  // Nota que la función ahora espera un argumento
+}
+
+export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [height, setHeight] = useState(50);
+    const [commentText, setCommentText] = useState('')
     const animatedValue = useRef(new Animated.Value(0)).current;
 
     const handleFocus = () => {
@@ -26,10 +36,11 @@ export const CommentsInput: React.FC = () => {
     };
 
     const handleChangeText = (text: string) => {
-        if (text.length<=0 && isFocused)
+        if (text.length <= 0 && isFocused)
             handleBlur();
-        else if (text.length>0)
+        else if (text.length > 0)
             handleFocus()
+        setCommentText(text);
     }
 
     const handleContentSizeChange = (event: any) => {
@@ -48,20 +59,28 @@ export const CommentsInput: React.FC = () => {
         ],
     };
 
+    const sendCommentAndClear = async () => {
+        await sendComment(user, site, commentText);
+        setCommentText("");
+        onCommentSent({'texto': commentText, 'usuario': { '_id': user._id, 'nombre': user.nombre, 'apellidos': user.apellidos }});
+    }
+
     return (
         <View style={styles.container}>
             <Animated.View style={[styles.sendButtonContainer, sendButtonContainerStyle]}>
-                <TouchableOpacity style={styles.sendButton} onPress={() => { console.log("enviando comentario...")}}>
+                <TouchableOpacity style={styles.sendButton} onPress={sendCommentAndClear}>
+
                     <Icon name="paper-plane" style={styles.sendButtonIcon} />
                 </TouchableOpacity>
             </Animated.View>
             <TextInput
-                style={[styles.textInput, {height: Math.max(50, height)}]}
+                style={[styles.textInput, { height: Math.max(50, height) }]}
                 multiline
                 onContentSizeChange={handleContentSizeChange}
                 blurOnSubmit
-                onChangeText={(text)=>handleChangeText(text)}
+                onChangeText={(text) => handleChangeText(text)}
                 placeholder="Escriba un comentario..."
+                value={commentText}
             />
         </View>
     );

@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-//const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+// const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
 const API_HOST = REMOTE;
 
 
@@ -102,7 +102,28 @@ export async function getSavedSites(user: Person) {
     const sites: Site[] = response.data.sitios
     return sites
 }
+export async function sendComment(user: Person, site: Site, comment: string) {
+    const response = await axios.post(API_HOST + '/comment', {
+        userId: user._id,
+        placeId: site.placeId,
+        comment: comment
+    })
+    console.log(response.data);
 
+}
+
+export async function getComments(site: Site) {
+    const response = await axios.get(API_HOST + '/comments', {
+        params: {
+            placeId: site.placeId
+        }
+    }).then(res => res.data)
+    console.log(response);
+    
+    return response.data.comentarios;
+}
+
+//Funciones auxiliares
 async function makeRequest(query: string, location: Location, radius?: number) {
 
     const rectangle = "rectangle:42.88254,-7.18317|43.66653,-4.51059";

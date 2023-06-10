@@ -4,12 +4,12 @@ import { StackHeader } from "../components/Headers/StackHeader";
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import { LoginContext } from "../components/Shared/Context";
 import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
-import { FlatList } from "react-native-gesture-handler";
 import { CommentsInput } from "../components/CommentsInput";
+import { getComments } from "../services/PlacesServices";
 
 
 type RootStackParamList = {
@@ -75,7 +75,25 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 100,
         padding: 3,
-    }
+    },
+    commentsListContainer: {
+        marginTop: 10,
+    },
+    commentContainer: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 5,
+    },
+    commentText: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    commentUser: {
+        fontSize: 14,
+        color: 'gray',
+    },
 })
 
 export const SiteScreen = () => {
@@ -84,8 +102,22 @@ export const SiteScreen = () => {
     const { user } = useContext(LoginContext);
 
     const [isSaved, setIsSaved] = useState(false);
+    const [comments, setComments] = useState<any[]>([]);
+
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            //Obtener el nombre de los usuarios que han comentado 
+            const data: any = await getComments(site);
+            console.log(data);
+
+            setComments(data);
+        };
+
+        fetchData();
+    }, [])
 
     useEffect(() => {
         if (user?.saved.includes(site.placeId)) {
@@ -102,6 +134,10 @@ export const SiteScreen = () => {
             await save()
         setIsSaved(!isSaved)
         toggleUserContext(isSaved);
+    }
+
+    const handleNewComment = (newComment: any) => {
+        setComments(prevComments => [...prevComments, newComment]);
     }
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
@@ -162,7 +198,13 @@ export const SiteScreen = () => {
 
                 {/*Comentarios*/}
                 <SectionHeader title="Comentarios" >
-                    <CommentsInput/>
+                    {comments && comments.map((comment, index) => (
+                        <View key={index} style={styles.commentContainer}>
+                            <Text style={styles.commentText}>{comment.texto}</Text>
+                            <Text style={styles.commentUser}>{`${comment.usuario.nombre} ${comment.usuario.apellidos}`}</Text>
+                        </View>
+                    ))}
+                    {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
                 </SectionHeader>
             </ScrollView>
         </SafeAreaView>
