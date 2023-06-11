@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
     contentBody: {
         borderColor: 'black',
-        borderWidth: 0.4,
+        //borderWidth: 0.4,
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
@@ -75,7 +75,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         //backgroundColor: 'purple',
-        borderRadius: 7
+        borderRadius: 7,
+        borderBottomColor: 'black',
+        borderBottomWidth: 0.4,
     },
     icon: {
         marginRight: 15,

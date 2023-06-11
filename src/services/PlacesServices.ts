@@ -10,6 +10,7 @@ const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const API_HOST = REMOTE;
 
 
+
 export async function getPlacesByLocation(location: Location) {
 
     const uri = baseUrl + '/nearbysearch/json';
