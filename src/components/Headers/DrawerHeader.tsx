@@ -24,9 +24,7 @@ const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => {
-                    console.log(DrawerActions)
-                    navigation.dispatch(DrawerActions.openDrawer());}}>
+                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => {navigation.dispatch(DrawerActions.openDrawer());}}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
                 {searchBar ? (
