@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { DrawerActions, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { SearchBar } from '@rneui/themed';
@@ -24,7 +24,9 @@ const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => navigation.openDrawer()}>
+                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => {
+                    console.log(DrawerActions)
+                    navigation.dispatch(DrawerActions.openDrawer());}}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
                 {searchBar ? (

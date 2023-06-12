@@ -4,10 +4,11 @@ import { Location, Site } from "../../@types/Site";
 import Person from "../../@types/Person";
 import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
+import { CommentType } from "../../@types/CommentType";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-// const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
-const API_HOST = REMOTE;
+const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+// const API_HOST = REMOTE;
 
 
 
@@ -108,9 +109,27 @@ export async function sendComment(user: Person, site: Site, comment: string) {
         userId: user._id,
         placeId: site.placeId,
         comment: comment
-    })
-    console.log(response.data);
+    }).then(res=>res.data)
+    console.log(response);
+    const nuevoComentario: CommentType = {
+        '_id': response.data.comment._id,
+        'texto': response.data.comment.texto,
+        'usuario': {
+            '_id': response.data.usuarioId,
+            'nombre': user.nombre,
+            'apellidos': user.apellidos
+        }
+    }
+    return nuevoComentario
+}
 
+export async function editComment(siteId: string, commentId: string, newText: string) {
+    const response = await axios.put(API_HOST + '/comment', {
+        siteId: siteId,
+        commentId: commentId,
+        newText: newText
+    })
+    console.log(response)
 }
 
 export async function getComments(site: Site) {
@@ -119,9 +138,10 @@ export async function getComments(site: Site) {
             placeId: site.placeId
         }
     }).then(res => res.data)
-    console.log(response);
-    
-    return response.data.comentarios;
+    console.log(JSON.stringify(response));
+    const comments: CommentType[] = response.data.comentarios
+
+    return comments;
 }
 
 //Funciones auxiliares

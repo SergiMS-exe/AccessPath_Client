@@ -8,7 +8,7 @@ import { sendComment } from '../services/PlacesServices';
 type Props = {
     user: Person,
     site: Site;
-    onCommentSent: (newComment: any) => void;  // Nota que la función ahora espera un argumento
+    onCommentSent: (newComment: any) => void;  
 }
 
 export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) => {
@@ -60,19 +60,19 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) =>
     };
 
     const sendCommentAndClear = async () => {
-        await sendComment(user, site, commentText);
+        const newComment = await sendComment(user, site, commentText);
         setCommentText("");
-        onCommentSent({'texto': commentText, 'usuario': { '_id': user._id, 'nombre': user.nombre, 'apellidos': user.apellidos }});
+        onCommentSent({'_id': newComment._id, 'texto': commentText, 'usuario': { '_id': user._id, 'nombre': user.nombre, 'apellidos': user.apellidos }});
     }
 
     return (
         <View style={styles.container}>
             <Animated.View style={[styles.sendButtonContainer, sendButtonContainerStyle]}>
                 <TouchableOpacity style={styles.sendButton} onPress={sendCommentAndClear}>
-
                     <Icon name="paper-plane" style={styles.sendButtonIcon} />
                 </TouchableOpacity>
             </Animated.View>
+
             <TextInput
                 style={[styles.textInput, { height: Math.max(50, height) }]}
                 multiline

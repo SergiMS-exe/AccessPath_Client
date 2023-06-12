@@ -9,9 +9,11 @@ module.exports = {
         sage: false,
         allowUndefined: true,
       }],
-      ['react-native-reanimated/plugin', {
-          relativeSourceLocation: true,
-      }],
+      [
+        'react-native-reanimated/plugin', {
+            relativeSourceLocation: true,
+        },
+    ]
     ],
     env: {
       production: {
