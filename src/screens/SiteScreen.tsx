@@ -41,7 +41,7 @@ export const SiteScreen = () => {
             const data: CommentType[] = await getComments(site);
             console.log(user)
             setLoading(false)
-    
+
             setComments(data);
         };
 
@@ -70,10 +70,13 @@ export const SiteScreen = () => {
         setComments(prevComments => [...prevComments, newComment]);
     }
 
-    const updateComments = (updatedComment: CommentType) => {
-        setComments(prevComments => prevComments.map(c => c._id === updatedComment._id ? updatedComment : c));
+    const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
+        if (wantsToDelete)
+            setComments(prevComments => prevComments.filter(c => c._id !== comment._id))
+        else
+            setComments(prevComments => prevComments.map(c => c._id === comment._id ? comment : c));
     };
-    
+
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
 
@@ -137,7 +140,7 @@ export const SiteScreen = () => {
                         <ActivityIndicator /> : (
                             <>
                                 {comments && comments.map((comment, index) => (
-                                    <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId}/>
+                                    <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />
                                 ))}
                                 {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
                             </>

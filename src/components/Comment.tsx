@@ -2,12 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { LoginContext } from './Shared/Context';
-import { editComment } from '../services/PlacesServices';
+import { deleteComment, editComment } from '../services/PlacesServices';
 import { CommentType } from '../../@types/CommentType';
 
 type CommentProps = {
     comment: CommentType;
-    updateComments: (newComments: CommentType) => void;
+    updateComments: (comment: CommentType, wantsToDelete: boolean) => void;
     placeId: string;
 }
 
@@ -17,22 +17,30 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [newText, setNewText] = useState(comment.texto);
 
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleEdit = async () => {
         const newComment = await editComment(placeId, comment._id, newText); //tiene _id, texto y usuarioId
-        const realComment: CommentType = new CommentType(
-            newComment._id,
-            {
-                _id: newComment.usuarioId,
-                nombre: user!.nombre,
-                apellidos: user!.apellidos,
-            },
-            newComment.texto
-        );
+        
         if (newComment) {
-            updateComments(realComment)
+            const realComment: CommentType = new CommentType(
+                newComment._id,
+                {
+                    _id: newComment.usuarioId,
+                    nombre: user!.nombre,
+                    apellidos: user!.apellidos,
+                },
+                newComment.texto
+            );
+            updateComments(realComment, false)
             setIsEditing(false)
         }
+    }
+
+    const handleDeleting = async () => {
+        await deleteComment(placeId, comment._id)
+        setIsDeleting(false)
+        updateComments(comment, true)
     }
 
     if (isEditing)
@@ -54,6 +62,21 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
                 </View>
             </View>
         )
+    else if (isDeleting)
+        return (
+            <View style={styles.commentContainer}>
+                <Text style={styles.commentText}>{comment.texto}</Text>
+                <Text style={styles.commentUser}>{`${comment.usuario.nombre} ${comment.usuario.apellidos}`}</Text>
+                <View style={styles.editingbuttonsContainer}>
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting}>
+                        <Icon name="trash" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsDeleting(false)}>
+                        <Icon name="times" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
     else
         return (
             <View style={styles.commentContainer}>
@@ -63,7 +86,7 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
                     <TouchableOpacity onPress={() => setIsEditing(true)}>
                         <Icon name="pen" size={15} style={{ marginRight: 7 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsDeleting(true)}>
                         <Icon name="trash" size={15} />
                     </TouchableOpacity>
                 </View>}

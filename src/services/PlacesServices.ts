@@ -109,13 +109,13 @@ export async function sendComment(user: Person, site: Site, comment: string) {
         userId: user._id,
         placeId: site.placeId,
         comment: comment
-    }).then(res=>res.data)
+    }).then(res => res.data)
     console.log(response);
     const nuevoComentario: CommentType = {
         '_id': response.data.comment._id,
         'texto': response.data.comment.texto,
         'usuario': {
-            '_id': response.data.usuarioId,
+            '_id': response.data.comment.usuarioId,
             'nombre': user.nombre,
             'apellidos': user.apellidos
         }
@@ -128,11 +128,21 @@ export async function editComment(placeId: string, commentId: string, newText: s
         placeId: placeId,
         commentId: commentId,
         newText: newText
-    }).then(res => res.data).catch(e=>console.error(e))
+    }).then(res => res.data).catch(e => console.error(e))
     console.log(response)
 
-    
+
     return response.newComment; //Hay que transformar esto a CommentType (añadir nombre y apellidos)
+}
+
+export async function deleteComment(placeId: string, commentId: string) {
+    const response = await axios.delete(API_HOST + '/comment', {
+        data: {
+            placeId: placeId,
+            commentId: commentId
+        }
+    })
+    console.log(response.data)
 }
 
 export async function getComments(site: Site) {
