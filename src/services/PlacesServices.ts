@@ -7,8 +7,8 @@ import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
-// const API_HOST = REMOTE;
+// const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+const API_HOST = REMOTE;
 
 
 
@@ -123,13 +123,16 @@ export async function sendComment(user: Person, site: Site, comment: string) {
     return nuevoComentario
 }
 
-export async function editComment(siteId: string, commentId: string, newText: string) {
+export async function editComment(placeId: string, commentId: string, newText: string) {
     const response = await axios.put(API_HOST + '/comment', {
-        siteId: siteId,
+        placeId: placeId,
         commentId: commentId,
         newText: newText
-    })
+    }).then(res => res.data).catch(e=>console.error(e))
     console.log(response)
+
+    
+    return response.newComment; //Hay que transformar esto a CommentType (añadir nombre y apellidos)
 }
 
 export async function getComments(site: Site) {

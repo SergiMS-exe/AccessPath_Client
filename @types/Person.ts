@@ -1,5 +1,5 @@
 type Props = {
-    _id: number;
+    _id: string;
     nombre: string;
     apellidos: string;
     email: string;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 class Person {
-    _id: number;
+    _id: string;
     nombre: string;
     apellidos: string;
     email: string;

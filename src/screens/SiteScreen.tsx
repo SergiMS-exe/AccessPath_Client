@@ -4,7 +4,7 @@ import { StackHeader } from "../components/Headers/StackHeader";
 import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { LoginContext } from "../components/Shared/Context";
 import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
@@ -13,7 +13,7 @@ import { getComments } from "../services/PlacesServices";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Comment } from "../components/Comment";
 import { CommentType } from "../../@types/CommentType";
-
+import { Footer } from "../components/Footer";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -35,15 +35,15 @@ export const SiteScreen = () => {
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site)
 
-    const fetchData = async () => {
-        //Obtener el nombre de los usuarios que han comentado 
-        const data: CommentType[] = await getComments(site);
-        console.log(user)
-        setLoading(false)
-
-        setComments(data);
-    };
     useEffect(() => {
+        const fetchData = async () => {
+            //Obtener el nombre de los usuarios que han comentado 
+            const data: CommentType[] = await getComments(site);
+            console.log(user)
+            setLoading(false)
+    
+            setComments(data);
+        };
 
         fetchData();
     }, [])
@@ -65,19 +65,20 @@ export const SiteScreen = () => {
         toggleUserContext(isSaved);
     }
 
-    const handleNewComment = (newComment: any) => {
+    const handleNewComment = (newComment: CommentType) => {
         console.log(newComment)
         setComments(prevComments => [...prevComments, newComment]);
     }
 
-    const updateComments = (newComments: any[]) => {
-        setComments(newComments);
+    const updateComments = (updatedComment: CommentType) => {
+        setComments(prevComments => prevComments.map(c => c._id === updatedComment._id ? updatedComment : c));
     };
+    
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <StackHeader />
             <ScrollView
                 style={styles.container}
@@ -136,13 +137,14 @@ export const SiteScreen = () => {
                         <ActivityIndicator /> : (
                             <>
                                 {comments && comments.map((comment, index) => (
-                                    <Comment key={index} comment={comment} updateComments={updateComments} />
+                                    <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId}/>
                                 ))}
                                 {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
                             </>
                         )
                 }
                 </SectionHeader>
+                <Footer />
             </ScrollView>
         </SafeAreaView>
     );
