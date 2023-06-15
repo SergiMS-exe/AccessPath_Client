@@ -56,7 +56,7 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
                     <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, }} onPress={handleEdit}>
                         <Icon name="pen" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#cf142b' }} onPress={() => setIsEditing(false)}>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsEditing(false)}>
                         <Icon name="times" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                 </View>

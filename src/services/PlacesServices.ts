@@ -150,7 +150,7 @@ export async function getComments(site: Site) {
         params: {
             placeId: site.placeId
         }
-    }).then(res => res.data)
+    }).then(res => res.data).catch(e=>console.error(e))
     console.log(JSON.stringify(response));
     const comments: CommentType[] = response.data.comentarios
 
