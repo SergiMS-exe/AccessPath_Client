@@ -54,7 +54,7 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
 
                 <View style={styles.editingbuttonsContainer}>
                     <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, }} onPress={handleEdit}>
-                        <Icon name="pen" style={styles.sendButtonIcon} />
+                        <Icon name="check" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                     <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsEditing(false)}>
                         <Icon name="times" style={styles.sendButtonIcon} />
@@ -84,10 +84,10 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
                 <Text style={styles.commentUser}>{`${comment.usuario.nombre} ${comment.usuario.apellidos}`}</Text>
                 {user && user._id === comment.usuario._id && <View style={styles.editDeleteButtons}>
                     <TouchableOpacity onPress={() => setIsEditing(true)}>
-                        <Icon name="pen" size={15} style={{ marginRight: 7 }} />
+                        <Icon name="pen" size={18} style={{ marginRight: 12 }} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setIsDeleting(true)}>
-                        <Icon name="trash" size={15} />
+                        <Icon name="trash" size={18} />
                     </TouchableOpacity>
                 </View>}
             </View>
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     },
     commentText: {
         fontSize: 18,
+        fontWeight: '600',
         marginBottom: 5,
     },
     commentUser: {

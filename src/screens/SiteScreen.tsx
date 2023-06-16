@@ -67,7 +67,10 @@ export const SiteScreen = () => {
 
     const handleNewComment = (newComment: CommentType) => {
         console.log(newComment)
-        setComments(prevComments => [...prevComments, newComment]);
+        if (comments)
+            setComments(prevComments => [...prevComments, newComment]);
+        else
+            setComments([newComment])
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {

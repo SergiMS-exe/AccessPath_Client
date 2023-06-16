@@ -62,7 +62,7 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) =>
     const sendCommentAndClear = async () => {
         const newComment = await sendComment(user, site, commentText);
         setCommentText("");
-        onCommentSent({'_id': newComment._id, 'texto': commentText, 'usuario': { '_id': user._id, 'nombre': user.nombre, 'apellidos': user.apellidos }});
+        onCommentSent({'_id': newComment._id, 'texto': newComment.texto, 'usuario': { '_id': newComment.usuario._id, 'nombre': newComment.usuario.nombre, 'apellidos': newComment.usuario.apellidos }});
     }
 
     return (

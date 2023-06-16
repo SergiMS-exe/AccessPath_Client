@@ -107,7 +107,7 @@ export async function getSavedSites(user: Person) {
 export async function sendComment(user: Person, site: Site, comment: string) {
     const response = await axios.post(API_HOST + '/comment', {
         userId: user._id,
-        placeId: site.placeId,
+        site: site,
         comment: comment
     }).then(res => res.data)
     console.log(response);
@@ -155,6 +155,13 @@ export async function getComments(site: Site) {
     const comments: CommentType[] = response.data.comentarios
 
     return comments;
+}
+
+export async function sendRating(form: any, site: Site) {
+    const response = await axios.post(API_HOST + '/rating', {
+        placeId: site.placeId,
+        form: form
+    });
 }
 
 //Funciones auxiliares
