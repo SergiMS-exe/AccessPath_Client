@@ -1,11 +1,11 @@
 import { SafeAreaView, SectionList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Titulo } from "../components/Titulo";
-import Icon from "react-native-vector-icons/FontAwesome5";
 import { RadioButtonGroup } from "../components/RadioButtonGroup";
 import { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
+import { sendRating } from "../services/PlacesServices";
+import { RatingForm } from "../../@types/RatingForm";
 
 const data = [
     {
@@ -15,6 +15,10 @@ const data = [
     {
         title: 'Sensorial',
         data: ['A', 'B', 'C']
+    },
+    {
+        title: 'Psiquica',
+        data: ['D', 'E', 'F']
     }
 ]
 type StackProps = NativeStackNavigationProp<any, any>;
@@ -23,25 +27,51 @@ export const FormScreen = () => {
 
     const navigation = useNavigation<StackProps>();
 
-    const [selectedValues, setSelectedValues] = useState({});
+    const [selectedValues, setSelectedValues] = useState<RatingForm>({});
+    const [hasError, setHasError] = useState(false);
 
-    const handleSelectionChange = (item: any, value: any) => {
-        setSelectedValues(prevState => ({...prevState, [item]: value}));
+    const handleSelectionChange = (section: string, item: string, value: number) => {
+        setSelectedValues(prevState => {
+            let sectionValues = prevState[section.toLowerCase()] || [];
+            let itemIndex = sectionValues.findIndex((sv) => sv[item]);
+
+            if (value === 0) { //Remove item if value is 0
+                sectionValues = sectionValues.filter((sv, index) => index !== itemIndex);
+                if (sectionValues.length === 0) {
+                    const { [section.toLowerCase()]: _, ...rest } = prevState;
+                    return rest;
+                }
+            } else {
+                let newItem = { [item]: value };
+                setHasError(false)
+                if (itemIndex >= 0) {
+                    sectionValues[itemIndex] = newItem;  // replace existing item
+                } else {
+                    sectionValues.push(newItem);  // add new item
+                }
+            }
+
+            return { ...prevState, [section.toLowerCase()]: sectionValues };
+        });
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         console.log(selectedValues)
     }, [selectedValues])
-    
+
     const guardarCambios = () => {
-        // Código para guardar los cambios
-        console.log('Cambios guardados: ', selectedValues);
-        navigation.goBack()
+        if (Object.keys(selectedValues).length===0)
+            setHasError(true);
+        else {
+            // Código para guardar los cambios
+            console.log('Cambios guardados: ', selectedValues);
+            navigation.goBack()
+        }
     }
-    
+
     return (
         <SafeAreaView style={{
-
+            flex: 1,
             backgroundColor: '#fff',
         }}>
             <StackHeader />
@@ -49,13 +79,16 @@ export const FormScreen = () => {
                 contentContainerStyle={styles.container}
                 sections={data}
                 keyExtractor={(item, index) => item + index}
-                renderItem={({ item }) => (
-                    <RadioButtonGroup text={item} onSelectionChange={(value) => handleSelectionChange(item, value)}/>
+                renderItem={({ section, item }) => (
+                    <RadioButtonGroup text={item}
+                        onSelectionChange={(value) => handleSelectionChange(section.title, item, value)}
+                    />
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <Text style={styles.header}>{title}</Text>
                 )}
             />
+            {hasError && <Text style={styles.errorMessage}>Se debe valorar algún campo antes de enviar</Text>}
             <TouchableOpacity style={styles.saveButton} onPress={guardarCambios}>
                 <Text style={styles.saveButtonText}>Guardar Cambios</Text>
             </TouchableOpacity>
@@ -90,5 +123,11 @@ const styles = StyleSheet.create({
     saveButtonText: {
         color: 'white',
         fontSize: 16,
+    },
+    errorMessage: {
+        position: 'relative',
+        alignSelf: 'center',
+        color: 'red',
+        fontSize: 16
     }
 });

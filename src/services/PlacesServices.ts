@@ -5,10 +5,11 @@ import Person from "../../@types/Person";
 import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
+import { RatingForm } from "../../@types/RatingForm";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-// const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
-const API_HOST = REMOTE;
+const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
+// const API_HOST = REMOTE;
 
 
 
@@ -157,7 +158,7 @@ export async function getComments(site: Site) {
     return comments;
 }
 
-export async function sendRating(form: any, site: Site) {
+export async function sendRating(form: RatingForm, site: Site) {
     const response = await axios.post(API_HOST + '/rating', {
         placeId: site.placeId,
         form: form
