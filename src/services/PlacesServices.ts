@@ -8,10 +8,9 @@ import { CommentType } from "../../@types/CommentType";
 import { RatingForm } from "../../@types/RatingForm";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
-const API_HOST = Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID;
-// const API_HOST = REMOTE;
-
-
+const baseUrlSites = '/sites'
+const API_HOST = (Platform.OS === 'ios' ? LOCALHOST_IOS : 'http://10.0.2.2:3002') + baseUrlSites;
+// const API_HOST = REMOTE + baseUrlSites;
 
 export async function getPlacesByLocation(location: Location) {
 
@@ -86,37 +85,20 @@ export async function getPlacesByText(text: string) {
     return convertToSite(response)
 }
 
-export async function toggleSave(site: Site, user: Person, save: boolean) {
-    const endpoint = save ? '/save' : '/unSave';
-
-    const response = await axios.put(API_HOST + endpoint, {
-        site: site,
-        userEmail: user.email
-    })
-    console.log(response.data);
-}
-
-export async function getSavedSites(user: Person) {
-    const response = await axios.get(API_HOST + '/userSaved', {
-        params: {
-            userId: user._id,
-        }
-    }).then(res => res.data)
-    const sites: Site[] = response.data.sitios
-    return sites
-}
 export async function sendComment(user: Person, site: Site, comment: string) {
     const response = await axios.post(API_HOST + '/comment', {
-        userId: user._id,
         site: site,
-        comment: comment
+        comment: {
+            texto: comment,
+            usuarioId: user._id
+        }
     }).then(res => res.data)
     console.log(response);
     const nuevoComentario: CommentType = {
-        '_id': response.data.comment._id,
-        'texto': response.data.comment.texto,
+        '_id': response.comment._id,
+        'texto': response.comment.texto,
         'usuario': {
-            '_id': response.data.comment.usuarioId,
+            '_id': response.comment.usuarioId,
             'nombre': user.nombre,
             'apellidos': user.apellidos
         }
@@ -125,8 +107,7 @@ export async function sendComment(user: Person, site: Site, comment: string) {
 }
 
 export async function editComment(placeId: string, commentId: string, newText: string) {
-    const response = await axios.put(API_HOST + '/comment', {
-        placeId: placeId,
+    const response = await axios.put(API_HOST + '/comment/' + placeId, {
         commentId: commentId,
         newText: newText
     }).then(res => res.data).catch(e => console.error(e))
@@ -137,13 +118,10 @@ export async function editComment(placeId: string, commentId: string, newText: s
 }
 
 export async function deleteComment(placeId: string, commentId: string) {
-    const response = await axios.delete(API_HOST + '/comment', {
-        data: {
-            placeId: placeId,
-            commentId: commentId
-        }
-    })
-    console.log(response.data)
+    const response = await axios.delete(API_HOST + '/comment/'+placeId+'/'+commentId, {
+    }).then(response => response.data).
+        catch(e => console.error(e))
+    console.log(response)
 }
 
 export async function getComments(site: Site) {
@@ -153,7 +131,7 @@ export async function getComments(site: Site) {
         }
     }).then(res => res.data).catch(e=>console.error(e))
     console.log(JSON.stringify(response));
-    const comments: CommentType[] = response.data.comentarios
+    const comments: CommentType[] = response.comentarios;
 
     return comments;
 }

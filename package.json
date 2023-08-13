@@ -8,7 +8,7 @@
   },
   "scripts": {
     "android": "react-native run-android",
-    "android-clean": "cd android && ./gradlew clean && cd .. && react-native run-android ",
+    "android-clean": "cd android && gradlew clean && cd .. && react-native run-android ",
     "ios": "react-native run-ios",
     "ios-clean": "cd ios && pod cache clean --all && rm -rf build && pod install && cd .. && react-native run-ios",
     "mobile-clean": "npm run android-clean && npm run ios-clean",

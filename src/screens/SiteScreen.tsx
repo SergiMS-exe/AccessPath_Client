@@ -39,7 +39,7 @@ export const SiteScreen = () => {
         const fetchData = async () => {
             //Obtener el nombre de los usuarios que han comentado 
             const data: CommentType[] = await getComments(site);
-            console.log(user)
+            console.log(data)
             setLoading(false)
 
             setComments(data);
