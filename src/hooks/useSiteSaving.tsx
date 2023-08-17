@@ -1,9 +1,9 @@
 import { useContext, useState } from "react"
 import Person from "../../@types/Person"
 import { Site } from "../../@types/Site"
-import { toggleSave } from "../services/PlacesServices"
 import { LoginContext } from "../components/Shared/Context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { toggleSave } from "../services/UserServices"
 
 export const useSiteSaving = (site: Site) => {
     const { user, setUser } = useContext(LoginContext);
