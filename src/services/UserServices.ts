@@ -11,7 +11,7 @@ import { Site } from '../../@types/Site';
 
 const baseUrlUsers = '/users'
 
-const API_HOST = (Platform.OS === 'ios' ? LOCALHOST_IOS : LOCALHOST_ANDROID) + baseUrlUsers;
+const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
 //const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
@@ -107,12 +107,20 @@ export async function deleteAccount(userId: string, setUser: Function) {
 }
 
 export async function toggleSave(site: Site, user: Person, save: boolean) {
-    const endpoint = save ? '/saveSite' : '/unsaveSite';
+    let response;
+    
+    if (save) {
+        response = await axios.put(API_HOST + '/saveSite', {
+            site: site,
+            userId: user._id
+        })
+    } else {
+        response = await axios.put(API_HOST + '/unsaveSite', {
+            placeId: site.placeId,
+            userId: user._id
+        })
+    }    
 
-    const response = await axios.put(API_HOST + endpoint, {
-        site: site,
-        userId: user._id
-    })
     console.log(response.data);
 }
 

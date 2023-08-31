@@ -98,7 +98,7 @@ export const SiteScreen = () => {
                             <Icon name='heart' size={20} solid={isSaved} />
                         </TouchableOpacity>}
                 </View>
-                <Text style={styles.rating}>{site.calificacion}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
+                <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
                 <View style={styles.addressContainer}>
 
                     <View style={styles.addressTextContainer}>

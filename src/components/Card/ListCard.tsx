@@ -51,7 +51,7 @@ export const ListCard = ({site}: Props) => {
                 <Icon name='map-marker-alt' size={17} color='red'/>
             </View>
             <Text style={styles.address}>{site.direccion}</Text>
-            <Text style={styles.rating}>{site.calificacion}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{borderWidth: 0.5, borderColor:'black'}}/></Text>
+            <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{borderWidth: 0.5, borderColor:'black'}}/></Text>
         </TouchableOpacity>
     );
 }

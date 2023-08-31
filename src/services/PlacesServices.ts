@@ -9,8 +9,8 @@ import { RatingForm } from "../../@types/RatingForm";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-const API_HOST = (Platform.OS === 'ios' ? LOCALHOST_IOS : 'http://10.0.2.2:3002') + baseUrlSites;
-// const API_HOST = REMOTE + baseUrlSites;
+const API_HOST = 'http://192.168.0.11:3002' + baseUrlSites;
+//const API_HOST = REMOTE + baseUrlSites;
 
 export async function getPlacesByLocation(location: Location) {
 
@@ -125,6 +125,7 @@ export async function deleteComment(placeId: string, commentId: string) {
 }
 
 export async function getComments(site: Site) {
+    console.log(API_HOST + '/comments')
     const response = await axios.get(API_HOST + '/comments', {
         params: {
             placeId: site.placeId
@@ -174,7 +175,7 @@ function convertToSite(placeResponse: PlaceResponse): Site[] {
             longitude: lng
         };
 
-        return new Site(name, formatted_address, rating, types, location, place_id);
+        return new Site(place_id, name, formatted_address, rating, location, types);
     });
 }
 
@@ -185,7 +186,7 @@ const convertDataToSites = (data: any): Site[] => {
         const { name, formatted_address, rating, types, geometry, place_id } = result;
         const { lat, lng } = geometry.location;
         const location = { latitude: lat, longitude: lng };
-        return new Site(name, formatted_address, rating, types, location, place_id);
+        return new Site(place_id, name, formatted_address, rating, location, types);
     });
 };
 
