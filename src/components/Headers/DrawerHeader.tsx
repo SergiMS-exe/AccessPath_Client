@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerActions, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -12,10 +12,11 @@ type RoutePropType = RouteProp<any, any>;
 type Props = {
     searchBar?: boolean;
     searchText?: string;
-    onSearchTextChange: (text: string) => void;
+    title?: string;
+    onSearchTextChange?: (text: string) => void;
 }
 
-const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
+const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Props) => {
     const navigation = useNavigation<DrawerProp>();
     const route = useRoute<RoutePropType>();
 
@@ -27,7 +28,9 @@ const DrawerHeader = ({ searchBar, searchText, onSearchTextChange }: Props) => {
                 <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => {navigation.dispatch(DrawerActions.openDrawer());}}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
-                {searchBar ? (
+                {title ? (
+                    <Text style={styles.titleText}>{title}</Text>
+                ) : searchBar ? (
                 <SearchBar
                     containerStyle={styles.searchBar}
                     inputContainerStyle={styles.searchBarInput}
@@ -64,6 +67,12 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 20,
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+        textAlign: 'center'
     },
     menu: {
         fontSize: 30,

@@ -28,7 +28,7 @@ export const SavedScreen = () => {
 
     return (
         <>
-            <ResultList data={savedSites} title='Sitios guardados' noItemsMessage='No hay sitios guardados'/>
+            <ResultList data={savedSites} noItemsMessage='No hay sitios guardados'/>
         </>
     )
 }

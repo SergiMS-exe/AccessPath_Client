@@ -1,25 +1,31 @@
+import { CommentType } from "./CommentType";
+
+
 export class Site {
     public placeId: string;
     public nombre: string;
     public direccion: string;
-    public calificacion: number;
+    public calificacionGoogle: number;
+    public comentarios?: CommentType[];
     public location: Location;
     public types: string[];
-  
+
     constructor(
+      placeId: string,
       nombre: string,
       direccion: string,
-      calificacion: number,
-      types: string[],
+      calificacionGoogle: number,
       location: Location,
-      placeId: string,
+      types: string[],
+      comentarios?: CommentType[]
     ) {
       this.placeId = placeId;
       this.nombre = nombre;
       this.direccion = direccion;
-      this.calificacion = calificacion;
+      this.calificacionGoogle = calificacionGoogle;
       this.location = location;
-      this.types = types
+      this.types = types;
+      this.comentarios = comentarios;
     }
 }
 

@@ -190,7 +190,10 @@ export const Home = () => {
                 header: () => <DrawerHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
                 }}
             />
-            <Drawer.Screen name="Saved" component={SavedScreen} />
+            <Drawer.Screen name="Saved" component={SavedScreen} options={{
+                header: () => <DrawerHeader title='Sitios Guardados'/>
+                
+            }}/>
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />
