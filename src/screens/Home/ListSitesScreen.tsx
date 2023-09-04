@@ -18,10 +18,9 @@ const styles = StyleSheet.create({
 
 export const ListSitesScreen = ({navigation}: Props) => {
     return (
-        <>
-        {/* <Titulo title='Sitios valorados cerca de ti'/> */}
-        <ResultList data={staticSites} title='Sitios valorados cercanos' noItemsMessage='No hay sitios valorados cerca de ti'/>
-        <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
-        </>
+        <View style={{flex: 1}}>
+            <ResultList data={staticSites} title='Sitios valorados cercanos' noItemsMessage='No hay sitios valorados cerca de ti'/>
+            <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
+        </View>
     )
 }

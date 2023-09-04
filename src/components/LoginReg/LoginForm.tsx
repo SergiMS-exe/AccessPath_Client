@@ -6,7 +6,7 @@ import { Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { login } from '../../services/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getSavedSites } from '../../services/PlacesServices';
+import { getSavedSites } from '../../services/UserServices';
 
 type Props = {
     navigation: NativeStackNavigationProp<any, any>;

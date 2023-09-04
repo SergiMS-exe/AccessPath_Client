@@ -11,8 +11,8 @@ import { Site } from '../../@types/Site';
 
 const baseUrlUsers = '/users'
 
-const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
-//const API_HOST = REMOTE + baseUrlUsers;
+//const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
+const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
     screen: string, setUser: Function) {

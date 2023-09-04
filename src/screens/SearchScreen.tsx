@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
-import { Titulo } from "../components/Titulo";
-import { ListCard } from '../components/Card/ListCard';
+import { StyleSheet } from 'react-native';
 import { getPlacesByText } from '../services/PlacesServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackHeader } from '../components/Headers/StackHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Site } from '../../@types/Site';
+import { ResultList } from '../components/Card/ResultList';
 
 interface Props extends NativeStackScreenProps<any, any>{};
 
@@ -23,15 +22,15 @@ export const SearchScreen = ({route}: Props) => {
     }, []);
 
     return(
-        <SafeAreaView>
-            <StackHeader/>
-            <Titulo title='Search'/>
-            <FlatList
-                data={places}
-                bounces              
-                //key={(item) => item._id?.toString()}
-                renderItem={({ item }) => <ListCard site={item} />}
-            />
+        <SafeAreaView style={{flex: 1}}> 
+            <StackHeader title={"Búsqueda: '"+route.params?.searchText+"'"}/>
+            <ResultList data={places} noItemsMessage='No se han encontrado '/>
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    list : {
+        paddingHorizontal: 10
+    }
+})

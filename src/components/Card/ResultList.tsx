@@ -6,35 +6,37 @@ import { Text } from "@rneui/base";
 
 type Props = {
     data: Site[];
-    title: string;
+    title?: string;
     noItemsMessage: string;
 }
 
 const styles = StyleSheet.create({
     container: {
         margin: 10,
-        alignItems: "center"
+        padding: 5
     },
     emptyListMessage: {
         fontSize: 20
     },
+    content : {
+        flexGrow: 1,
+    }
 })
 
 export const ResultList = ({ data, title, noItemsMessage }: Props) => {
     const renderListItem = ({ item }: { item: Site }) => <ListCard site={item} />;
 
     return (
-        <View style={styles.container}>
+        // <View style={styles.container}>
             <FlatList
-                // data={[...data, ...data]}
                 data={data}
-                //keyExtractor={(item) => item._id?.toString() || ''}
+                style={styles.container}
                 renderItem={renderListItem}
-                contentContainerStyle={{flexGrow: 1}}
-                ListHeaderComponent={<Titulo title={title}/>}
+                contentContainerStyle={styles.content}
+                ListHeaderComponent={title ? <Titulo title={title}/> : null}
                 ListEmptyComponent={<Text style={styles.emptyListMessage}>{noItemsMessage}</Text>}
                 showsVerticalScrollIndicator={false}
             />
-        </View>
+        // </View>
     );
 }

@@ -1,21 +1,28 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
+type Props = {
+    title?: string;
+}
 
-export const StackHeader = () => {
+export const StackHeader = ({ title }: Props) => {
 
     const navigation = useNavigation();
 
     return (
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon name='arrow-left' size={30} />
-                </TouchableOpacity>
-                
-                <View style={styles.blank}/>
-                
-            </View>
+        <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon name='arrow-left' size={30} />
+            </TouchableOpacity>
+
+            {title ? (
+                <Text style={styles.titleText}>{title}</Text>
+            ) : (
+                <View style={styles.blank} />
+            )}
+
+        </View>
     )
 }
 
@@ -31,6 +38,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.2,
         borderBottomColor: '#000',
         zIndex: 1
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+        textAlign: 'center'
     },
     blank: {
         marginLeft: 10,
