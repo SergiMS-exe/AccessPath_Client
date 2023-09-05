@@ -32,6 +32,8 @@ export async function login(email: string, password: string, navigation: NativeS
         if (usuario !== null) {
             console.log(usuario)
             setUser(usuario);
+            const savedSites = await getSavedSites(usuario);
+            await AsyncStorage.setItem("savedSites", savedSites.toString());
             navigation.dispatch(
                 CommonActions.reset({
                     routes: [
@@ -125,11 +127,8 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
 }
 
 export async function getSavedSites(user: Person) {
-    const response = await axios.get(API_HOST + '/savedSites', {
-        params: {
-            userId: user._id,
-        }
-    }).then(res => res.data)
-    const sites: Site[] = response.sitios
+    const response = await axios.get(API_HOST + '/savedSites/'+user._id).
+                        then(res => res.data);
+    const sites: Site[] = response.saved;
     return sites
 }
