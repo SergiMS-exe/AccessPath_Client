@@ -11,7 +11,7 @@ interface Props extends NativeStackScreenProps<any, any>{};
 export const LoginScreen = ({navigation}:Props) => {
 
 
-    const user = new Person({_id:1, nombre:'a', apellidos: 'a', email: 'a', tipoDiscapacidad:'a'})
+    //const user = new Person({_id:1, nombre:'a', apellidos: 'a', email: 'a', tipoDiscapacidad:'a'})
     return(
         <SafeAreaView>
             <Titulo title='Iniciar Sesion'/>

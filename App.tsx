@@ -13,6 +13,9 @@ import useLoginContext from './src/hooks/useLoginContext';
 import { SearchScreen } from './src/screens/SearchScreen';
 import { SiteScreen } from './src/screens/SiteScreen';
 import { FormScreen } from './src/screens/FormScreen';
+import { EditProfile } from './src/screens/Profile/EditProfile';
+import { MyComments } from './src/screens/Profile/MyComments';
+import { MyRatings } from './src/screens/Profile/MyRatings';
 
 enableLatestRenderer();
 
@@ -36,6 +39,10 @@ function App() {
                         <Stack.Screen name='search' component={SearchScreen}/>
                         <Stack.Screen name='site' component={SiteScreen}/>
                         <Stack.Screen name='form' component={FormScreen}/>
+                        {/* Parte del profile */}
+                        <Stack.Screen name='editProfile' component={EditProfile}/>
+                        <Stack.Screen name='myComments' component={MyComments}/>
+                        <Stack.Screen name='myRatings' component={MyRatings}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </SafeAreaProvider>

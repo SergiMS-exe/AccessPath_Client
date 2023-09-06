@@ -5,9 +5,15 @@ import { logout } from '../services/UserServices';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Text } from '@rneui/base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+type StackProps = NativeStackNavigationProp<any, any>;
 
 export const ProfileScreen = () => {
 
+    const navigation = useNavigation<StackProps>();
+    
     const { setUser, user } = useContext(LoginContext)
 
     return (
@@ -20,10 +26,10 @@ export const ProfileScreen = () => {
                 </View>
             </View>
 
-            <ProfileButton iconName='user-edit' title='Editar Perfil' onPress={() => {}}/>
-            <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/>
-            <ProfileButton iconName='star' title='Mis Valoraciones' onPress={() => {}}/>
-            <ProfileButton iconName='comment' title='Mis Comentarios' onPress={() => {}}/>
+            <ProfileButton iconName='user-edit' title='Editar Perfil' onPress={() => navigation.navigate("editProfile")}/>
+            {/* <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/> */}
+            <ProfileButton iconName='star' title='Mis Valoraciones' onPress={() => navigation.navigate("myRatings")}/>
+            <ProfileButton iconName='comment' title='Mis Comentarios' onPress={() => navigation.navigate("myComments")}/>
             <ProfileButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' onPress={async () => await logout(setUser)} />
         </SafeAreaView>
     )
