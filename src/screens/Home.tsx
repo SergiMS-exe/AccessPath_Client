@@ -20,7 +20,7 @@ type DrawerButtonProps = {
     screenName?: string;
     text: string;
     iconName: string;
-    navigation?: DrawerNavigationHelpers;
+    navigation: DrawerNavigationHelpers;
 }
 
 type RootDrawerParamList = {
@@ -148,6 +148,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                     </>
                 ) : (
                     <DrawerContentButton
+                        navigation={navigation}
                         text='Cerrar Sesión'
                         iconName='sign-out-alt' />
                 )}
@@ -163,10 +164,14 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
     const logoutTernary = iconName == 'sign-out-alt' ? '#E94A47' : 'black'
     return (
         <TouchableOpacity
-            onPress={async () => { navigation != undefined ? navigation?.navigate(screenName) : await logout(setUser) }}
+            onPress={async () => {
+                iconName !== 'sign-out-alt'
+                    ? navigation.navigate(screenName)
+                    : (await logout(setUser), navigation.navigate('Feed'))
+            }}
             style={styles.button}
         >
-            <Icon name={iconName} size={23} style={{ ...styles.icon, color: logoutTernary }}/>
+            <Icon name={iconName} size={23} style={{ ...styles.icon, color: logoutTernary }} />
             <Text style={{ ...styles.text, color: logoutTernary }}>{text}</Text>
 
         </TouchableOpacity>
@@ -183,17 +188,17 @@ export const Home = () => {
             initialRouteName='Feed'
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
-                header: () => <DrawerHeader searchText={searchText} onSearchTextChange={setSearchText}/>
+                header: () => <DrawerHeader searchText={searchText} onSearchTextChange={setSearchText} />
             }}
         >
             <Drawer.Screen name="Feed" component={Feed} options={{
-                header: () => <DrawerHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText}/>
-                }}
+                header: () => <DrawerHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText} />
+            }}
             />
             <Drawer.Screen name="Saved" component={SavedScreen} options={{
-                header: () => <DrawerHeader title='Sitios Guardados'/>
-                
-            }}/>
+                header: () => <DrawerHeader title='Sitios Guardados' />
+
+            }} />
             <Drawer.Screen name="Perfil" component={ProfileScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Registro" component={RegistroScreen} />

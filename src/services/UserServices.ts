@@ -30,10 +30,10 @@ export async function login(email: string, password: string, navigation: NativeS
         const usuario = peticion.user
 
         if (usuario !== null) {
-            console.log(usuario)
+            console.log("login de usuario: "+JSON.stringify(usuario))
             setUser(usuario);
             const savedSites = await getSavedSites(usuario);
-            await AsyncStorage.setItem("savedSites", savedSites.toString());
+            await AsyncStorage.setItem("savedSites", JSON.stringify(savedSites));
             navigation.dispatch(
                 CommonActions.reset({
                     routes: [

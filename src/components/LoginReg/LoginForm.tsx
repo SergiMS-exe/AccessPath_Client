@@ -38,10 +38,6 @@ export const LoginForm = ({ screenName, navigation }: Props) => {
 
     const handleLogin = async () => {
         await login(email, password, navigation, screenName, setUser);
-        if (user) {
-            const savedSites = await getSavedSites(user);
-            await AsyncStorage.setItem("savedSites", JSON.stringify(savedSites));
-        }
     }
 
     return (

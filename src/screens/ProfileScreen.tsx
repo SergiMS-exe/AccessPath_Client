@@ -6,13 +6,17 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Text } from '@rneui/base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 
 type StackProps = NativeStackNavigationProp<any, any>;
+type DrawerProps = DrawerNavigationProp<any, any>;
+
 
 export const ProfileScreen = () => {
 
-    const navigation = useNavigation<StackProps>();
+    const stackNavigation = useNavigation<StackProps>();
+    const drawerNavigation = useNavigation<DrawerProps>();
     
     const { setUser, user } = useContext(LoginContext)
 
@@ -26,11 +30,15 @@ export const ProfileScreen = () => {
                 </View>
             </View>
 
-            <ProfileButton iconName='user-edit' title='Editar Perfil' onPress={() => navigation.navigate("editProfile")}/>
+            <ProfileButton iconName='user-edit' title='Editar Perfil' onPress={() => stackNavigation.navigate("editProfile")}/>
             {/* <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/> */}
-            <ProfileButton iconName='star' title='Mis Valoraciones' onPress={() => navigation.navigate("myRatings")}/>
-            <ProfileButton iconName='comment' title='Mis Comentarios' onPress={() => navigation.navigate("myComments")}/>
-            <ProfileButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' onPress={async () => await logout(setUser)} />
+            <ProfileButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")}/>
+            <ProfileButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")}/>
+            <ProfileButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' 
+                onPress={ async () => {
+                    await logout(setUser)
+                    drawerNavigation.navigate("Feed")
+                }} />
         </SafeAreaView>
     )
 }
