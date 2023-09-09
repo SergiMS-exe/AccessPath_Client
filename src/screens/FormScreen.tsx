@@ -6,21 +6,41 @@ import { useNavigation } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
 import { sendRating } from "../services/PlacesServices";
 import { RatingForm } from "../../@types/RatingForm";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const data = [
     {
         title: 'Física',
-        data: ['Entrada suficiente', 'Rampa']
+        data: [
+            'Entradas/Salidas',
+            'Rampas',
+            'Ascensores',
+            'Pasillos',
+            'Baños Adaptados',
+            'Señalética Clara'
+        ]
     },
     {
         title: 'Sensorial',
-        data: ['A', 'B', 'C']
+        data: [
+            'Señalización Braille',
+            'Sistemas de Amplificación',
+            'Iluminación Adecuada',
+            'Información Accesible',
+            'Pictogramas Claros'
+        ]
     },
     {
-        title: 'Psiquica',
-        data: ['D', 'E', 'F']
+        title: 'Psíquica',
+        data: [
+            'Información Simple',
+            'Señalización Intuitiva',
+            'Espacios Tranquilos',
+            'Interacción del Personal'
+        ]
     }
 ]
+
 type StackProps = NativeStackNavigationProp<any, any>;
 
 export const FormScreen = () => {
@@ -29,6 +49,18 @@ export const FormScreen = () => {
 
     const [selectedValues, setSelectedValues] = useState<RatingForm>({});
     const [hasError, setHasError] = useState(false);
+    const [expandedSections, setExpandedSections] = useState<string[]>([]);
+
+    const toggleSection = (sectionTitle: string) => {
+        setExpandedSections(prevSections => {
+            if (prevSections.includes(sectionTitle)) {
+                return prevSections.filter(title => title !== sectionTitle);
+            } else {
+                return [...prevSections, sectionTitle];
+            }
+        });
+    };
+
 
     const handleSelectionChange = (section: string, item: string, value: number) => {
         setSelectedValues(prevState => {
@@ -60,7 +92,7 @@ export const FormScreen = () => {
     }, [selectedValues])
 
     const guardarCambios = () => {
-        if (Object.keys(selectedValues).length===0)
+        if (Object.keys(selectedValues).length === 0)
             setHasError(true);
         else {
             // Código para guardar los cambios
@@ -70,23 +102,29 @@ export const FormScreen = () => {
     }
 
     return (
-        <SafeAreaView style={{
-            flex: 1,
-            backgroundColor: '#fff',
-        }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <StackHeader />
             <SectionList
                 contentContainerStyle={styles.container}
                 sections={data}
                 keyExtractor={(item, index) => item + index}
                 renderItem={({ section, item }) => (
-                    <RadioButtonGroup text={item}
-                        onSelectionChange={(value) => handleSelectionChange(section.title, item, value)}
-                    />
+                    expandedSections.includes(section.title) ? (
+                        <RadioButtonGroup text={item}
+                            onSelectionChange={(value) => handleSelectionChange(section.title, item, value)}
+                        />
+                    ) : null
                 )}
                 renderSectionHeader={({ section: { title } }) => (
-                    <Text style={styles.header}>{title}</Text>
+                    <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(title)}>
+                        <Text style={styles.header}>{title}</Text>
+                        <Icon 
+                            size={24}
+                            style={styles.iconStyle} 
+                            name={expandedSections.includes(title) ? 'chevron-up' : 'chevron-down'} />
+                    </TouchableOpacity>
                 )}
+                stickySectionHeadersEnabled={false}
             />
             {hasError && <Text style={styles.errorMessage}>Se debe valorar algún campo antes de enviar</Text>}
             <TouchableOpacity style={styles.saveButton} onPress={guardarCambios}>
@@ -109,6 +147,17 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 32,
         backgroundColor: '#fff',
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        padding: 10, 
+        backgroundColor: '#fff',
+    },
+
+    iconStyle: {
+        marginLeft: 10,
     },
     title: {
         fontSize: 24,

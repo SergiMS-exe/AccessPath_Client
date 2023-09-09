@@ -8,6 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
+import MainButton from '../components/MainButton';
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
@@ -30,11 +31,11 @@ export const ProfileScreen = () => {
                 </View>
             </View>
 
-            <ProfileButton iconName='user-edit' title='Editar Perfil' onPress={() => stackNavigation.navigate("editProfile")}/>
+            <MainButton iconName='user-edit' title='Editar Perfil' onPress={() => stackNavigation.navigate("editProfile")}/>
             {/* <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/> */}
-            <ProfileButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")}/>
-            <ProfileButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")}/>
-            <ProfileButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' 
+            <MainButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")}/>
+            <MainButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")}/>
+            <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' 
                 onPress={ async () => {
                     await logout(setUser)
                     drawerNavigation.navigate("Feed")
@@ -42,22 +43,6 @@ export const ProfileScreen = () => {
         </SafeAreaView>
     )
 }
-
-type ButtonProps = {
-    onPress: () => void;
-    title: string;
-    iconName: string;
-    color?: string;
-}
-
-const ProfileButton = ({ onPress, title, iconName, color = '#007AFF' }: ButtonProps) => {
-    return (
-        <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
-            <Icon name={iconName} style={styles.icon}/>
-            <Text style={styles.buttonText}>{title}</Text>
-        </TouchableOpacity>
-    );
-};
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -76,25 +61,4 @@ const styles = StyleSheet.create({
     email: {
         fontSize: 20
     },
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        minWidth: 100,
-        marginVertical: 8,
-        marginHorizontal: 20,
-        flexDirection: 'row'
-    },
-    buttonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-        marginLeft: 8
-    },
-    icon: {
-        fontSize: 20,
-        color: 'white',
-    }
 });
