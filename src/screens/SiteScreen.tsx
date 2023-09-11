@@ -14,6 +14,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Comment } from "../components/Comment";
 import { CommentType } from "../../@types/CommentType";
 import { Footer } from "../components/Footer";
+import useComments from "../hooks/useComments";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -30,10 +31,10 @@ export const SiteScreen = () => {
     const { user } = useContext(LoginContext);
 
     const [isSaved, setIsSaved] = useState(false);
-    const [comments, setComments] = useState<CommentType[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const { save, unSave, toggleUserContext } = useSiteSaving(site)
+    const { save, unSave, toggleUserContext } = useSiteSaving(site);
+    const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,7 +43,8 @@ export const SiteScreen = () => {
             console.log(data)
             setLoading(false)
 
-            setComments(data);
+            if (data)
+                setComments(data);
         };
 
         fetchData();
@@ -67,17 +69,20 @@ export const SiteScreen = () => {
 
     const handleNewComment = (newComment: CommentType) => {
         console.log(newComment)
-        if (comments)
-            setComments(prevComments => [...prevComments, newComment]);
-        else
-            setComments([newComment])
+        addComment(newComment);
+        // if (comments)
+        //     setComments(prevComments => [...prevComments, newComment]);
+        // else
+        //     setComments([newComment])
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
         if (wantsToDelete)
-            setComments(prevComments => prevComments.filter(c => c._id !== comment._id))
+            //setComments(prevComments => prevComments.filter(c => c._id !== comment._id))
+            deleteComment(comment._id);
         else
-            setComments(prevComments => prevComments.map(c => c._id === comment._id ? comment : c));
+            //setComments(prevComments => prevComments.map(c => c._id === comment._id ? comment : c));
+            updateComment(comment);
     };
 
 

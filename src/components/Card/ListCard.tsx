@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
         marginBottom: 4
     },
     rating: {
-        alignSelf: 'flex-end', // Alinear elemento al final del contenedor
-        marginTop: 12, // Añadir un margen inferior para separar del contenido superior
+        alignSelf: 'flex-end',
+        marginTop: 12,
     }
 })
 

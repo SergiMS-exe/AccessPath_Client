@@ -132,3 +132,10 @@ export async function getSavedSites(user: Person) {
     const sites: Site[] = response.saved;
     return sites
 }
+
+export async function getUserComments(user: Person) {
+    const response = await axios.get(API_HOST + '/comments/'+user._id).
+                        then(res => res.data);
+    const comments: Site[] = response.sites;
+    return comments
+}

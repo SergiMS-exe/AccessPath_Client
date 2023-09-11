@@ -137,14 +137,6 @@ export async function getComments(site: Site) {
     return comments;
 }
 
-export async function getCommentsByUser(user: Person) {
-    const response = await axios.get(API_HOST + '/comments/' + user._id).then(res => res.data)
-    console.log(response)
-    const comments: CommentType[] = response.comentarios;
-
-    return comments;
-}
-
 export async function sendRating(form: RatingForm, site: Site) {
     const response = await axios.post(API_HOST + '/rating', {
         placeId: site.placeId,
