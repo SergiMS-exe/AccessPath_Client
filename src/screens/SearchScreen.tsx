@@ -6,6 +6,7 @@ import { StackHeader } from '../components/Headers/StackHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Site } from '../../@types/Site';
 import { ResultList } from '../components/Card/ResultList';
+import { ListCard } from '../components/Card/ListCard';  
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -15,29 +16,32 @@ export const SearchScreen = ({ route }: Props) => {
 
     useEffect(() => {
         const fetchPlaces = async () => {
-            const response = await getPlacesByText(route.params?.searchText); // Cambia "Asturias" por el texto que desees buscar
-            setPlaces(response); // Asegúrate de que esta es la forma correcta de acceder a los datos de los lugares en la respuesta
-            setLoading(false);
-        }
+            const response = await getPlacesByText(route.params?.searchText); 
+            setPlaces(response); 
+            setLoading(false); 
+        };
+
         fetchPlaces();
-    }, []);
+        
+    }, [route.params?.searchText]);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <StackHeader title={"Búsqueda: '" + route.params?.searchText + "'"} />
-            {loading && <ActivityIndicator size="large" style={{ marginTop: 10 }} />}
-            {places.length == 0 && !loading ?
-                <Text>No se han encontrado resultados</Text>
-                :
-                <ResultList data={places} noItemsMessage='No se han encontrado ' />
-            }
+        <SafeAreaView style={styles.container}>
+            <StackHeader title={"Búsqueda: '"+route.params?.searchText+"'"} />
 
+            <ResultList 
+                data={places} 
+                noItemsMessage="No se encontraron resultados" 
+                isLoading={loading}
+                renderItemComponent={(item) => <ListCard site={item} />}
+            />
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    list: {
-        paddingHorizontal: 10
-    }
-})
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+});

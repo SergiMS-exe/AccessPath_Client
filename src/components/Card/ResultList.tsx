@@ -1,13 +1,13 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { Site } from "../../../@types/Site";
-import { ListCard } from "./ListCard";
 import { Titulo } from "../Titulo";
-import { Text } from "@rneui/base";
 
 type Props = {
     data: Site[];
     title?: string;
     noItemsMessage: string;
+    isLoading?: boolean;
+    renderItemComponent: (item: Site) => JSX.Element;  
 }
 
 const styles = StyleSheet.create({
@@ -16,27 +16,33 @@ const styles = StyleSheet.create({
         padding: 5
     },
     emptyListMessage: {
-        fontSize: 20
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 20
     },
     content : {
         flexGrow: 1,
     }
 })
 
-export const ResultList = ({ data, title, noItemsMessage }: Props) => {
-    const renderListItem = ({ item }: { item: Site }) => <ListCard site={item} />;
+export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemComponent }: Props) => {
+
+    if (isLoading) {
+        return <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />;
+    }
+
+    if (data.length === 0) {
+        return <Text style={styles.emptyListMessage}>{noItemsMessage}</Text>;
+    }
 
     return (
-        // <View style={styles.container}>
-            <FlatList
-                data={data}
-                style={styles.container}
-                renderItem={renderListItem}
-                contentContainerStyle={styles.content}
-                ListHeaderComponent={title ? <Titulo title={title}/> : null}
-                //ListEmptyComponent={<Text style={styles.emptyListMessage}>{noItemsMessage}</Text>}
-                showsVerticalScrollIndicator={false}
-            />
-        // </View>
+        <FlatList
+            data={data}
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItemComponent(item)}
+            contentContainerStyle={styles.content}
+            ListHeaderComponent={title ? <Titulo title={title}/> : null}
+        />
     );
 }

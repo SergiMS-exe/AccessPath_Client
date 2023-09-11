@@ -5,7 +5,7 @@ import { LoginContext } from "../../components/Shared/Context";
 import { getUserComments } from "../../services/UserServices";
 import { Site } from "../../../@types/Site";
 import { SiteWMyComments } from '../../components/SiteWMyComments';
-import { Text } from "@rneui/base";
+import { ResultList } from "../../components/Card/ResultList";
 
 export const MyComments = () => {
     const { user } = useContext(LoginContext);
@@ -32,17 +32,11 @@ export const MyComments = () => {
     return (
         <SafeAreaView style={{ flexGrow: 1 }}>
             <StackHeader title='Mis Comentarios' />
-            {loading && <ActivityIndicator size="large" style={{ marginTop: 10 }} />}
-            {sites.length == 0 && !loading ?
-                <Text>No has comentado en ningún sitio</Text>
-                :
-                <FlatList
-                    style={styles.listContainer}
-                    data={sites}
-                    renderItem={({ item }) => <SiteWMyComments site={item} deleteSiteFromList={deleteSiteFromList}/>}
-                />
-
-            }
+            <ResultList 
+                data={sites}
+                noItemsMessage='No has comentado en ningún sitio'
+                isLoading={loading}
+                renderItemComponent={(item) => <SiteWMyComments site={item} deleteSiteFromList={deleteSiteFromList}/>}/>
         </SafeAreaView>
     );
 }

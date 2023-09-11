@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ResultList } from '../components/Card/ResultList';
 import { Site } from '../../@types/Site';
+import { ListCard } from '../components/Card/ListCard';  // Assuming you have this component
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SavedScreen = () => {
-    const [savedSites, setSavedSites] = useState<Site[]>([])
+    const [savedSites, setSavedSites] = useState<Site[]>([]);
 
     const isFocused = useIsFocused();
 
@@ -22,13 +23,16 @@ export const SavedScreen = () => {
             }
         };
 
-        getSitesFromStorage()
+        getSitesFromStorage();
         
-    }, [isFocused])
+    }, [isFocused]);
 
     return (
-        <>
-            <ResultList data={savedSites} noItemsMessage='No hay sitios guardados'/>
-        </>
-    )
+        <ResultList 
+            data={savedSites} 
+            noItemsMessage="No tienes sitios guardados" 
+            isLoading={savedSites.length === 0}
+            renderItemComponent={(item) => <ListCard site={item} />}
+        />
+    );
 }

@@ -19,7 +19,13 @@ const styles = StyleSheet.create({
 export const ListSitesScreen = ({navigation}: Props) => {
     return (
         <View style={{flex: 1}}>
-            <ResultList data={staticSites} title='Sitios valorados cercanos' noItemsMessage='No hay sitios valorados cerca de ti'/>
+            <ResultList 
+                data={staticSites} 
+                title='Sitios valorados cercanos' 
+                noItemsMessage='No hay sitios valorados cerca de ti'
+                isLoading={false}  // Asumiendo que staticSites siempre tiene datos y no hay una carga en curso
+                renderItemComponent={(item) => <ListCard site={item} />}
+            />
             <FloatingButton onPress={()=>navigation.navigate('Map')} text='Ver Mapa'/>
         </View>
     )

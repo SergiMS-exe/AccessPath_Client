@@ -70,18 +70,12 @@ export const SiteScreen = () => {
     const handleNewComment = (newComment: CommentType) => {
         console.log(newComment)
         addComment(newComment);
-        // if (comments)
-        //     setComments(prevComments => [...prevComments, newComment]);
-        // else
-        //     setComments([newComment])
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
         if (wantsToDelete)
-            //setComments(prevComments => prevComments.filter(c => c._id !== comment._id))
             deleteComment(comment._id);
         else
-            //setComments(prevComments => prevComments.map(c => c._id === comment._id ? comment : c));
             updateComment(comment);
     };
 
@@ -143,9 +137,9 @@ export const SiteScreen = () => {
                 </SectionHeader>
 
                 {/*Comentarios*/}
-                <SectionHeader title="Comentarios" >{
-                    loading ?
-                        <ActivityIndicator size="large" style={{marginTop: 10}} /> : (
+                <SectionHeader title="Comentarios" >
+                    {loading ?
+                        <ActivityIndicator size="large" style={{ marginTop: 10 }} /> : (
                             <>
                                 {comments && comments.map((comment, index) => (
                                     <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />
@@ -153,7 +147,7 @@ export const SiteScreen = () => {
                                 {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
                             </>
                         )
-                }
+                    }
                 </SectionHeader>
                 <Footer />
             </ScrollView>
