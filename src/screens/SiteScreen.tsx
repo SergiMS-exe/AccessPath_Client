@@ -145,7 +145,7 @@ export const SiteScreen = () => {
                 {/*Comentarios*/}
                 <SectionHeader title="Comentarios" >{
                     loading ?
-                        <ActivityIndicator /> : (
+                        <ActivityIndicator size="large" style={{marginTop: 10}} /> : (
                             <>
                                 {comments && comments.map((comment, index) => (
                                     <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />

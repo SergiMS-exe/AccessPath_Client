@@ -34,7 +34,7 @@ export const ResultList = ({ data, title, noItemsMessage }: Props) => {
                 renderItem={renderListItem}
                 contentContainerStyle={styles.content}
                 ListHeaderComponent={title ? <Titulo title={title}/> : null}
-                ListEmptyComponent={<Text style={styles.emptyListMessage}>{noItemsMessage}</Text>}
+                //ListEmptyComponent={<Text style={styles.emptyListMessage}>{noItemsMessage}</Text>}
                 showsVerticalScrollIndicator={false}
             />
         // </View>

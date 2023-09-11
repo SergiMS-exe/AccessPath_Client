@@ -96,8 +96,8 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
 
 const styles = StyleSheet.create({
     commentContainer: {
-        borderWidth: 1,
-        borderColor: '#ddd',
+        borderWidth: 1.5,
+        borderColor: '#ccc', 
         borderRadius: 5,
         padding: 10,
         marginVertical: 5,
