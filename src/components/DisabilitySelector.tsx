@@ -9,10 +9,11 @@ interface DropdownItem {
 
 type Props = {
     value?: "Ninguna" | "Física" | "Sensorial" | "Psíquica";
+    onChange?: (value: "Ninguna" | "Física" | "Sensorial" | "Psíquica") => void;
 }
 
 
-const DisabilitySelector = ({ value }: Props) => {
+const DisabilitySelector = ({ value, onChange }: Props) => {
     const [open, setOpen] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState(value || 'Ninguna');
 
@@ -36,7 +37,10 @@ const DisabilitySelector = ({ value }: Props) => {
                 itemSeparatorStyle={styles.itemSeparator}
                 style={styles.dropdownStyle}
                 showArrowIcon={true}
-                onSelectItem={item => setSelectedValue(item.value as any)}
+                onSelectItem={item => {
+                    setSelectedValue(item.value as any);
+                    onChange && onChange(item.value as any);
+                }}
                 
             />
         </View>

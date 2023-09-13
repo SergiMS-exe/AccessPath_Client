@@ -1,39 +1,147 @@
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { StackHeader } from "../../components/Headers/StackHeader";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { LoginContext } from "../../components/Shared/Context";
 import { MyInput } from "../../components/MyInput";
 import DisabilitySelector from "../../components/DisabilitySelector";
 import MainButton from "../../components/MainButton";
+import { updateUserPassword, updateAccount } from "../../services/UserServices";
+import Person from "../../../@types/Person";
 
 export const EditProfile = () => {
     
-    const { user } = useContext(LoginContext);
+    const { user, setUser } = useContext(LoginContext);
+
+    const [nombre, setNombre] = useState(user!.nombre);
+    const [apellidos, setApellidos] = useState(user!.apellidos);
+    const [email, setEmail] = useState(user!.email);
+    const [tipoDiscapacidad, setTipoDiscapacidad] = useState(user!.tipoDiscapacidad);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+
+    const handleChangePassword = async () => {
+        if (user && user._id) {
+            const result = await updateUserPassword(user._id, currentPassword, newPassword);
+            Alert.alert(result.success ? 'Contraseña actualizada correctamente' : 'Error: '+result.message.msg);
+            if (result.success) {
+                setCurrentPassword('');
+                setNewPassword('');
+            }
+        }
+    };
+
+    const handleUpdateProfile = async() => {
+        //Person con los datos actualizados
+        const updatedUser = new Person({
+            _id: user!._id,
+            nombre: nombre,
+            apellidos: apellidos,
+            email: email,
+            tipoDiscapacidad: tipoDiscapacidad,
+        });
+        //Llamada a la API para actualizar el perfil
+        const result = await updateAccount(updatedUser);
+        if (result.success) {
+            setUser(updatedUser);
+        }
+        Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: '+result.message);
+    };
+    
+    const handleDisabilityChange = (newValue: "Ninguna" | "Física" | "Sensorial" | "Psíquica") => {
+        setTipoDiscapacidad(newValue);
+    };
 
     return (
         <SafeAreaView style={styles.screen}>
             <StackHeader title='Editar Perfil'/>
 
-            <View style={styles.form}>
-                <MyInput title="Nombre" value={user?.nombre}/>
-                <MyInput title="Apellidos" value={user?.apellidos}/>
-                <MyInput title="Email" value={user?.email}/>
-                <DisabilitySelector value={user?.tipoDiscapacidad as any}/>
-            </View>
+            <ScrollView 
+                style={styles.form}
+                keyboardDismissMode="on-drag">
+                <MyInput 
+                    title="Nombre" 
+                    value={nombre}
+                    onChangeText={setNombre}
+                />
+                <MyInput 
+                    title="Apellidos" 
+                    value={apellidos}
+                    onChangeText={setApellidos}
+                />
+                <MyInput 
+                    title="Email" 
+                    value={email}
+                    onChangeText={setEmail}
+                />
+                <DisabilitySelector 
+                    value={tipoDiscapacidad as any}
+                    onChange={handleDisabilityChange}
+                />
+                
+                {/* Botón Guardar cambios */}
+                <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()}/>
 
-            <MainButton title='Guardar Cambios' onPress={() => {console.log('usuario editado')}}/>
+                {/* Zona de peligro */}
+                <View style={styles.divider}>
+                    <Text style={styles.dividerText}>Zona de peligro</Text>
+                </View>
+                <Text style={styles.changePasswordTitle}>Cambio de contraseña</Text>
+                <View style={styles.changePasswordContainer}>
+                    <MyInput 
+                        title="Contraseña actual" 
+                        value={currentPassword}
+                        marginHorizontal={17}
+                        onChangeText={setCurrentPassword}
+                    />
+                    <MyInput 
+                        title="Nueva contraseña"
+                        value={newPassword} 
+                        marginHorizontal={17}
+                        onChangeText={setNewPassword}
+                    />
+                    <MainButton 
+                        title='Cambiar contraseña' 
+                        color="red" 
+                        onPress={() => handleChangePassword()}
+                    />
+                </View>
+                <MainButton title='Borrar cuenta' color="red" onPress={() => {/* Lógica para borrar cuenta */}}/>
+            </ScrollView>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     screen : {
-        flexGrow: 1,
-        justifyContent: 'space-between',
+        flex: 1,
     },
     form: {
-        flex: 1,
-        marginTop: 20
+        marginVertical: 15
+    },
+    divider: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'red',
+        marginVertical: 15,
+        alignItems: 'center',
+    },
+    dividerText: {
+        fontSize: 18,
+        paddingHorizontal: 10,
+    },
+    changePasswordTitle: { 
+        fontSize: 16, 
+        marginLeft: 10 
+    },
+    changePasswordContainer: {
+        marginHorizontal: 10,
+        marginBottom: 10,
+        marginTop: 5,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 10,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
     }
 
 })

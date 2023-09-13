@@ -6,14 +6,15 @@ type Props = {
     title: string;
     onChangeText?: (text: string) => void;
     onKeyPress?: (event: any) => void;
-    value?: string;  // Propiedad opcional para el valor del TextInput
+    value?: string;  
+    marginHorizontal?: number;
 }
 
-export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKeyPress, value }, ref) => {
+export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKeyPress, value, marginHorizontal = 30 }, ref) => {
 
     const styles = StyleSheet.create({
         container: {
-            marginHorizontal: 30,
+            marginHorizontal: marginHorizontal,
             marginVertical: 10
         },
         titulo: {

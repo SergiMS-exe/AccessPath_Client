@@ -11,7 +11,7 @@ import { Site } from '../../@types/Site';
 
 const baseUrlUsers = '/users'
 
-//const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
+// const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
 const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
@@ -107,6 +107,37 @@ export async function deleteAccount(userId: string, setUser: Function) {
         await logout(setUser);
     }
 }
+
+export async function updateAccount(person: Person) {
+    const peticion = await axios.put(API_HOST+'/'+person._id, {
+        person: person
+    }).then(() => {
+        return { success: true, message: 'Datos actualizados correctamente.' };
+    }).catch(error => {
+        console.error(error);
+        return { success: false, message: "No se pudo actualizar el usuario" };
+    });
+
+    return peticion;
+}
+
+export async function updateUserPassword(userId: string, oldPassword: string, newPassword: string) {
+    return axios.put(API_HOST+'/password/'+userId, {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+    }).then(() => {
+        return { success: true, message: 'Contraseña actualizada correctamente.' };
+    }).catch(error => {
+        if (error.response && error.response.status === 401) {
+            return { success: false, message: error.response.data };
+        } else {
+            console.error(error);
+            throw error;
+        }
+    });
+}
+
+
 
 export async function toggleSave(site: Site, user: Person, save: boolean) {
     let response;
