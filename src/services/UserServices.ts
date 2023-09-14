@@ -88,24 +88,17 @@ export async function logout(setUser: Function) {
     await AsyncStorage.removeItem("savedSites");
 }
 
-export async function deleteAccount(userId: string, setUser: Function) {
-    const peticion = await axios.delete(API_HOST, {
-        params: {
-            userId: userId
+export async function deleteAccount(userId: string) {
+    const peticion = await axios.delete(API_HOST+'/'+userId).then(
+        () => {
+            return { success: true, message: 'Cuenta eliminada correctamente.' };
         }
-    }).then(
-        response => response.data
     ).catch(error => {
         console.error(error)
+        return { success: false, message: 'No se pudo eliminar la cuenta.' };
     });
 
-    const usuario = peticion.user
-
-    if (usuario !== undefined) {
-        setUser(usuario);
-    } else {
-        await logout(setUser);
-    }
+    return peticion;
 }
 
 export async function updateAccount(person: Person) {

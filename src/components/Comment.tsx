@@ -43,6 +43,10 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
         updateComments(comment, true)
     }
 
+    const displayedName = comment.usuario 
+        ? `${comment.usuario.nombre} ${comment.usuario.apellidos}`
+        : 'usuario desconocido';
+
     if (isEditing)
         return (
             <View style={styles.commentContainer}>
@@ -66,7 +70,7 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
         return (
             <View style={styles.commentContainer}>
                 <Text style={styles.commentText}>{comment.texto}</Text>
-                <Text style={styles.commentUser}>{`${comment.usuario!.nombre} ${comment.usuario!.apellidos}`}</Text>
+                <Text style={styles.commentUser}>{displayedName}</Text>
                 <View style={styles.editingbuttonsContainer}>
                     <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting}>
                         <Icon name="trash" style={styles.sendButtonIcon} />
@@ -81,7 +85,7 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
         return (
             <View style={styles.commentContainer}>
                 <Text style={styles.commentText}>{comment.texto}</Text>
-                <Text style={styles.commentUser}>{`${comment.usuario?.nombre} ${comment.usuario?.apellidos}`}</Text>
+                <Text style={styles.commentUser}>{displayedName}</Text>
                 {user && user._id === comment.usuario?._id && <View style={styles.editDeleteButtons}>
                     <TouchableOpacity onPress={() => setIsEditing(true)}>
                         <Icon name="pen" size={18} style={{ marginRight: 12 }} />

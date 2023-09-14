@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { LoginContext } from '../components/Shared/Context';
 import { logout } from '../services/UserServices';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Text } from '@rneui/base';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +11,6 @@ import MainButton from '../components/MainButton';
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
-
 
 export const ProfileScreen = () => {
 

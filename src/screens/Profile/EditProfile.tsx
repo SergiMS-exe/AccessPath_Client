@@ -5,11 +5,20 @@ import { LoginContext } from "../../components/Shared/Context";
 import { MyInput } from "../../components/MyInput";
 import DisabilitySelector from "../../components/DisabilitySelector";
 import MainButton from "../../components/MainButton";
-import { updateUserPassword, updateAccount } from "../../services/UserServices";
+import { updateUserPassword, updateAccount, deleteAccount, logout } from "../../services/UserServices";
 import Person from "../../../@types/Person";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+
+type StackProps = NativeStackNavigationProp<any, any>;
+type DrawerProps = DrawerNavigationProp<any, any>;
 
 export const EditProfile = () => {
     
+    const stackNavigation = useNavigation<StackProps>();
+    const drawerNavigation = useNavigation<DrawerProps>();
+
     const { user, setUser } = useContext(LoginContext);
 
     const [nombre, setNombre] = useState(user!.nombre);
@@ -51,13 +60,40 @@ export const EditProfile = () => {
         setTipoDiscapacidad(newValue);
     };
 
+    const handleDeleteAccount = async () => {
+        Alert.alert(
+            "Borrar cuenta", 
+            "¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible y no podrás recuperar tus datos.", 
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                { 
+                    text: "Sí, borrar", 
+                    onPress: async () => {
+                        // Aquí llamamos a la función que borra la cuenta, por ejemplo:
+                        const result = await deleteAccount(user!._id);
+                        if (result.success) {
+                            stackNavigation.navigate('home');
+                            drawerNavigation.navigate('Feed');
+                            await logout(setUser);
+                        } else {
+                            Alert.alert('Error', 'No se pudo borrar la cuenta');
+                        }
+                    },
+                    style: "destructive"
+                }
+            ]
+        );
+    };
+
     return (
         <SafeAreaView style={styles.screen}>
             <StackHeader title='Editar Perfil'/>
 
             <ScrollView 
-                style={styles.form}
-                keyboardDismissMode="on-drag">
+                style={styles.form}>
                 <MyInput 
                     title="Nombre" 
                     value={nombre}
@@ -105,7 +141,7 @@ export const EditProfile = () => {
                         onPress={() => handleChangePassword()}
                     />
                 </View>
-                <MainButton title='Borrar cuenta' color="red" onPress={() => {/* Lógica para borrar cuenta */}}/>
+                <MainButton title='Borrar cuenta' color="red" onPress={() => handleDeleteAccount()}/>
             </ScrollView>
         </SafeAreaView>
     );
