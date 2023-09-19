@@ -1,5 +1,5 @@
 import { CommentType } from "./CommentType";
-import { CategoriaValoracion } from "./Valoracion";
+import { Valoracion } from "./Valoracion";
 
 export type Location = {
     latitude: number;
@@ -14,33 +14,7 @@ export class Site {
     public comentarios?: CommentType[];
     public location: Location;
     public types: string[];
-    public valoraciones?: {
-        fisica?: {
-            average: number;
-            entrada?: CategoriaValoracion;
-            taza_bano?: CategoriaValoracion;
-            rampas?: CategoriaValoracion;
-            ascensores?: CategoriaValoracion;
-            pasillos?: CategoriaValoracion;
-            banos_adaptados?: CategoriaValoracion;
-            senaletica_clara?: CategoriaValoracion;
-        };
-        sensorial?: {
-            average: number;
-            senaletica_braille?: CategoriaValoracion;
-            sistemas_amplificacion?: CategoriaValoracion;
-            iluminacion_adecuada?: CategoriaValoracion;
-            informacion_accesible?: CategoriaValoracion;
-            pictogramas_claros?: CategoriaValoracion;
-        };
-        psiquico: {
-            average: number;
-            informacion_simple?: CategoriaValoracion;
-            senaletica_intuitiva?: CategoriaValoracion;
-            espacios_tranquilos?: CategoriaValoracion;
-            interaccion_personal?: CategoriaValoracion;
-        };
-    };
+    public valoraciones?: Valoracion
 
     constructor(
         placeId: string,
@@ -49,33 +23,7 @@ export class Site {
         calificacionGoogle: number,
         location: Location,
         types: string[],
-        valoraciones?: {
-            fisica?: {
-                average: number;
-                entrada?: CategoriaValoracion;
-                taza_bano?: CategoriaValoracion;
-                rampas?: CategoriaValoracion;
-                ascensores?: CategoriaValoracion;
-                pasillos?: CategoriaValoracion;
-                banos_adaptados?: CategoriaValoracion;
-                senaletica_clara?: CategoriaValoracion;
-            };
-            sensorial?: {
-                average: number;
-                senaletica_braille?: CategoriaValoracion;
-                sistemas_amplificacion?: CategoriaValoracion;
-                iluminacion_adecuada?: CategoriaValoracion;
-                informacion_accesible?: CategoriaValoracion;
-                pictogramas_claros?: CategoriaValoracion;
-            };
-            psiquico: {
-                average: number;
-                informacion_simple?: CategoriaValoracion;
-                senaletica_intuitiva?: CategoriaValoracion;
-                espacios_tranquilos?: CategoriaValoracion;
-                interaccion_personal?: CategoriaValoracion;
-            };
-        },
+        valoraciones?: Valoracion,
         comentarios?: CommentType[]
     ) {
         this.placeId = placeId;

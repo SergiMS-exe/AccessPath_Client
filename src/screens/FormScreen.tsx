@@ -1,53 +1,46 @@
 import { SafeAreaView, SectionList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RadioButtonGroup } from "../components/RadioButtonGroup";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
 import { sendRating } from "../services/PlacesServices";
-import { RatingForm } from "../../@types/RatingForm";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FisicaEnum, SensorialEnum, PsiquicaEnum, Valoracion, FisicaKey, SensorialKey, PsiquicaKey } from '../../@types/Valoracion';
+import { Site } from "../../@types/Site";
+import { LoginContext } from "../components/Shared/Context";
 
 const data = [
     {
         title: 'Física',
-        data: [
-            'Entradas/Salidas',
-            'Rampas',
-            'Ascensores',
-            'Pasillos',
-            'Baños Adaptados',
-            'Señalética Clara'
-        ]
+        data: Object.values(FisicaEnum) as string[]
     },
     {
         title: 'Sensorial',
-        data: [
-            'Señalización Braille',
-            'Sistemas de Amplificación',
-            'Iluminación Adecuada',
-            'Información Accesible',
-            'Pictogramas Claros'
-        ]
+        data: Object.values(SensorialEnum) as string[]
     },
     {
         title: 'Psíquica',
-        data: [
-            'Información Simple',
-            'Señalización Intuitiva',
-            'Espacios Tranquilos',
-            'Interacción del Personal'
-        ]
+        data: Object.values(PsiquicaEnum) as string[]
     }
 ]
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const FormScreen = () => {
+export const FormScreen = (site: Site) => {
+
+    const { user } = useContext(LoginContext);
 
     const navigation = useNavigation<StackProps>();
 
-    const [selectedValues, setSelectedValues] = useState<RatingForm>({});
+    const [selectedValues, setSelectedValues] = useState<Valoracion>({} as Valoracion);
+    // const [selectedValues, setSelectedValues] = useState<Valoracion>({
+    //     // fisica: {},
+    //     // sensorial: {},
+    //     // psiquica: {}
+    //     userId: user?._id,
+    //     placeId: site.placeId
+    // });
     const [hasError, setHasError] = useState(false);
     const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
@@ -61,31 +54,69 @@ export const FormScreen = () => {
         });
     };
 
+    type Ternary = FisicaKey | SensorialKey | PsiquicaKey;
 
-    const handleSelectionChange = (section: string, item: string, value: number) => {
-        setSelectedValues(prevState => {
-            let sectionValues = prevState[section.toLowerCase()] || [];
-            let itemIndex = sectionValues.findIndex((sv) => sv[item]);
+    const handleSelectionChange = (type: "fisica" | "sensorial" | "psiquica", property: Ternary, value: number) => {
+        let newValoracion: Valoracion = { ...selectedValues };  // Haciendo una copia superficial para no mutar el objeto original
+        if (value === 0) {
+            if (newValoracion[type]) {
+                // @ts-ignore
+                delete newValoracion[type][property];
 
-            if (value === 0) { //Remove item if value is 0
-                sectionValues = sectionValues.filter((sv, index) => index !== itemIndex);
-                if (sectionValues.length === 0) {
-                    const { [section.toLowerCase()]: _, ...rest } = prevState;
-                    return rest;
-                }
-            } else {
-                let newItem = { [item]: value };
-                setHasError(false)
-                if (itemIndex >= 0) {
-                    sectionValues[itemIndex] = newItem;  // replace existing item
-                } else {
-                    sectionValues.push(newItem);  // add new item
-                }
+                // @ts-ignore
+                if (Object.keys(newValoracion[type]).length === 0)
+                    delete newValoracion[type];
             }
+        } else {
+            if (!newValoracion[type])
+                newValoracion[type] = {} as Record<Ternary, number>;
+            (newValoracion[type] as Record<Ternary, number>)[property] = value;
+        }
 
-            return { ...prevState, [section.toLowerCase()]: sectionValues };
-        });
+        setSelectedValues(newValoracion);
     }
+
+
+    type EnumType = typeof FisicaEnum | typeof SensorialEnum | typeof PsiquicaEnum;
+
+    const titleToType = (title: string): { type: "fisica" | "sensorial" | "psiquica", correspondingEnum: EnumType } | null => {
+        switch (title) {
+            case 'Física':
+                return { type: "fisica", correspondingEnum: FisicaEnum };
+            case 'Sensorial':
+                return { type: "sensorial", correspondingEnum: SensorialEnum };
+            case 'Psíquica':
+                return { type: "psiquica", correspondingEnum: PsiquicaEnum };
+            default:
+                return null;
+        }
+    };
+
+    const processSelectionChange = (type: string, property: string, value: number) => {
+        const conversionResult = titleToType(type);
+        if (!conversionResult) {
+            console.error(`Tipo no válido: ${type}`);
+            return;
+        }
+
+        const enumKey = getKeyFromEnumValue(property, conversionResult.correspondingEnum);
+        if (!enumKey) {
+            console.error(`Propiedad no válida: ${property}`);
+            return;
+        }
+
+        handleSelectionChange(conversionResult.type, enumKey, value);
+    }
+
+    function getKeyFromEnumValue<T>(value: string, enumObject: T): keyof T | null {
+        for (let key in enumObject) {
+            if (enumObject[key] === value) {
+                return key as keyof T;
+            }
+        }
+        return null;
+    }
+
 
     useEffect(() => {
         console.log(selectedValues)
@@ -111,16 +142,16 @@ export const FormScreen = () => {
                 renderItem={({ section, item }) => (
                     expandedSections.includes(section.title) ? (
                         <RadioButtonGroup text={item}
-                            onSelectionChange={(value) => handleSelectionChange(section.title, item, value)}
+                            onSelectionChange={(value) => processSelectionChange(section.title, item, value)}
                         />
                     ) : null
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(title)}>
                         <Text style={styles.header}>{title}</Text>
-                        <Icon 
+                        <Icon
                             size={24}
-                            style={styles.iconStyle} 
+                            style={styles.iconStyle}
                             name={expandedSections.includes(title) ? 'chevron-up' : 'chevron-down'} />
                     </TouchableOpacity>
                 )}
@@ -151,8 +182,8 @@ const styles = StyleSheet.create({
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center', 
-        padding: 10, 
+        alignItems: 'center',
+        padding: 10,
         backgroundColor: '#fff',
     },
 

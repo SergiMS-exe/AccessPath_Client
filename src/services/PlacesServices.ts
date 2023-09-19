@@ -5,7 +5,7 @@ import Person from "../../@types/Person";
 import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
-import { RatingForm } from "../../@types/RatingForm";
+import { Valoracion } from "../../@types/Valoracion";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
@@ -118,7 +118,7 @@ export async function editComment(placeId: string, commentId: string, newText: s
 }
 
 export async function deleteComment(placeId: string, commentId: string) {
-    const response = await axios.delete(API_HOST + '/comment/'+placeId+'/'+commentId, {
+    const response = await axios.delete(API_HOST + '/comment/' + placeId + '/' + commentId, {
     }).then(response => response.data).
         catch(e => console.error(e))
     console.log(response)
@@ -130,18 +130,25 @@ export async function getComments(site: Site) {
         params: {
             placeId: site.placeId
         }
-    }).then(res => res.data).catch(e=>console.error(e))
+    }).then(res => res.data).catch(e => console.error(e))
     console.log(JSON.stringify(response));
     const comments: CommentType[] = response.comentarios;
 
     return comments;
 }
 
-export async function sendRating(form: RatingForm, site: Site) {
-    const response = await axios.post(API_HOST + '/rating', {
-        placeId: site.placeId,
-        form: form
+export async function sendRating(valoracion: Valoracion, site: Site, userId: string) {
+    const response = await axios.post(API_HOST + '/review', {
+        place: site,
+        usuarioId: userId,
+        valoracion: valoracion
+    }).then((response) => {
+        return { success: true, message: 'Valoración enviada correctamente.', review: response.data.review };
+    }).catch(error => {
+        console.error(error);
+        return { success: false, message: "No se pudo enviar la valoración" };
     });
+    return response;
 }
 
 //Funciones auxiliares

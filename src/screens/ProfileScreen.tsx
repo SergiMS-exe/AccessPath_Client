@@ -16,7 +16,7 @@ export const ProfileScreen = () => {
 
     const stackNavigation = useNavigation<StackProps>();
     const drawerNavigation = useNavigation<DrawerProps>();
-    
+
     const { setUser, user } = useContext(LoginContext)
 
     return (
@@ -29,12 +29,12 @@ export const ProfileScreen = () => {
                 </View>
             </View>
 
-            <MainButton iconName='user-edit' title='Editar Perfil' onPress={() => stackNavigation.navigate("editProfile")}/>
+            <MainButton iconName='user-edit' title='Editar Perfil' onPress={() => stackNavigation.navigate("editProfile")} />
             {/* <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/> */}
-            <MainButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")}/>
-            <MainButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")}/>
-            <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión' 
-                onPress={ async () => {
+            <MainButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")} />
+            <MainButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")} />
+            <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión'
+                onPress={async () => {
                     await logout(setUser)
                     drawerNavigation.navigate("Feed")
                 }} />

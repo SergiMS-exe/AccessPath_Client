@@ -30,7 +30,7 @@ export async function login(email: string, password: string, navigation: NativeS
         const usuario = peticion.user
 
         if (usuario !== null) {
-            console.log("login de usuario: "+JSON.stringify(usuario))
+            console.log("login de usuario: " + JSON.stringify(usuario))
             setUser(usuario);
             const savedSites = await getSavedSites(usuario);
             await AsyncStorage.setItem("savedSites", JSON.stringify(savedSites));
@@ -89,7 +89,7 @@ export async function logout(setUser: Function) {
 }
 
 export async function deleteAccount(userId: string) {
-    const peticion = await axios.delete(API_HOST+'/'+userId).then(
+    const peticion = await axios.delete(API_HOST + '/' + userId).then(
         () => {
             return { success: true, message: 'Cuenta eliminada correctamente.' };
         }
@@ -102,7 +102,7 @@ export async function deleteAccount(userId: string) {
 }
 
 export async function updateAccount(person: Person) {
-    const peticion = await axios.put(API_HOST+'/'+person._id, {
+    const peticion = await axios.put(API_HOST + '/' + person._id, {
         person: person
     }).then(() => {
         return { success: true, message: 'Datos actualizados correctamente.' };
@@ -115,7 +115,7 @@ export async function updateAccount(person: Person) {
 }
 
 export async function updateUserPassword(userId: string, oldPassword: string, newPassword: string) {
-    return axios.put(API_HOST+'/password/'+userId, {
+    return axios.put(API_HOST + '/password/' + userId, {
         oldPassword: oldPassword,
         newPassword: newPassword
     }).then(() => {
@@ -134,7 +134,7 @@ export async function updateUserPassword(userId: string, oldPassword: string, ne
 
 export async function toggleSave(site: Site, user: Person, save: boolean) {
     let response;
-    
+
     if (save) {
         response = await axios.put(API_HOST + '/saveSite', {
             site: site,
@@ -145,21 +145,21 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
             placeId: site.placeId,
             userId: user._id
         })
-    }    
+    }
 
     console.log(response.data);
 }
 
 export async function getSavedSites(user: Person) {
-    const response = await axios.get(API_HOST + '/savedSites/'+user._id).
-                        then(res => res.data);
+    const response = await axios.get(API_HOST + '/savedSites/' + user._id).
+        then(res => res.data);
     const sites: Site[] = response.saved;
     return sites
 }
 
 export async function getUserComments(user: Person) {
-    const response = await axios.get(API_HOST + '/comments/'+user._id).
-                        then(res => res.data);
+    const response = await axios.get(API_HOST + '/comments/' + user._id).
+        then(res => res.data);
     const comments: Site[] = response.sites;
     return comments
 }
