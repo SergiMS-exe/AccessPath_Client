@@ -2,7 +2,7 @@ import { SafeAreaView, SectionList, StatusBar, StyleSheet, Text, TouchableOpacit
 import { RadioButtonGroup } from "../components/RadioButtonGroup";
 import { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
 import { sendRating } from "../services/PlacesServices";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -27,20 +27,21 @@ const data = [
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const FormScreen = (site: Site) => {
+type RootStackParamList = {
+    site: { site: Site };
+};
+
+type SiteScreenRouteProp = RouteProp<RootStackParamList, "site">;
+
+export const FormScreen = () => {
+    const route = useRoute<SiteScreenRouteProp>();
 
     const { user } = useContext(LoginContext);
+    let { site } = route.params;
 
     const navigation = useNavigation<StackProps>();
 
     const [selectedValues, setSelectedValues] = useState<Valoracion>({} as Valoracion);
-    // const [selectedValues, setSelectedValues] = useState<Valoracion>({
-    //     // fisica: {},
-    //     // sensorial: {},
-    //     // psiquica: {}
-    //     userId: user?._id,
-    //     placeId: site.placeId
-    // });
     const [hasError, setHasError] = useState(false);
     const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
@@ -122,13 +123,34 @@ export const FormScreen = (site: Site) => {
         console.log(selectedValues)
     }, [selectedValues])
 
-    const guardarCambios = () => {
+    const saveChanges = () => {
         if (Object.keys(selectedValues).length === 0)
             setHasError(true);
         else {
             // Código para guardar los cambios
-            console.log('Cambios guardados: ', selectedValues);
-            navigation.goBack()
+            console.log('Changes saved: ', selectedValues);
+            site.nombre = "(Rated)";
+            navigation.setParams({ site: site });
+            navigation.goBack();
+        }
+    }
+
+    const saveChangesAsync = async () => {
+        if (Object.keys(selectedValues).length === 0)
+            setHasError(true);
+        else {
+            const response = await sendRating(selectedValues, site, user!._id);
+            if (response.success && "newPlace" in response) {
+                response.newPlace.nombre = "(Rated)";
+                console.log("Nombre en form: " + response.newPlace.nombre);
+                navigation.navigate({
+                    name: 'site',
+                    params: { site: response.newPlace },
+                    merge: true,
+                });
+            }
+            else
+                console.log(response.message)
         }
     }
 
@@ -158,7 +180,7 @@ export const FormScreen = (site: Site) => {
                 stickySectionHeadersEnabled={false}
             />
             {hasError && <Text style={styles.errorMessage}>Se debe valorar algún campo antes de enviar</Text>}
-            <TouchableOpacity style={styles.saveButton} onPress={guardarCambios}>
+            <TouchableOpacity style={styles.saveButton} onPress={saveChangesAsync}>
                 <Text style={styles.saveButtonText}>Guardar Cambios</Text>
             </TouchableOpacity>
         </SafeAreaView>

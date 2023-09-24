@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackHeader } from "../components/Headers/StackHeader";
 import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -27,9 +27,9 @@ type StackProps = NativeStackNavigationProp<any, any>;
 export const SiteScreen = () => {
     const navigation = useNavigation<StackProps>();
     const route = useRoute<SiteScreenRouteProp>();
-    const { site } = route.params;
     const { user } = useContext(LoginContext);
 
+    const site = route.params.site;
     const [isSaved, setIsSaved] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,6 @@ export const SiteScreen = () => {
         const fetchData = async () => {
             //Obtener el nombre de los usuarios que han comentado 
             const data: CommentType[] = await getComments(site);
-            console.log(data)
             setLoading(false)
 
             if (data)
@@ -133,7 +132,7 @@ export const SiteScreen = () => {
                 </View>
 
                 {/*Formularios*/}
-                <SectionHeader title="Formularios" onPressButton={() => navigation.navigate('form')}>
+                <SectionHeader title="Formularios" onPressButton={() => navigation.navigate('form', { site })}>
                 </SectionHeader>
 
                 {/*Comentarios*/}

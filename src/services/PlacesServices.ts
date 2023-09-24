@@ -125,13 +125,11 @@ export async function deleteComment(placeId: string, commentId: string) {
 }
 
 export async function getComments(site: Site) {
-    console.log(API_HOST + '/comments')
     const response = await axios.get(API_HOST + '/comments', {
         params: {
             placeId: site.placeId
         }
     }).then(res => res.data).catch(e => console.error(e))
-    console.log(JSON.stringify(response));
     const comments: CommentType[] = response.comentarios;
 
     return comments;
@@ -141,9 +139,10 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
     const response = await axios.post(API_HOST + '/review', {
         place: site,
         usuarioId: userId,
-        valoracion: valoracion
+        review: valoracion
     }).then((response) => {
-        return { success: true, message: 'Valoración enviada correctamente.', review: response.data.review };
+        let site: Site = response.data.newPlace;
+        return { success: true, message: 'Valoración enviada correctamente.', newPlace: site };
     }).catch(error => {
         console.error(error);
         return { success: false, message: "No se pudo enviar la valoración" };
