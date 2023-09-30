@@ -1,8 +1,8 @@
-import { SafeAreaView, SectionList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, SectionList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { RadioButtonGroup } from "../components/RadioButtonGroup";
 import { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommonActions, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
 import { sendRating } from "../services/PlacesServices";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -28,7 +28,7 @@ const data = [
 type StackProps = NativeStackNavigationProp<any, any>;
 
 type RootStackParamList = {
-    site: { site: Site };
+    site: { site: Site, valoracion?: Valoracion };
 };
 
 type SiteScreenRouteProp = RouteProp<RootStackParamList, "site">;
@@ -37,7 +37,7 @@ export const FormScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
 
     const { user } = useContext(LoginContext);
-    let { site } = route.params;
+    let { site, valoracion } = route.params;
 
     const navigation = useNavigation<StackProps>();
 
@@ -118,22 +118,9 @@ export const FormScreen = () => {
         return null;
     }
 
-
     useEffect(() => {
         console.log(selectedValues)
     }, [selectedValues])
-
-    const saveChanges = () => {
-        if (Object.keys(selectedValues).length === 0)
-            setHasError(true);
-        else {
-            // Código para guardar los cambios
-            console.log('Changes saved: ', selectedValues);
-            site.nombre = "(Rated)";
-            navigation.setParams({ site: site });
-            navigation.goBack();
-        }
-    }
 
     const saveChangesAsync = async () => {
         if (Object.keys(selectedValues).length === 0)

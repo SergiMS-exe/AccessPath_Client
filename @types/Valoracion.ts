@@ -33,6 +33,14 @@ export enum PsiquicaEnum {
     interaccion_personal = 'Interacción del Personal'
 }
 
+export enum TypesOfDisabilities {
+    fisica = 'Física',
+    sensorial = 'Sensorial',
+    psiquica = 'Psíquica',
+    ninguna = 'Ninguna'
+}
+
+export type TypesOfDisabilitiesKey = keyof typeof TypesOfDisabilities;
 export type FisicaKey = keyof typeof FisicaEnum;
 export type SensorialKey = keyof typeof SensorialEnum;
 export type PsiquicaKey = keyof typeof PsiquicaEnum;

@@ -10,12 +10,13 @@ import Person from "../../../@types/Person";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { TypesOfDisabilitiesKey } from "../../../@types/Valoracion";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
 
 export const EditProfile = () => {
-    
+
     const stackNavigation = useNavigation<StackProps>();
     const drawerNavigation = useNavigation<DrawerProps>();
 
@@ -31,7 +32,7 @@ export const EditProfile = () => {
     const handleChangePassword = async () => {
         if (user && user._id) {
             const result = await updateUserPassword(user._id, currentPassword, newPassword);
-            Alert.alert(result.success ? 'Contraseña actualizada correctamente' : 'Error: '+result.message.msg);
+            Alert.alert(result.success ? 'Contraseña actualizada correctamente' : 'Error: ' + result.message.msg);
             if (result.success) {
                 setCurrentPassword('');
                 setNewPassword('');
@@ -39,7 +40,7 @@ export const EditProfile = () => {
         }
     };
 
-    const handleUpdateProfile = async() => {
+    const handleUpdateProfile = async () => {
         //Person con los datos actualizados
         const updatedUser = new Person({
             _id: user!._id,
@@ -53,24 +54,24 @@ export const EditProfile = () => {
         if (result.success) {
             setUser(updatedUser);
         }
-        Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: '+result.message);
+        Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: ' + result.message);
     };
-    
-    const handleDisabilityChange = (newValue: "Ninguna" | "Física" | "Sensorial" | "Psíquica") => {
+
+    const handleDisabilityChange = (newValue: TypesOfDisabilitiesKey) => {
         setTipoDiscapacidad(newValue);
     };
 
     const handleDeleteAccount = async () => {
         Alert.alert(
-            "Borrar cuenta", 
-            "¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible y no podrás recuperar tus datos.", 
+            "Borrar cuenta",
+            "¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible y no podrás recuperar tus datos.",
             [
                 {
                     text: "Cancelar",
                     style: "cancel"
                 },
-                { 
-                    text: "Sí, borrar", 
+                {
+                    text: "Sí, borrar",
                     onPress: async () => {
                         // Aquí llamamos a la función que borra la cuenta, por ejemplo:
                         const result = await deleteAccount(user!._id);
@@ -90,32 +91,32 @@ export const EditProfile = () => {
 
     return (
         <SafeAreaView style={styles.screen}>
-            <StackHeader title='Editar Perfil'/>
+            <StackHeader title='Editar Perfil' />
 
-            <ScrollView 
+            <ScrollView
                 style={styles.form}>
-                <MyInput 
-                    title="Nombre" 
+                <MyInput
+                    title="Nombre"
                     value={nombre}
                     onChangeText={setNombre}
                 />
-                <MyInput 
-                    title="Apellidos" 
+                <MyInput
+                    title="Apellidos"
                     value={apellidos}
                     onChangeText={setApellidos}
                 />
-                <MyInput 
-                    title="Email" 
+                <MyInput
+                    title="Email"
                     value={email}
                     onChangeText={setEmail}
                 />
-                <DisabilitySelector 
+                <DisabilitySelector
                     value={tipoDiscapacidad as any}
                     onChange={handleDisabilityChange}
                 />
-                
+
                 {/* Botón Guardar cambios */}
-                <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()}/>
+                <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} />
 
                 {/* Zona de peligro */}
                 <View style={styles.divider}>
@@ -123,32 +124,32 @@ export const EditProfile = () => {
                 </View>
                 <Text style={styles.changePasswordTitle}>Cambio de contraseña</Text>
                 <View style={styles.changePasswordContainer}>
-                    <MyInput 
-                        title="Contraseña actual" 
+                    <MyInput
+                        title="Contraseña actual"
                         value={currentPassword}
                         marginHorizontal={17}
                         onChangeText={setCurrentPassword}
                     />
-                    <MyInput 
+                    <MyInput
                         title="Nueva contraseña"
-                        value={newPassword} 
+                        value={newPassword}
                         marginHorizontal={17}
                         onChangeText={setNewPassword}
                     />
-                    <MainButton 
-                        title='Cambiar contraseña' 
-                        color="red" 
+                    <MainButton
+                        title='Cambiar contraseña'
+                        color="red"
                         onPress={() => handleChangePassword()}
                     />
                 </View>
-                <MainButton title='Borrar cuenta' color="red" onPress={() => handleDeleteAccount()}/>
+                <MainButton title='Borrar cuenta' color="red" onPress={() => handleDeleteAccount()} />
             </ScrollView>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    screen : {
+    screen: {
         flex: 1,
     },
     form: {
@@ -164,9 +165,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingHorizontal: 10,
     },
-    changePasswordTitle: { 
-        fontSize: 16, 
-        marginLeft: 10 
+    changePasswordTitle: {
+        fontSize: 16,
+        marginLeft: 10
     },
     changePasswordContainer: {
         marginHorizontal: 10,

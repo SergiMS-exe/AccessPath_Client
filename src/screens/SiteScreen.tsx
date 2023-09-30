@@ -1,7 +1,7 @@
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackHeader } from "../components/Headers/StackHeader";
-import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
@@ -13,8 +13,8 @@ import { getComments } from "../services/PlacesServices";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Comment } from "../components/Comment";
 import { CommentType } from "../../@types/CommentType";
-import { Footer } from "../components/Footer";
 import useComments from "../hooks/useComments";
+import { AddEditRating } from "../components/AddEditRating";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -84,9 +84,12 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader />
+            <AddEditRating isEditing={false} site={site} />
             <ScrollView
                 style={styles.container}
-                keyboardDismissMode="on-drag"
+                automaticallyAdjustKeyboardInsets={true}
+                contentInset={{ bottom: 80 }}
+                keyboardShouldPersistTaps="handled"
             >
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
@@ -132,7 +135,7 @@ export const SiteScreen = () => {
                 </View>
 
                 {/*Formularios*/}
-                <SectionHeader title="Formularios" onPressButton={() => navigation.navigate('form', { site })}>
+                <SectionHeader title="Valoraciones">
                 </SectionHeader>
 
                 {/*Comentarios*/}
@@ -148,9 +151,8 @@ export const SiteScreen = () => {
                         )
                     }
                 </SectionHeader>
-                <Footer />
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 

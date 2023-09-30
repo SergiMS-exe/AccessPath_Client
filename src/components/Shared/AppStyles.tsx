@@ -12,5 +12,6 @@ export const AppStyles = {
     card: {
         titleSize: 20,
         subtitleSize: 15,
-    }
+    },
+    mainBlueColor: '#3498db'
 }

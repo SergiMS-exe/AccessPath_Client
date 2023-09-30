@@ -6,7 +6,7 @@ type Props = {
     title: string;
     onChangeText?: (text: string) => void;
     onKeyPress?: (event: any) => void;
-    value?: string;  
+    value?: string;
     marginHorizontal?: number;
 }
 
@@ -32,10 +32,10 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
         passwordContainer: {
             flexDirection: 'row',
             borderColor: '#ccc',
+            backgroundColor: '#fff',
             borderWidth: 1,
             borderRadius: 10,
             alignItems: 'center',
-            padding: 10
         }
     })
 
@@ -52,13 +52,13 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
             {isPassword ? (
                 <View style={styles.passwordContainer}>
                     <TextInput
-                        style={{ flex: 1, ...styles.input}}
+                        style={{ flex: 1, ...styles.input, borderWidth: 0 }}
                         secureTextEntry={hidePassword}
                         onChangeText={onChangeText}
                         autoCapitalize='none'
                         onKeyPress={onKeyPress}
                         ref={ref}
-                        value={value}  // Usar el valor de la prop "value" aquí
+                        value={value}
                     />
                     <TouchableOpacity onPress={handleHidePassword} style={{ paddingHorizontal: 10 }}>
                         {hidePassword ? (
@@ -75,7 +75,7 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
                     autoCapitalize='none'
                     onKeyPress={onKeyPress}
                     ref={ref}
-                    value={value}  // Usar el valor de la prop "value" aquí
+                    value={value}
                 />
             )}
         </View>

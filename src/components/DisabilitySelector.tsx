@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-interface DropdownItem {
-    label: string;
-    value: string;
-}
+import { TypesOfDisabilities, TypesOfDisabilitiesKey } from '../../@types/Valoracion';
 
 type Props = {
-    value?: "Ninguna" | "Física" | "Sensorial" | "Psíquica";
-    onChange?: (value: "Ninguna" | "Física" | "Sensorial" | "Psíquica") => void;
+    value?: TypesOfDisabilitiesKey;
+    onChange?: (value: TypesOfDisabilitiesKey) => void;
 }
-
 
 const DisabilitySelector = ({ value, onChange }: Props) => {
     const [open, setOpen] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState(value || 'Ninguna');
+
+    const disabilityOptions = Object.values(TypesOfDisabilities).map(option => ({
+        label: option,
+        value: option.toLowerCase() as TypesOfDisabilitiesKey,
+    }));
 
     return (
         <View style={styles.container}>
@@ -23,12 +23,7 @@ const DisabilitySelector = ({ value, onChange }: Props) => {
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}
-                items={[
-                    { label: 'Física', value: 'Física' },
-                    { label: 'Sensorial', value: 'Sensorial' },
-                    { label: 'Psíquica', value: 'Psíquica' },
-                    { label: 'Ninguna', value: 'Ninguna' }
-                ]}
+                items={disabilityOptions}
                 value={selectedValue}
                 setValue={setSelectedValue}
                 dropDownContainerStyle={styles.dropDownContainer}
@@ -41,7 +36,7 @@ const DisabilitySelector = ({ value, onChange }: Props) => {
                     setSelectedValue(item.value as any);
                     onChange && onChange(item.value as any);
                 }}
-                
+                listItemLabelStyle={{ fontSize: 16 }}
             />
         </View>
     );
@@ -50,10 +45,11 @@ const DisabilitySelector = ({ value, onChange }: Props) => {
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 30,
-        marginVertical: 10
+        marginVertical: 10,
+        zIndex: 1,
     },
     title: {
-        fontSize: 15,
+        fontSize: 16,
         marginBottom: 7
     },
     pickerContainer: {
@@ -64,7 +60,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 10,
-    },    
+    },
     dropdownItem: {
         justifyContent: 'flex-start',
         fontSize: 16,

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     text: string;
-    onSelectionChange: (value: number) => void; // Esta es la función que maneja el cambio de selección
+    onSelectionChange: (value: number) => void;
 }
 
 export const RadioButtonGroup = ({ text, onSelectionChange }: Props) => {
@@ -22,9 +23,9 @@ export const RadioButtonGroup = ({ text, onSelectionChange }: Props) => {
             <Text style={styles.categoria}>{text}</Text>
             <View style={styles.respuestas}>
                 {[...Array(5).keys()].map(i => (
-                    <TouchableOpacity style={styles.radioButton} key={i+1} onPress={() => handlePress(i+1)}>
-                        <Text style={styles.respuesta}>{i+1}</Text>
-                        <Icon style={styles.icono} name="dot-circle" solid={selected === i+1} />
+                    <TouchableOpacity style={styles.radioButton} key={i + 1} onPress={() => handlePress(i + 1)}>
+                        <Text style={styles.respuesta}>{i + 1}</Text>
+                        <Icon style={styles.icono} name="dot-circle" solid={selected === i + 1} />
                     </TouchableOpacity>
                 ))}
                 <TouchableOpacity style={styles.radioButton} onPress={() => handlePress(0)}>
@@ -51,24 +52,24 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     categoria: {
-        fontWeight: 'bold', // Make text bold
-        fontSize: 16, // Increase font size
-        flex: 1, // Give it as much space as possible
+        fontWeight: 'bold',
+        fontSize: 16,
+        flex: 1,
     },
     respuestas: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        flex: 1, // Make it take the remaining space
+        flex: 1,
     },
     respuesta: {
         alignSelf: 'center',
-        marginLeft: 5, // Add some space between the icon and the text
+        marginLeft: 5,
         marginRight: 6,
         color: '#333', // Dark gray
     },
     icono: {
         marginTop: 5,
-        fontSize: 20, // Make the icon a bit larger
-        color: '#3498db', // Blue color
+        fontSize: 20,
+        color: AppStyles.mainBlueColor, // Blue color
     }
 })

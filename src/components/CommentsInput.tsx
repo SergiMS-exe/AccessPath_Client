@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Animated, StyleSheet, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
@@ -8,7 +8,7 @@ import { sendComment } from '../services/PlacesServices';
 type Props = {
     user: Person,
     site: Site;
-    onCommentSent: (newComment: any) => void;  
+    onCommentSent: (newComment: any) => void;
 }
 
 export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) => {
@@ -60,9 +60,10 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) =>
     };
 
     const sendCommentAndClear = async () => {
+        Keyboard.dismiss();
         const newComment = await sendComment(user, site, commentText);
         setCommentText("");
-        onCommentSent({'_id': newComment._id, 'texto': newComment.texto, 'usuario': { '_id': newComment.usuario?._id, 'nombre': newComment.usuario?.nombre, 'apellidos': newComment.usuario?.apellidos }});
+        onCommentSent({ '_id': newComment._id, 'texto': newComment.texto, 'usuario': { '_id': newComment.usuario?._id, 'nombre': newComment.usuario?.nombre, 'apellidos': newComment.usuario?.apellidos } });
     }
 
     return (

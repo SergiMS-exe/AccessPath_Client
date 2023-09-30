@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { View, TouchableOpacity, StyleSheet, GestureResponderEvent, Text, } from 'react-native';
-import {  } from 'react-native-vector-icons'; 
+import { AppStyles } from './Shared/AppStyles';
 
 
 const styles = StyleSheet.create({
@@ -11,8 +11,9 @@ const styles = StyleSheet.create({
         zIndex: 1
     },
     button: {
-        backgroundColor: '#55F1B1F2',
+        backgroundColor: AppStyles.mainBlueColor,
         borderRadius: 30,
+        opacity: 0.8,
         width: 120,
         height: 60,
         justifyContent: 'center',
@@ -30,12 +31,12 @@ interface FloatingButtonProps {
     text: string;
 }
 
-export const FloatingButton: FC<FloatingButtonProps> = ({ onPress, text}: FloatingButtonProps) => {
+export const FloatingButton: FC<FloatingButtonProps> = ({ onPress, text }: FloatingButtonProps) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={onPress}>
                 {/* <Icon name="md-add" size={24} color="white" /> */}
-                <Text style={styles.text}>{ text }</Text>
+                <Text style={styles.text}>{text}</Text>
             </TouchableOpacity>
         </View>
     );

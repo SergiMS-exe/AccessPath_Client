@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -7,6 +7,8 @@ import { useForm } from '../../hooks/useForm';
 import { MyInput } from '../MyInput';
 import { register } from '../../services/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DisabilitySelector from '../DisabilitySelector';
+import { TypesOfDisabilitiesKey } from '../../../@types/Valoracion';
 
 
 type Props = {
@@ -32,14 +34,21 @@ export const RegisterForm = ({ screenName, navigation }: Props) => {
         await AsyncStorage.setItem('savedSites', '[]')
     }
 
+    const handleDisabilityChange = (newValue: TypesOfDisabilitiesKey) => {
+        onChange(newValue, 'tipoDiscapacidad');
+    };
+
     return (
         <>
             <MyInput title='Nombre' onChangeText={(text: string) => onChange(text, 'nombre')} />
             <MyInput title='Apellidos' onChangeText={(text: string) => onChange(text, 'apellidos')} />
             <MyInput title='Email' onChangeText={(text: string) => onChange(text, 'email')} />
+            <DisabilitySelector
+                value={tipoDiscapacidad as any}
+                onChange={handleDisabilityChange}
+            />
             <MyInput title='Contraseña' onChangeText={(text: string) => onChange(text, 'password')} />
             <MyInput title='Repita la Contraseña' onChangeText={(text: string) => onChange(text, 'repeatPassword')} />
-            <MyInput title='Tipos de discapacidad' onChangeText={(text: string) => onChange(text, 'tipoDiscapacidad')} />
 
             <Button title='Registrarse'
                 onPress={handleRegister} />
