@@ -15,6 +15,8 @@ import { Comment } from "../components/Comment";
 import { CommentType } from "../../@types/CommentType";
 import useComments from "../hooks/useComments";
 import { AddEditRating } from "../components/AddEditRating";
+import { AppStyles } from "../components/Shared/AppStyles";
+import DropDownAverages from "../components/DropDownAverages";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -84,7 +86,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader />
-            <AddEditRating isEditing={false} site={site} />
+            <AddEditRating isEditing={true} site={site} />
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}
@@ -96,7 +98,7 @@ export const SiteScreen = () => {
                     <Text>{site.types[2]}, {site.types[3]}</Text>
                     {user &&
                         <TouchableOpacity onPress={handleSave}>
-                            <Icon name='heart' size={20} solid={isSaved} />
+                            <Icon name='heart' size={20} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />
                         </TouchableOpacity>}
                 </View>
                 <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
@@ -136,18 +138,19 @@ export const SiteScreen = () => {
 
                 {/*Formularios*/}
                 <SectionHeader title="Valoraciones">
+                    <DropDownAverages />
                 </SectionHeader>
 
                 {/*Comentarios*/}
                 <SectionHeader title="Comentarios" >
                     {loading ?
                         <ActivityIndicator size="large" style={{ marginTop: 10 }} /> : (
-                            <>
+                            <View style={{ marginTop: 12 }}>
                                 {comments && comments.map((comment, index) => (
                                     <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />
                                 ))}
                                 {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
-                            </>
+                            </View>
                         )
                     }
                 </SectionHeader>
@@ -199,6 +202,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignItems: "center",
         borderRadius: 10,
+        marginBottom: 15,
     },
     addressTextContainer: {
         width: "100%",
@@ -222,7 +226,7 @@ const styles = StyleSheet.create({
         textAlignVertical: "bottom"
     },
     sectionContainer: {
-        marginTop: 30
+        marginTop: 15
     },
     sectionHeaderContainer: {
         flexDirection: "row",

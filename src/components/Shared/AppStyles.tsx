@@ -13,5 +13,7 @@ export const AppStyles = {
         titleSize: 20,
         subtitleSize: 15,
     },
-    mainBlueColor: '#3498db'
+    mainBlueColor: '#3498db',
+    mainRedColor: '#e74c3c',
+    mainBlackColor: '#2c3e50'
 }
