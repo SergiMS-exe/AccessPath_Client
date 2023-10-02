@@ -86,7 +86,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader />
-            <AddEditRating isEditing={true} site={site} />
+            <AddEditRating isEditing={false} site={site} />
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}

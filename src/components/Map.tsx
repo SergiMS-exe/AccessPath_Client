@@ -5,20 +5,27 @@ import MapView, { Marker } from 'react-native-maps';
 import { MapCard } from './Card/MapCard';
 import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
+import { Site } from '../../@types/Site';
 
 type Props = {
-    setShowButton: Function;
+    setShowButton: (show: boolean) => void;
 }
 
 export const Map = ({ setShowButton }: Props) => {
 
-    const { location, error, resetLocation} = useLocation();
+    const { location, error, resetLocation } = useLocation();
     const { cardData, handleShowCard, handleCloseCard } = useCard();
 
-    useEffect(()=>{
+    const [sites, setSites] = useState<Site[]>([]);
+
+    useEffect(() => { // esto se podra borrar en un futuro
         console.log(cardData);
-        
+
     }, [cardData])
+
+    useEffect(() => {
+        console.log(sites);
+    }, [])
 
     return (
         <>
@@ -37,16 +44,14 @@ export const Map = ({ setShowButton }: Props) => {
                 moveOnMarkerPress
                 style={{ ...StyleSheet.absoluteFillObject, zIndex: 0 }}
                 region={{
-                    latitude: location.lat,
-                    longitude: location.lng,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
                     latitudeDelta: 0.0122,
                     longitudeDelta: 0.0121,
                 }}
                 maxZoomLevel={19}
                 minZoomLevel={10}
-                onMarkerPress={(e)=>{
-                    
-                    handleShowCard({});
+                onMarkerPress={(e) => {
                     setShowButton(false)
                 }}
                 loadingEnabled={true}
@@ -56,25 +61,36 @@ export const Map = ({ setShowButton }: Props) => {
                 //       { "visibility": "off" }
                 //     ]
                 //   }]}
-                onPoiClick={(e)=>console.log(e.nativeEvent.name)}
+                onPoiClick={(e) => console.log(e.nativeEvent.name)}
             >
+                {sites.map(site => (
+                    <Marker
+                        key={site.placeId}
+                        coordinate={{
+                            latitude: site.location.latitude,
+                            longitude: site.location.longitude,
+                        }}
+                        onPress={(e) => {
+                            handleShowCard(site);  // Suponiendo que handleShowCard puede tomar un sitio como argumento
+                            setShowButton(false)
+                        }}
+                        title={site.nombre}
+                    />
+                ))}
+
                 <Marker
                     coordinate={{
-                        latitude: location.lat,
-                        longitude: location.lng
+                        latitude: location.latitude,
+                        longitude: location.longitude,
                     }}
                     onPress={(e) => {
-                        e.nativeEvent.coordinate
-                        handleShowCard({});
+                        //console.log(e.nativeEvent);
+                        handleShowCard(undefined);
                         setShowButton(false)
-                        
                     }}
                 />
             </MapView>
-            {cardData != null && <MapCard nombre={''} direccion={''} calificacion={0} placeId={''} location={{
-                latitude: 0,
-                longitude: 0
-            }} types={[]} />}
+            {cardData != null && <MapCard {...cardData} />}
         </>
 
     )

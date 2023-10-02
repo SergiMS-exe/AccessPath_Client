@@ -1,13 +1,22 @@
 export interface Valoracion {
     placeId?: string;
     userId?: string;
-    fisica?: Record<FisicaKey, number>;
-    sensorial?: Record<SensorialKey, number>;
-    psiquica?: Record<PsiquicaKey, number>;
+    fisica?: {
+        media: number;
+        valoracion: Record<FisicaKey, number>;
+    } | Record<FisicaKey, number>;
+    sensorial?: {
+        media: number;
+        valoracion: Record<SensorialKey, number>;
+    } | Record<SensorialKey, number>;
+    psiquica?: {
+        media: number;
+        valoracion: Record<PsiquicaKey, number>;
+    } | Record<PsiquicaKey, number>;
 
 }
 
-// Defining enums from the provided keys
+// Enums para las valoraciones
 export enum FisicaEnum {
     entrada = 'Entradas/Salidas',
     taza_bano = 'Taza del baño',
@@ -15,7 +24,7 @@ export enum FisicaEnum {
     ascensores = 'Ascensores',
     pasillos = 'Pasillos',
     banos_adaptados = 'Baños Adaptados',
-    senaletica_clara = 'Señalética Clara'
+    senaletica_clara = 'Señalización Clara',
 }
 
 export enum SensorialEnum {

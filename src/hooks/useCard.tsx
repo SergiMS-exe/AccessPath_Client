@@ -1,15 +1,15 @@
-// useCard.js
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import { Site } from '../../@types/Site';
 
 export const useCard = () => {
-    const [cardData, setCardData] = useState(null);
+    const [cardData, setCardData] = useState<Site>();
 
-    const handleShowCard = (data: any) => {
+    const handleShowCard = (data: Site | undefined) => {
         setCardData(data);
     };
 
     const handleCloseCard = () => {
-        setCardData(null);
+        setCardData(undefined);
     };
 
     return { cardData, handleShowCard, handleCloseCard };

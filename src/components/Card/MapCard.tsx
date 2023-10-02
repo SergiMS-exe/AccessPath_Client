@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
     container: {
-        zIndex: 2,
+        zIndex: 1000,
         marginLeft: '2.5%',
         borderWidth: 1,
         borderColor: 'black',
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        padding:6
+        padding: 6
     }
 })
 

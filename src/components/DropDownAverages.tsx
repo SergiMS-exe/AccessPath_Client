@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { List } from 'react-native-paper';
+import { ListItem } from '@rneui/themed';
 import {
     FisicaEnum,
     SensorialEnum,
@@ -8,6 +8,8 @@ import {
     TypesOfDisabilities,
 } from '../../@types/Valoracion';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { List } from 'react-native-paper';
+import { Rating } from '@rneui/base';
 
 const DropDownAverages = () => {
 
@@ -34,25 +36,37 @@ const DropDownAverages = () => {
     return (
         <View style={styles.container}>
             {categories.map((category) => (
-                <View style={styles.categoryContainer} key={category.mainCategory}>
-                    <List.Accordion
-                        title={category.mainCategory}
-                        expanded={expanded === category.mainCategory}
-                        onPress={() =>
-                            setExpanded(
-                                expanded === category.mainCategory ? false : category.mainCategory
-                            )
-                        }
-                        titleStyle={{ fontWeight: 'bold', fontSize: 18 }}
-                        style={styles.accordion}
-                        left={() => <Icon name={category.icon} size={20} style={styles.icon} />}
-                        id={category.mainCategory}
-                    >
-                        {category.subCategories.map((subCategory) => (
-                            <List.Item key={subCategory} title={subCategory} />
-                        ))}
-                    </List.Accordion>
-                </View>
+                <ListItem.Accordion
+                    key={category.mainCategory}
+                    content={
+                        <>
+                            <Icon name={category.icon} size={25} style={styles.icon} />
+                            <ListItem.Content style={{ flex: 1 }}>
+                                <ListItem.Title style={{ fontWeight: 'bold', fontSize: 18 }}>
+                                    {category.mainCategory}
+                                </ListItem.Title>
+                            </ListItem.Content>
+                            <Text style={styles.ratingText}>4/5</Text>
+                        </>
+                    }
+                    isExpanded={expanded === category.mainCategory}
+                    onPress={() => {
+                        setExpanded(
+                            expanded === category.mainCategory ? false : category.mainCategory
+                        );
+                    }}
+                >
+                    {category.subCategories.map((subCategory, i) => (
+                        <ListItem key={i} bottomDivider>
+                            <ListItem.Content>
+                                <ListItem.Title>{subCategory}</ListItem.Title>
+                            </ListItem.Content>
+                            <ListItem.Content right>
+                                <Text style={styles.ratingText}>4/5</Text>
+                            </ListItem.Content>
+                        </ListItem>
+                    ))}
+                </ListItem.Accordion>
             ))}
         </View>
     );
@@ -80,9 +94,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     icon: {
-        padding: 10,
-        marginLeft: 5
-    }
+        marginRight: 10,
+    },
+    ratingText: {
+        marginRight: 10,
+        fontSize: 16,
+        color: '#333'
+    },
 });
 
 export default DropDownAverages
