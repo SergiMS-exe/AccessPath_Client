@@ -14,7 +14,7 @@ export class Site {
     public comentarios?: CommentType[];
     public location: Location;
     public types: string[];
-    public valoraciones?: Valoracion
+    public valoraciones?: Valoracion;
 
     constructor(
         placeId: string,

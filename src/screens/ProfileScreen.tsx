@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { LoginContext } from '../components/Shared/Context';
 import { logout } from '../services/UserServices';
@@ -12,6 +12,19 @@ import MainButton from '../components/MainButton';
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
 
+export const getUserIcon = (dasibily: string) => {
+    switch (dasibily) {
+        case "Física":
+            return "wheelchair";
+        case "Sensorial":
+            return "eye";
+        case "Psíquica":
+            return "brain";
+        default:
+            return "user";
+    }
+}
+
 export const ProfileScreen = () => {
 
     const stackNavigation = useNavigation<StackProps>();
@@ -19,10 +32,14 @@ export const ProfileScreen = () => {
 
     const { setUser, user } = useContext(LoginContext)
 
+    useEffect(() => {
+        console.log(user)
+    }, []);
+
     return (
         <SafeAreaView>
             <View style={styles.headerContainer}>
-                <Icon name='user' size={60} />
+                <Icon name={getUserIcon(user!.tipoDiscapacidad)} size={60} />
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.name}>{user?.nombre} {user?.apellidos}</Text>
                     <Text style={styles.email}>{user?.email}</Text>

@@ -9,7 +9,7 @@ import { Valoracion } from "../../@types/Valoracion";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-// const API_HOST = 'http://192.168.0.11:3002' + baseUrlSites;
+// const API_HOST = 'http://192.168.0.9:3002' + baseUrlSites;
 const API_HOST = REMOTE + baseUrlSites;
 
 export async function getPlacesByLocation(location: Location) {
@@ -55,6 +55,22 @@ interface PlaceResponse {
         types: string[];
     }>;
 }
+
+export async function getCloseSites(location: Location): Promise<Site[]> {
+    const response = await axios.get(API_HOST + '/close', {
+        params: {
+            location: location.latitude + '%' + location.longitude
+        }
+    }).then(res => res.data).catch(e => {
+        console.error("Error en getCloseSites: " + e)
+        return { sitios: [] }
+    })
+    //console.log(response)
+    return response.sites;
+}
+
+
+
 
 
 export async function getPlacesByText(text: string) {

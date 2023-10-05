@@ -171,7 +171,7 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
             }}
             style={styles.button}
         >
-            <Icon name={iconName} size={23} style={{ ...styles.icon, color: logoutTernary }} />
+            <Icon name={iconName} size={23} style={{ ...styles.icon, color: logoutTernary }} solid />
             <Text style={{ ...styles.text, color: logoutTernary }}>{text}</Text>
 
         </TouchableOpacity>

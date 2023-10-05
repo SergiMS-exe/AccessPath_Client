@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Site } from '../../@types/Site';
 
 export const useCard = () => {
-    const [cardData, setCardData] = useState<Site>();
+    const [cardData, setCardData] = useState<Site | undefined>(undefined);
 
     const handleShowCard = (data: Site | undefined) => {
         setCardData(data);

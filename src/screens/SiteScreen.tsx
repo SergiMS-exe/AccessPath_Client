@@ -90,7 +90,7 @@ export const SiteScreen = () => {
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}
-                contentInset={{ bottom: 80 }}
+                contentContainerStyle={{ paddingBottom: 110 }}
                 keyboardShouldPersistTaps="handled"
             >
                 <Text style={styles.name}>{site.nombre}</Text>

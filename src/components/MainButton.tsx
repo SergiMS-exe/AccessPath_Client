@@ -11,7 +11,7 @@ type Props = {
 const MainButton = ({ onPress, title, iconName, color = '#007AFF' }: Props) => {
     return (
         <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
-            {iconName && <Icon name={iconName} style={styles.icon}/>}
+            {iconName && <Icon name={iconName} style={styles.icon} solid />}
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );

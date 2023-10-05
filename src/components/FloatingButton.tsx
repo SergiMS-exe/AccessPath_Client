@@ -37,7 +37,8 @@ const MyFAB = ({ name, loading, showing }: Props) => {
 
     const { title, icon, onPress } = getFABConfig();
 
-    const fabContainerStyle = Platform.OS === 'ios' && name === 'map' ? [styles.fabContainer, styles.fabIOS] : [styles.fabContainer, styles.fabDefault];
+    const fabContainerStyle = Platform.OS === 'ios' && name === 'map' ? [styles.fabContainer, styles.fabIOSContainer] : [styles.fabContainer, styles.fabDefault];
+    const fabButtonStyle = Platform.OS === 'ios' ? [styles.fab, styles.fabIOSButton] : styles.fab;
 
     return (
         <View style={fabContainerStyle}>
@@ -49,7 +50,7 @@ const MyFAB = ({ name, loading, showing }: Props) => {
                 title={title}
                 icon={icon}
                 color={AppStyles.mainBlueColor}
-                style={styles.fab}
+                style={fabButtonStyle}
                 titleStyle={styles.fabTitle}
             />
         </View>
@@ -60,7 +61,7 @@ const MyFAB = ({ name, loading, showing }: Props) => {
 const styles = StyleSheet.create({
     fabContainer: {
         position: 'absolute',
-        bottom: 23,
+        bottom: 25,
         elevation: 5,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.23,
@@ -70,12 +71,14 @@ const styles = StyleSheet.create({
     fab: {
         zIndex: 1,
         opacity: 0.85,
-        height: 60,
-        width: 174,
         backgroundColor: AppStyles.mainBlueColor,
     },
-    fabIOS: {
+    fabIOSContainer: {
         right: 60,
+    },
+    fabIOSButton: {
+        height: 58,
+        width: 174,
     },
     fabDefault: {
         right: 25,

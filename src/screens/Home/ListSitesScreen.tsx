@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useContext } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Titulo } from '../../components/Titulo';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -8,6 +8,7 @@ import { staticSites } from '../../services/PlacesServices';
 import { FAB } from '@rneui/themed';
 import { AppStyles } from '../../components/Shared/AppStyles';
 import MyFAB from '../../components/FloatingButton';
+import { SiteContext } from '../../components/Shared/Context';
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -19,10 +20,13 @@ const styles = StyleSheet.create({
 })
 
 export const ListSitesScreen = ({ navigation }: Props) => {
+
+    const { sites } = useContext(SiteContext);
+
     return (
         <View style={{ flex: 1 }}>
             <ResultList
-                data={staticSites}
+                data={sites}
                 title='Sitios valorados cercanos'
                 noItemsMessage='No hay sitios valorados cerca de ti'
                 isLoading={false}  // Asumiendo que staticSites siempre tiene datos y no hay una carga en curso

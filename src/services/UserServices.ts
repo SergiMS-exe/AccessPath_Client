@@ -11,7 +11,7 @@ import { Site } from '../../@types/Site';
 
 const baseUrlUsers = '/users'
 
-// const API_HOST = 'http://192.168.0.11:3002' + baseUrlUsers;
+// const API_HOST = 'http://192.168.0.9:3002' + baseUrlUsers;
 const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
@@ -153,7 +153,7 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
 export async function getSavedSites(user: Person) {
     const response = await axios.get(API_HOST + '/savedSites/' + user._id).
         then(res => res.data);
-    const sites: Site[] = response.saved;
+    const sites: Site[] = response.sites;
     return sites
 }
 

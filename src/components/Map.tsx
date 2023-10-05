@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useLocation } from '../hooks/useLocation';
 import MapView, { Marker } from 'react-native-maps';
@@ -6,26 +6,26 @@ import { MapCard } from './Card/MapCard';
 import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
 import { Site } from '../../@types/Site';
+import { CloseSitesContext } from './Shared/Context';
 
 type Props = {
     setShowButton: (show: boolean) => void;
 }
 
 export const Map = ({ setShowButton }: Props) => {
-
+    const { sites } = useContext(CloseSitesContext);
     const { location, error, resetLocation } = useLocation();
     const { cardData, handleShowCard, handleCloseCard } = useCard();
 
-    const [sites, setSites] = useState<Site[]>([]);
+    const handlePressMarker = (site: Site) => {
+        handleShowCard(site);
+        setShowButton(false);
+    }
 
-    useEffect(() => { // esto se podra borrar en un futuro
-        console.log(cardData);
-
-    }, [cardData])
-
-    useEffect(() => {
-        console.log(sites);
-    }, [])
+    const handlePressMap = () => {
+        handleCloseCard();
+        setShowButton(true);
+    }
 
     return (
         <>
@@ -35,8 +35,7 @@ export const Map = ({ setShowButton }: Props) => {
                     //Cuando se hace llamada a api se guardan los resultados en cache junto con un radio.
                     //Si luego se hace click en otro sitio dentro del radio se usan los datos de cache.
                     //Si se hace click fuera se hace una nueva llamada
-                    handleCloseCard();
-                    setShowButton(true)
+                    handlePressMap();
                 }}
                 provider='google'
                 showsUserLocation
@@ -51,9 +50,6 @@ export const Map = ({ setShowButton }: Props) => {
                 }}
                 maxZoomLevel={19}
                 minZoomLevel={10}
-                onMarkerPress={(e) => {
-                    setShowButton(false)
-                }}
                 loadingEnabled={true}
                 // customMapStyle={[{
                 //     "featureType": "poi",
@@ -61,37 +57,26 @@ export const Map = ({ setShowButton }: Props) => {
                 //       { "visibility": "off" }
                 //     ]
                 //   }]}
-                onPoiClick={(e) => console.log(e.nativeEvent.name)}
+                onPoiClick={(e) => {
+                    handlePressMap();
+                }}
             >
-                {sites.map(site => (
+                {sites.map(site =>
                     <Marker
                         key={site.placeId}
                         coordinate={{
                             latitude: site.location.latitude,
-                            longitude: site.location.longitude,
+                            longitude: site.location.longitude
                         }}
                         onPress={(e) => {
-                            handleShowCard(site);  // Suponiendo que handleShowCard puede tomar un sitio como argumento
-                            setShowButton(false)
+                            e.stopPropagation()
+                            handlePressMarker(site)
                         }}
                         title={site.nombre}
                     />
-                ))}
-
-                <Marker
-                    coordinate={{
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                    }}
-                    onPress={(e) => {
-                        //console.log(e.nativeEvent);
-                        handleShowCard(undefined);
-                        setShowButton(false)
-                    }}
-                />
+                )}
             </MapView>
-            {cardData != null && <MapCard {...cardData} />}
+            {cardData && <MapCard site={cardData} />}
         </>
-
     )
 }
