@@ -5,13 +5,17 @@ import { useForm } from '../../hooks/useForm';
 import { Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { login } from '../../services/UserServices';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
-    navigation: NativeStackNavigationProp<any, any>;
     screenName: string
 }
 
-export const LoginForm = ({ screenName, navigation }: Props) => {
+type StackProps = NativeStackNavigationProp<any, any>;
+
+export const LoginForm = ({ screenName }: Props) => {
+
+    const navigation = useNavigation<StackProps>();
 
     const { email, password, onChange, valid } = useForm({
         email: "",

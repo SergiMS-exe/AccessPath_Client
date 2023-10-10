@@ -1,19 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 type Props = {
     title?: string;
+    iconRight?: string
 }
 
-export const StackHeader = ({ title }: Props) => {
+export const StackHeader = ({ title, iconRight }: Props) => {
 
     const navigation = useNavigation();
 
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon name='arrow-left' size={30} />
+                <Icon name='arrow-left' size={40} color='#121212' />
             </TouchableOpacity>
 
             {title ? (
@@ -21,7 +22,11 @@ export const StackHeader = ({ title }: Props) => {
             ) : (
                 <View style={styles.blank} />
             )}
-
+            {iconRight &&
+                <TouchableOpacity onPress={() => console.log('Photo added')}>
+                    <Icon name={iconRight} size={30} style={{ marginRight: 20 }} />
+                </TouchableOpacity>
+            }
         </View>
     )
 }

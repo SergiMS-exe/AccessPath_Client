@@ -25,26 +25,26 @@ const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Prop
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => {navigation.dispatch(DrawerActions.openDrawer());}}>
+                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
                 </TouchableOpacity>
                 {title ? (
                     <Text style={styles.titleText}>{title}</Text>
                 ) : searchBar ? (
-                <SearchBar
-                    containerStyle={styles.searchBar}
-                    inputContainerStyle={styles.searchBarInput}
-                    round
-                    lightTheme
-                    showCancel
-                    placeholder='Busca un sitio para valorar...'
-                    value={searchText}
-                    onSubmitEditing={async () => {
-                        navigation.navigate('search', { searchText: searchText })
-                    }}
-                    onChangeText={onSearchTextChange}
-                />) : (
-                <View style={styles.searchBar}/>
+                    <SearchBar
+                        containerStyle={styles.searchBar}
+                        inputContainerStyle={styles.searchBarInput}
+                        round
+                        lightTheme
+                        showCancel
+                        placeholder='Busca un sitio para valorar...'
+                        value={searchText}
+                        onSubmitEditing={async () => {
+                            navigation.navigate('search', { searchText: searchText })
+                        }}
+                        onChangeText={onSearchTextChange}
+                    />) : (
+                    <View style={styles.searchBar} />
                 )}
             </View>
         </SafeAreaView>

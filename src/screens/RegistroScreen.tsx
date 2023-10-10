@@ -6,28 +6,28 @@ import { MyInput } from '../components/MyInput';
 import { SafeAreaView, Button, View, Text, StyleSheet } from 'react-native';
 import { AccNoAcc } from '../components/LoginReg/AccNoAcc';
 import { RegisterForm } from '../components/LoginReg/RegisterForm';
+import DrawerHeader from '../components/Headers/DrawerHeader';
 
 
-interface Props extends NativeStackScreenProps<any, any>{};
+interface Props extends NativeStackScreenProps<any, any> { };
 
-export const RegistroScreen = ({navigation}: Props) => {
-    
+export const RegistroScreen = ({ navigation }: Props) => {
+
     const styles = StyleSheet.create({
-        alreadyAccount : {
+        alreadyAccount: {
             alignItems: 'center',
             flexDirection: 'column',
             marginTop: 10
         }
     })
 
-    return(
+    return (
         <SafeAreaView>
-            <Titulo title='Registro'/>
+            <Titulo containerStyle={{ marginTop: 20 }} title='Registro' />
 
-            <RegisterForm navigation={navigation} screenName='home'/>
-            
-            <AccNoAcc navigation={navigation} goTo='login'/>
+            <RegisterForm screenName='home' />
 
+            <AccNoAcc goTo='login' />
         </SafeAreaView>
     )
 }

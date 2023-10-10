@@ -4,10 +4,10 @@ import { Titulo } from "../Titulo";
 
 type Props = {
     data: Site[];
-    title?: string;
+    title?: JSX.Element;
     noItemsMessage: string;
     isLoading?: boolean;
-    renderItemComponent: (item: Site) => JSX.Element;  
+    renderItemComponent: (item: Site) => JSX.Element;
 }
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 20
     },
-    content : {
+    content: {
         flexGrow: 1,
     }
 })
@@ -42,7 +42,7 @@ export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemC
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItemComponent(item)}
             contentContainerStyle={styles.content}
-            ListHeaderComponent={title ? <Titulo title={title}/> : null}
+            ListHeaderComponent={title || null}
         />
     );
 }

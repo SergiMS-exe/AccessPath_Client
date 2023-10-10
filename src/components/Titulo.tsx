@@ -2,16 +2,16 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
-    title: String
+    title: String,
+    containerStyle?: Object,
+    textStyle?: Object
 }
 
-export const Titulo = ({title}: Props) => {
+export const Titulo = ({ title, containerStyle, textStyle }: Props) => {
 
     const styles = StyleSheet.create({
-        titulo : {
-            alignContent: 'flex-start',
+        container: {
             alignItems: 'center',
-            marginBottom: 25
         },
         text: {
             fontSize: 30,
@@ -20,8 +20,8 @@ export const Titulo = ({title}: Props) => {
     })
 
     return (
-        <View style={styles.titulo}>
-            <Text style={styles.text}>{title}</Text>
+        <View style={{ ...styles.container, ...containerStyle }}>
+            <Text style={{ ...styles.text, ...textStyle }}>{title}</Text>
         </View>
     )
 }

@@ -9,14 +9,18 @@ import { register } from '../../services/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DisabilitySelector from '../DisabilitySelector';
 import { TypesOfDisabilitiesKey } from '../../../@types/Valoracion';
+import { useNavigation } from '@react-navigation/native';
 
 
 type Props = {
-    navigation: NativeStackNavigationProp<any, any>;
     screenName: string
 }
 
-export const RegisterForm = ({ screenName, navigation }: Props) => {
+type StackProps = NativeStackNavigationProp<any, any>;
+
+export const RegisterForm = ({ screenName }: Props) => {
+
+    const navigation = useNavigation<StackProps>();
 
     const { nombre, apellidos, email, password, repeatPassword, tipoDiscapacidad, onChange, valid } = useForm({
         nombre: "",

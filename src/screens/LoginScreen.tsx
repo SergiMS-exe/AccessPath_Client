@@ -6,21 +6,17 @@ import Person from '../../@types/Person';
 import { AccNoAcc } from '../components/LoginReg/AccNoAcc';
 import { LoginForm } from '../components/LoginReg/LoginForm';
 
-interface Props extends NativeStackScreenProps<any, any>{};
 
-export const LoginScreen = ({navigation}:Props) => {
-
+export const LoginScreen = () => {
 
     //const user = new Person({_id:1, nombre:'a', apellidos: 'a', email: 'a', tipoDiscapacidad:'a'})
-    return(
+    return (
         <SafeAreaView>
-            <Titulo title='Iniciar Sesion'/>
+            <Titulo containerStyle={{ marginTop: 20 }} title='Iniciar Sesion' />
 
-            <LoginForm navigation={navigation} screenName='home'/>
+            <LoginForm screenName='home' />
 
-
-            <AccNoAcc navigation={navigation} goTo='registro'/>
-            
+            <AccNoAcc goTo='registro' />
         </SafeAreaView>
     )
 }
