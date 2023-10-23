@@ -6,39 +6,41 @@ import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
 import { Valoracion } from "../../@types/Valoracion";
+import ImageResizer from "react-native-image-resizer";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-// const API_HOST = 'http://192.168.0.9:3002' + baseUrlSites;
+// const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
 const API_HOST = REMOTE + baseUrlSites;
 
-export async function getPlacesByLocation(location: Location) {
 
-    const uri = baseUrl + '/nearbysearch/json';
+// export async function getPlacesByLocation(location: Location) {
 
-    const response = await axios.get(uri,
-        {
-            params: {
-                location: location.latitude + '%' + location.longitude,
-                radius: 1500,
-                key: 'AIzaSyAv1vduVdGosz0qdPCs7hawR7ISgz97nbE'
-            }
-        }
-    );
+//     const uri = baseUrl + '/nearbysearch/json';
 
-    await AsyncStorage.setItem('placesCache', JSON.stringify(response.data))
-}
+//     const response = await axios.get(uri,
+//         {
+//             params: {
+//                 location: location.latitude + '%' + location.longitude,
+//                 radius: 1500,
+//                 key: 'AIzaSyAv1vduVdGosz0qdPCs7hawR7ISgz97nbE'
+//             }
+//         }
+//     );
 
-export async function checkIfClickedMarker(location: Location) {
-    const placesCache = await AsyncStorage.getItem('placesCache')
+//     await AsyncStorage.setItem('placesCache', JSON.stringify(response.data))
+// }
 
-    if (placesCache) {
-        const parsedPlaces = JSON.parse(placesCache);
+// export async function checkIfClickedMarker(location: Location) {
+//     const placesCache = await AsyncStorage.getItem('placesCache')
 
-        console.log(parsedPlaces);
+//     if (placesCache) {
+//         const parsedPlaces = JSON.parse(placesCache);
 
-    }
-}
+//         console.log(parsedPlaces);
+
+//     }
+// }
 
 interface PlaceResponse {
     results: Array<{
@@ -56,6 +58,8 @@ interface PlaceResponse {
     }>;
 }
 
+//Obtener sitios
+
 export async function getCloseSites(location: Location): Promise<Site[]> {
     const response = await axios.get(API_HOST + '/close', {
         params: {
@@ -69,11 +73,7 @@ export async function getCloseSites(location: Location): Promise<Site[]> {
     return response.sites;
 }
 
-
-
-
-
-export async function getPlacesByText(text: string) {
+export async function getPlacesByText(text: string) { //Por google maps. TODO pasar a servidor
 
     const centro: Location = {
         latitude: 43.34918,
@@ -100,6 +100,8 @@ export async function getPlacesByText(text: string) {
 
     return convertToSite(response)
 }
+
+//Comentarios
 
 export async function sendComment(user: Person, site: Site, comment: string) {
     const response = await axios.post(API_HOST + '/comment', {
@@ -151,6 +153,7 @@ export async function getComments(site: Site) {
     return comments;
 }
 
+//Valoraciones
 export async function sendRating(valoracion: Valoracion, site: Site, userId: string) {
     const response = await axios.post(API_HOST + '/review', {
         place: site,
@@ -166,8 +169,50 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
     return response;
 }
 
+//Fotos
+export async function sendPhoto(photoUri: string, place: Site, userId: string, alternativeText: string) {
+    try {
+        // Comprimir la imagen usando react-native-image-resizer
+        const compressedImage = await ImageResizer.createResizedImage(photoUri, 800, 600, 'JPEG', 60);
+        const compressedUri = compressedImage.uri;
+
+        // Detectar el tipo de imagen
+        const imageType = photoUri.endsWith('.png') ? 'image/png' : 'image/jpeg';
+        const imageName = photoUri.endsWith('.png') ? 'photo.png' : 'photo.jpg';
+
+        // Crear un objeto FormData
+        const formData = new FormData();
+
+        // Adjuntar la foto comprimida a FormData
+        formData.append('photo', {
+            uri: compressedUri,
+            type: imageType,
+            name: imageName,
+        });
+
+        // Adjuntar otros datos a FormData
+        formData.append('place', JSON.stringify(place));
+        formData.append('usuarioId', userId);
+        formData.append('alternativeText', alternativeText);
+
+        // Configurar los headers para la solicitud. El "multipart/form-data" es esencial para enviar archivos.
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+
+        const response = await axios.post(API_HOST + '/photo', formData, config);
+        let site: Site = response.data.newPlace;
+        console.log(JSON.stringify(site.fotos));
+        return { success: true, message: 'Foto enviada correctamente.', newPlace: site };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: "No se pudo enviar la foto" };
+    }
+}
 //Funciones auxiliares
-async function makeRequest(query: string, location: Location, radius?: number) {
+async function makeRequest(query: string, location: Location, radius?: number) { //hace peticion a maps con query y location
 
     const rectangle = "rectangle:42.88254,-7.18317|43.66653,-4.51059";
     const uri = baseUrl + '/textsearch/json';

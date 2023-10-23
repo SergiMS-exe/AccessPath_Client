@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 type Props = {
@@ -6,13 +6,14 @@ type Props = {
     title: string;
     iconName?: string;
     color?: string;
+    titleStyle?: Object;
 }
 
-const MainButton = ({ onPress, title, iconName, color = '#007AFF' }: Props) => {
+const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
+        <TouchableOpacity accessible style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
             {iconName && <Icon name={iconName} style={styles.icon} solid />}
-            <Text style={styles.buttonText}>{title}</Text>
+            <Text style={{ ...styles.buttonText, ...titleStyle }}>{title}</Text>
         </TouchableOpacity>
     );
 }

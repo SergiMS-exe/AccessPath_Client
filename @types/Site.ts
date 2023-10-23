@@ -1,10 +1,17 @@
 import { CommentType } from "./CommentType";
 import { Valoracion } from "./Valoracion";
+import { Buffer } from "buffer";
 
 export type Location = {
     latitude: number;
     longitude: number;
 };
+
+export type Photo = {
+    usuarioId: string;
+    fotoBuffer: Buffer;
+};
+
 
 export class Site {
     public placeId: string;
@@ -15,6 +22,7 @@ export class Site {
     public location: Location;
     public types: string[];
     public valoraciones?: Valoracion;
+    public fotos?: Photo[];
 
     constructor(
         placeId: string,
@@ -24,7 +32,8 @@ export class Site {
         location: Location,
         types: string[],
         valoraciones?: Valoracion,
-        comentarios?: CommentType[]
+        comentarios?: CommentType[],
+        fotos?: Photo[]
     ) {
         this.placeId = placeId;
         this.nombre = nombre;
@@ -34,5 +43,6 @@ export class Site {
         this.types = types;
         this.valoraciones = valoraciones;
         this.comentarios = comentarios;
+        this.fotos = fotos;
     }
 }

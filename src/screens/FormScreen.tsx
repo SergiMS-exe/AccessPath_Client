@@ -128,7 +128,6 @@ export const FormScreen = () => {
         else {
             const response = await sendRating(selectedValues, site, user!._id);
             if (response.success && "newPlace" in response) {
-                response.newPlace.nombre = "(Rated)";
                 console.log("Nombre en form: " + response.newPlace.nombre);
                 navigation.navigate({
                     name: 'site',

@@ -18,6 +18,7 @@ import { AddEditRating } from "../components/AddEditRating";
 import { AppStyles } from "../components/Shared/AppStyles";
 import DropDownAverages from "../components/DropDownAverages";
 import PhotoCarousel from "../components/PhotoCarousel";
+import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -86,7 +87,7 @@ export const SiteScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StackHeader iconRight="camera-plus" />
+            <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
             <AddEditRating isEditing={false} site={site} />
             <ScrollView
                 style={styles.container}
@@ -94,7 +95,7 @@ export const SiteScreen = () => {
                 contentContainerStyle={{ paddingBottom: 110 }}
                 keyboardShouldPersistTaps="handled"
             >
-                <PhotoCarousel />
+                <PhotoCarousel photos={site.fotos} />
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
                     <Text>{site.types[2]}, {site.types[3]}</Text>

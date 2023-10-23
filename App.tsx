@@ -16,6 +16,7 @@ import { FormScreen } from './src/screens/FormScreen';
 import { EditProfile } from './src/screens/Profile/EditProfile';
 import { MyComments } from './src/screens/Profile/MyComments';
 import { MyRatings } from './src/screens/Profile/MyRatings';
+import AddPhoto from './src/screens/AddPhoto';
 
 enableLatestRenderer();
 
@@ -38,6 +39,7 @@ function App() {
                         <Stack.Screen name="home" component={Home} />
                         <Stack.Screen name='search' component={SearchScreen} />
                         <Stack.Screen name='site' component={SiteScreen} />
+                        <Stack.Screen name='addPhoto' component={AddPhoto} />
                         <Stack.Screen name='form' component={FormScreen} />
                         {/* Parte del profile */}
                         <Stack.Screen name='editProfile' component={EditProfile} />

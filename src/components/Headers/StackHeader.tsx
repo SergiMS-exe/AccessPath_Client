@@ -4,10 +4,11 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 type Props = {
     title?: string;
-    iconRight?: string
+    iconRight?: string;
+    onPressRight?: () => void;
 }
 
-export const StackHeader = ({ title, iconRight }: Props) => {
+export const StackHeader = ({ title, iconRight, onPressRight }: Props) => {
 
     const navigation = useNavigation();
 
@@ -22,8 +23,8 @@ export const StackHeader = ({ title, iconRight }: Props) => {
             ) : (
                 <View style={styles.blank} />
             )}
-            {iconRight &&
-                <TouchableOpacity onPress={() => console.log('Photo added')}>
+            {(iconRight && onPressRight) &&
+                <TouchableOpacity onPress={onPressRight}>
                     <Icon name={iconRight} size={30} style={{ marginRight: 20 }} />
                 </TouchableOpacity>
             }
