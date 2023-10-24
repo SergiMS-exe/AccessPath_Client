@@ -7,7 +7,11 @@ export const usePhotos = (photos: Photo[]): string[] => {
 
     useEffect(() => {
         const convertedUris = photos.map(photo => {
-            const base64String = Buffer.from(photo.fotoBuffer).toString('base64');
+            let base64String;
+            if (typeof photo.fotoBuffer === 'string')
+                base64String = photo.fotoBuffer;
+            else
+                base64String = Buffer.from(photo.fotoBuffer).toString('base64');
             return `data:image/jpeg;base64,${base64String}`;
         });
 

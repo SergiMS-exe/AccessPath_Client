@@ -33,7 +33,10 @@ export const ProfileScreen = () => {
     const { setUser, user } = useContext(LoginContext)
 
     useEffect(() => {
-        console.log(user)
+        //console.log(user);
+        if (!user) {
+            drawerNavigation.navigate("Feed")
+        }
     }, []);
 
     return (

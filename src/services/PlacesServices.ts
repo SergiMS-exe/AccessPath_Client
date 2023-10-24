@@ -10,8 +10,8 @@ import ImageResizer from "react-native-image-resizer";
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-// const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
-const API_HOST = REMOTE + baseUrlSites;
+const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
+// const API_HOST = REMOTE + baseUrlSites;
 
 
 // export async function getPlacesByLocation(location: Location) {
@@ -67,7 +67,7 @@ export async function getCloseSites(location: Location): Promise<Site[]> {
         }
     }).then(res => res.data).catch(e => {
         console.error("Error en getCloseSites: " + e)
-        return { sitios: [] }
+        return { sites: [] }
     })
     //console.log(response)
     return response.sites;
@@ -104,6 +104,11 @@ export async function getPlacesByText(text: string) { //Por google maps. TODO pa
 //Comentarios
 
 export async function sendComment(user: Person, site: Site, comment: string) {
+    //remove photos from site
+    site = {
+        ...site,
+        fotos: []
+    }
     const response = await axios.post(API_HOST + '/comment', {
         site: site,
         comment: {

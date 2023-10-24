@@ -23,7 +23,7 @@ export const SavedScreen = () => {
                     const savedSitesFromStorage: Site[] = JSON.parse(savedSitesJson);
                     setSavedSites(savedSitesFromStorage);
                 } else {
-                    const savedSitesFromAPI = await getSavedSites(user!);
+                    const savedSitesFromAPI: Site[] = await getSavedSites(user!);
                     setSavedSites(savedSitesFromAPI)
                 }
             } catch (error) {

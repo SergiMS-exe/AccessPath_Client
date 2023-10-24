@@ -15,7 +15,7 @@ export const MyComments = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const sites = await getUserComments(user!)
+            const sites: Site[] = await getUserComments(user!)
             console.log(JSON.stringify(sites, null, 2));
             setSites(sites);
             setLoading(false);
@@ -32,11 +32,11 @@ export const MyComments = () => {
     return (
         <SafeAreaView style={{ flexGrow: 1 }}>
             <StackHeader title='Mis Comentarios' />
-            <ResultList 
+            <ResultList
                 data={sites}
                 noItemsMessage='No has comentado en ningún sitio'
                 isLoading={loading}
-                renderItemComponent={(item) => <SiteWMyComments site={item} deleteSiteFromList={deleteSiteFromList}/>}/>
+                renderItemComponent={(item) => <SiteWMyComments site={item} deleteSiteFromList={deleteSiteFromList} />} />
         </SafeAreaView>
     );
 }

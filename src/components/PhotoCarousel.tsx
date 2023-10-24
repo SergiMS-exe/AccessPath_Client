@@ -15,17 +15,11 @@ type StackProps = NativeStackNavigationProp<any, any>;
 const PhotoCarousel = ({ photos }: Props) => {
     const navigation = useNavigation<StackProps>();
 
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-    const screenWidth: number = Dimensions.get('window').width;
     const imageUris = (photos && photos.length > 0) && usePhotos(photos);
 
-    const handleScroll = (event: any) => {
-        const slideWidth: number = screenWidth;
-        const offset: number = event.nativeEvent.contentOffset.x;
-        const index: number = Math.floor(offset / slideWidth);
-        setCurrentIndex(index);
-    };
+    // useEffect(() => {
+    //     console.log('Photos: ', JSON.stringify(photos));
+    // }, [photos]);
 
     const renderContent = () => {
         // Si hay fotos
@@ -52,8 +46,6 @@ const PhotoCarousel = ({ photos }: Props) => {
         <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-        //onScroll={handleScroll}
-        //scrollEventThrottle={16}
         >
             {renderContent()}
         </ScrollView>

@@ -11,8 +11,8 @@ import { Site } from '../../@types/Site';
 
 const baseUrlUsers = '/users'
 
-// const API_HOST = 'http://192.168.0.9:3002' + baseUrlUsers;
-const API_HOST = REMOTE + baseUrlUsers;
+const API_HOST = 'http://192.168.0.7:3002' + baseUrlUsers;
+// const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
     screen: string, setUser: Function) {
@@ -136,6 +136,12 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
     let response;
 
     if (save) {
+        //remove photos from site
+        site = {
+            ...site,
+            fotos: []
+        }
+
         response = await axios.put(API_HOST + '/saveSite', {
             site: site,
             userId: user._id
@@ -154,7 +160,7 @@ export async function getSavedSites(user: Person) {
     const response = await axios.get(API_HOST + '/savedSites/' + user._id).
         then(res => res.data);
     const sites: Site[] = response.sites;
-    return sites
+    return sites;
 }
 
 export async function getUserComments(user: Person) {

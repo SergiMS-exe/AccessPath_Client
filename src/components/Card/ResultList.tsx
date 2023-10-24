@@ -10,21 +10,6 @@ type Props = {
     renderItemComponent: (item: Site) => JSX.Element;
 }
 
-const styles = StyleSheet.create({
-    container: {
-        margin: 10,
-        padding: 5
-    },
-    emptyListMessage: {
-        fontSize: 20,
-        textAlign: 'center',
-        marginTop: 20
-    },
-    content: {
-        flexGrow: 1,
-    }
-})
-
 export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemComponent }: Props) => {
 
     if (isLoading) {
@@ -46,3 +31,19 @@ export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemC
         />
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        margin: 10,
+        padding: 5,
+        flex: 1
+    },
+    emptyListMessage: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 20
+    },
+    content: {
+        flexGrow: 1,
+    }
+})
