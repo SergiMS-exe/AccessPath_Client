@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Photo } from '../../@types/Site';
-import { Buffer } from 'buffer';
 
 export const usePhotos = (photos: Photo[]): string[] => {
     const [imageUris, setImageUris] = useState<string[]>([]);
 
     useEffect(() => {
-        const convertedUris = photos.map(photo => {
-            let base64String;
-            if (typeof photo.fotoBuffer === 'string')
-                base64String = photo.fotoBuffer;
-            else
-                base64String = Buffer.from(photo.fotoBuffer).toString('base64');
-            return `data:image/jpeg;base64,${base64String}`;
-        });
-
+        const convertedUris = photos.map(photo => `data:image/jpeg;base64,${photo.base64}`);
         setImageUris(convertedUris);
     }, [photos]);
 

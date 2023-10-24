@@ -1,12 +1,13 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Location, Site } from "../../@types/Site";
+import { Location, Photo, Site } from "../../@types/Site";
 import Person from "../../@types/Person";
 import { Platform } from "react-native";
 import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
 import { Valoracion } from "../../@types/Valoracion";
 import ImageResizer from "react-native-image-resizer";
+import RNFS from 'react-native-fs';
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
@@ -104,13 +105,11 @@ export async function getPlacesByText(text: string) { //Por google maps. TODO pa
 //Comentarios
 
 export async function sendComment(user: Person, site: Site, comment: string) {
-    //remove photos from site
-    site = {
-        ...site,
-        fotos: []
-    }
+    //Quitar fotos de sitio
+    const siteToSend = removePhotosFromSite(site);
+
     const response = await axios.post(API_HOST + '/comment', {
-        site: site,
+        site: siteToSend,
         comment: {
             texto: comment,
             usuarioId: user._id
@@ -160,8 +159,11 @@ export async function getComments(site: Site) {
 
 //Valoraciones
 export async function sendRating(valoracion: Valoracion, site: Site, userId: string) {
+    //Quitar fotos de sitio
+    const siteToSend = removePhotosFromSite(site);
+
     const response = await axios.post(API_HOST + '/review', {
-        place: site,
+        place: siteToSend,
         usuarioId: userId,
         review: valoracion
     }).then((response) => {
@@ -175,47 +177,37 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
 }
 
 //Fotos
-export async function sendPhoto(photoUri: string, place: Site, userId: string, alternativeText: string) {
+export async function sendPhoto(photoUri: string, site: Site, userId: string, alternativeText: string) {
     try {
-        // Comprimir la imagen usando react-native-image-resizer
+        // Comprimir la imagen
         const compressedImage = await ImageResizer.createResizedImage(photoUri, 800, 600, 'JPEG', 60);
         const compressedUri = compressedImage.uri;
 
-        // Detectar el tipo de imagen
-        const imageType = photoUri.endsWith('.png') ? 'image/png' : 'image/jpeg';
-        const imageName = photoUri.endsWith('.png') ? 'photo.png' : 'photo.jpg';
+        // Convertir la imagen comprimida a base64
+        const photoBase64 = await RNFS.readFile(compressedUri, 'base64');
 
-        // Crear un objeto FormData
-        const formData = new FormData();
+        const photo: Photo = {
+            base64: photoBase64,
+            usuarioId: userId,
+            alternativeText: alternativeText
+        }
 
-        // Adjuntar la foto comprimida a FormData
-        formData.append('photo', {
-            uri: compressedUri,
-            type: imageType,
-            name: imageName,
+        //Quitar fotos de sitio
+        const siteToSend = removePhotosFromSite(site);
+
+        const response = await axios.post(API_HOST + '/photo', {
+            photo: photo,
+            site: siteToSend
         });
 
-        // Adjuntar otros datos a FormData
-        formData.append('place', JSON.stringify(place));
-        formData.append('usuarioId', userId);
-        formData.append('alternativeText', alternativeText);
-
-        // Configurar los headers para la solicitud. El "multipart/form-data" es esencial para enviar archivos.
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-
-        const response = await axios.post(API_HOST + '/photo', formData, config);
-        let site: Site = response.data.newPlace;
-        console.log(JSON.stringify(site.fotos));
-        return { success: true, message: 'Foto enviada correctamente.', newPlace: site };
+        let newPlace: Site = response.data.newPlace;
+        return { success: true, message: 'Foto enviada correctamente.', newPlace: newPlace };
     } catch (error) {
         console.error(error);
         return { success: false, message: "No se pudo enviar la foto" };
     }
 }
+
 //Funciones auxiliares
 async function makeRequest(query: string, location: Location, radius?: number) { //hace peticion a maps con query y location
 
@@ -261,6 +253,12 @@ const convertDataToSites = (data: any): Site[] => {
         return new Site(place_id, name, formatted_address, rating, location, types);
     });
 };
+
+export function removePhotosFromSite(site: Site): Omit<Site, 'fotos'> {
+    const { fotos, ...siteWithoutPhotos } = site;
+    return siteWithoutPhotos;
+}
+
 
 export const staticSites: Site[] = convertDataToSites(data);
 

@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
+import { removePhotosFromSite } from './PlacesServices';
 
 const baseUrlUsers = '/users'
 
@@ -136,14 +137,11 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
     let response;
 
     if (save) {
-        //remove photos from site
-        site = {
-            ...site,
-            fotos: []
-        }
+        //Quitar fotos de sitio
+        const siteToSend = removePhotosFromSite(site);
 
         response = await axios.put(API_HOST + '/saveSite', {
-            site: site,
+            site: siteToSend,
             userId: user._id
         })
     } else {

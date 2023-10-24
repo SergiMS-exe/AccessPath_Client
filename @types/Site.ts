@@ -9,9 +9,9 @@ export type Location = {
 
 export type Photo = {
     usuarioId: string;
-    fotoBuffer: Buffer;
-};
-
+    base64: string;
+    alternativeText?: string;
+}
 
 export class Site {
     public placeId: string;
