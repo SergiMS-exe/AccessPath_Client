@@ -11,8 +11,8 @@ import RNFS from 'react-native-fs';
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
-// const API_HOST = REMOTE + baseUrlSites;
+//const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
+const API_HOST = REMOTE + baseUrlSites;
 
 
 // export async function getPlacesByLocation(location: Location) {

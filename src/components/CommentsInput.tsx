@@ -9,9 +9,11 @@ type Props = {
     user: Person,
     site: Site;
     onCommentSent: (newComment: any) => void;
+    onFocus?: () => void;
+    onBlur?: () => void;
 }
 
-export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) => {
+export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent, onFocus, onBlur }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [height, setHeight] = useState(50);
     const [commentText, setCommentText] = useState('')
@@ -81,6 +83,8 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent }) =>
                 blurOnSubmit
                 onChangeText={(text) => handleChangeText(text)}
                 placeholder="Escriba un comentario..."
+                onFocus={() => { onFocus && onFocus() }}
+                onBlur={() => { onBlur && onBlur() }}
                 value={commentText}
             />
         </View>

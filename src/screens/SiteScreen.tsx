@@ -36,6 +36,7 @@ export const SiteScreen = () => {
     const site = route.params.site;
     const [isSaved, setIsSaved] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showAddEditRating, setShowAddEditRating] = useState(true);
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
     const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
@@ -88,7 +89,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
-            <AddEditRating isEditing={false} site={site} />
+            {showAddEditRating && <AddEditRating isEditing={false} site={site} />}
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}
@@ -152,7 +153,7 @@ export const SiteScreen = () => {
                                 {comments && comments.map((comment, index) => (
                                     <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />
                                 ))}
-                                {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} />}
+                                {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} onFocus={() => setShowAddEditRating(false)} onBlur={() => setShowAddEditRating(true)} />}
                             </View>
                         )
                     }
