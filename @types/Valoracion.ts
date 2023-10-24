@@ -2,15 +2,15 @@ export interface Valoracion {
     placeId?: string;
     userId?: string;
     fisica?: {
-        media: number;
+        average: number;
         valoracion: Record<FisicaKey, number>;
     } | Record<FisicaKey, number>;
     sensorial?: {
-        media: number;
+        average: number;
         valoracion: Record<SensorialKey, number>;
     } | Record<SensorialKey, number>;
     psiquica?: {
-        media: number;
+        average: number;
         valoracion: Record<PsiquicaKey, number>;
     } | Record<PsiquicaKey, number>;
 
@@ -53,3 +53,18 @@ export type TypesOfDisabilitiesKey = keyof typeof TypesOfDisabilities;
 export type FisicaKey = keyof typeof FisicaEnum;
 export type SensorialKey = keyof typeof SensorialEnum;
 export type PsiquicaKey = keyof typeof PsiquicaEnum;
+
+export const reverseFisicaEnum = Object.entries(FisicaEnum).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+}, {} as { [key: string]: string });
+
+export const reverseSensorialEnum = Object.entries(SensorialEnum).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+}, {} as { [key: string]: string });
+
+export const reversePsiquicaEnum = Object.entries(PsiquicaEnum).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+}, {} as { [key: string]: string });

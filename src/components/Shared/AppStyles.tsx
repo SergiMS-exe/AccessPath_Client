@@ -15,5 +15,6 @@ export const AppStyles = {
     },
     mainBlueColor: '#3498db',
     mainRedColor: '#e74c3c',
-    mainBlackColor: '#2c3e50'
+    mainBlackColor: '#2c3e50',
+    fontColorBlack: '#333'
 }

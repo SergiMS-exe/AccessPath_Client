@@ -98,10 +98,10 @@ export const SiteScreen = () => {
                 <PhotoCarousel photos={site.fotos} />
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
-                    <Text>{site.types[2]}, {site.types[3]}</Text>
+                    <Text style={{ fontSize: 18 }}>{site.types[2]}, {site.types[3]}</Text>
                     {user &&
                         <TouchableOpacity onPress={handleSave}>
-                            <Icon name='heart' size={20} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />
+                            <Icon name='heart' size={25} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />
                         </TouchableOpacity>}
                 </View>
                 <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
@@ -126,7 +126,7 @@ export const SiteScreen = () => {
                             pitchEnabled={false}
                             rotateEnabled={false}
                             provider="google"
-                            style={{ width: "100%", height: 100, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
+                            style={{ width: "100%", height: 110, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
                         >
                             <Marker
                                 coordinate={{
@@ -141,7 +141,7 @@ export const SiteScreen = () => {
 
                 {/*Formularios*/}
                 <SectionHeader title="Valoraciones">
-                    <DropDownAverages />
+                    <DropDownAverages media={site.valoraciones} />
                 </SectionHeader>
 
                 {/*Comentarios*/}
@@ -195,11 +195,13 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     name: {
-        fontSize: 35,
-        marginBottom: 15
+        fontSize: 34,
+        marginBottom: 15,
+        color: AppStyles.fontColorBlack,
+        fontWeight: '500'
     },
     address: {
-        fontSize: 15,
+        fontSize: 18
     },
     addressContainer: {
         width: "100%",
@@ -225,6 +227,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     rating: {
+        fontSize: 16,
         fontWeight: "400",
         textAlignVertical: "bottom"
     },
@@ -236,7 +239,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     sectionTitle: {
-        fontSize: 20
+        fontSize: 25,
+        color: '#333',
+        fontWeight: "500"
     },
     sectionButton: {
         borderWidth: 0.5,

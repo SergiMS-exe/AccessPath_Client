@@ -1,13 +1,20 @@
 import { Skeleton } from '@rneui/themed';
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, ScrollView, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Photo } from '../../@types/Site';
 import { usePhotos } from '../hooks/usePhotos';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
     photos?: Photo[];
 };
+
+type StackProps = NativeStackNavigationProp<any, any>;
+
 const PhotoCarousel = ({ photos }: Props) => {
+    const navigation = useNavigation<StackProps>();
+
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const screenWidth: number = Dimensions.get('window').width;
@@ -24,9 +31,11 @@ const PhotoCarousel = ({ photos }: Props) => {
         // Si hay fotos
         if (photos && photos.length > 0 && imageUris) {
             return imageUris.map((uri: string, index: number) => (
-                <View key={index} style={styles.slide}>
+                <TouchableOpacity key={index}
+                    onPress={() => navigation.navigate('photoDetail', { photos, index })}
+                    style={styles.slide}>
                     <Image source={{ uri: uri }} style={styles.image} />
-                </View>
+                </TouchableOpacity>
             ));
         }
         // Si no hay fotos, renderizar 3 skeletons
