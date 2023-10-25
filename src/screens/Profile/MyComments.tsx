@@ -26,8 +26,9 @@ export const MyComments = () => {
     const deleteSiteFromList = (placeId: string) => {
         //Remove site from sites list
         const newSites = sites.filter(site => site.placeId !== placeId);
-        setSites(newSites);
+        setSites([...newSites]);
     }
+
 
     return (
         <SafeAreaView style={{ flexGrow: 1 }}>

@@ -105,7 +105,7 @@ const DropDownAverages = ({ media }: Props) => {
                         {category.subCategories.map((subCategory, i) => {
                             const subCategoryRating = getSubCategoryRating(mainCategoryKey, subCategory as any);
                             return subCategoryRating !== null ? (
-                                <ListItem key={i} bottomDivider>
+                                <ListItem key={i} topDivider>
                                     <ListItem.Content>
                                         <ListItem.Title>{subCategory}</ListItem.Title>
                                     </ListItem.Content>
@@ -132,8 +132,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 8,
         paddingTop: 8,
-        paddingLeft: 8,
-        paddingRight: 8,
+        padding: 8,
         backgroundColor: '#fff',
     },
     categoryContainer: {

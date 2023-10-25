@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-
+import { Platform, StyleSheet } from 'react-native';
 import { Map } from '../../components/Map';
 import MyFAB from '../../components/FloatingButton';
 import { FAB } from '@rneui/themed';
-import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const MapSitesScreen = () => {
@@ -14,7 +13,7 @@ export const MapSitesScreen = () => {
         <>
             <Map setShowButton={setShowButton} />
             <FAB
-                style={styles.fab}
+                style={[styles.fab, Platform.OS === 'android' && styles.androidFab]}
                 icon={<Icon name='filter-alt' size={30} />}
                 color='white'
             />
@@ -41,5 +40,8 @@ const styles = StyleSheet.create({
         shadowRadius: 2.62,
         shadowColor: "#000",
         backgroundColor: 'white'
+    },
+    androidFab: {
+        right: 50
     }
-})
+});

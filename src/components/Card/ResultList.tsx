@@ -22,6 +22,7 @@ export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemC
 
     return (
         <FlatList
+            key={data.length}
             data={data}
             style={styles.container}
             showsVerticalScrollIndicator={false}
