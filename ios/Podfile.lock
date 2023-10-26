@@ -453,6 +453,8 @@ PODS:
     - React-perflogger (= 0.71.8)
   - RNCAsyncStorage (1.19.2):
     - React-Core
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.10.1):
     - React-Core
   - RNReanimated (3.5.4):
@@ -487,6 +489,8 @@ PODS:
   - RNScreens (3.24.0):
     - React-Core
     - React-RCTImage
+  - RNSnackbar (2.6.2):
+    - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
   - SocketRocket (0.6.0)
@@ -561,9 +565,11 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -670,12 +676,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -742,9 +752,11 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7c51ae9d4b3e9608a2366e39ccaa606aa551b9ed
   ReactCommon: 85c98ab0a509e70bf5ee5d9715cf68dbf495b84c
   RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 42ec7c28dd02d540ed6c9159c57a98ff016492dc
   RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32
   RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
+  RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 065f0b74dba4832d6e328238de46eb72c5de9556

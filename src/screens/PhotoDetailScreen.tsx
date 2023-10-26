@@ -1,38 +1,74 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Image, StyleSheet, SafeAreaView, Dimensions, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { Photo } from '../../@types/Site';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { View, Image, StyleSheet, SafeAreaView, Dimensions, ScrollView, Text, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Photo, Site } from '../../@types/Site';
 import { usePhotos } from '../hooks/usePhotos';
 import { StackHeader } from '../components/Headers/StackHeader';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MainButton from '../components/MainButton';
 import { AppStyles } from '../components/Shared/AppStyles';
 import { LoginContext } from '../components/Shared/Context';
-import { updateAccount } from '../services/UserServices';
+import { deletePhoto } from '../services/PlacesServices';
+import Snackbar from 'react-native-snackbar';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const { width, height } = Dimensions.get('window');
 
 type RootStackParamList = {
     PhotoDetail: { photos: Photo[]; index: number; };
+    site: { site: Site };
 };
 
 type PhotoDetailScreenRouteProp = RouteProp<RootStackParamList, 'PhotoDetail'>;
+type SiteScreenRouteProp = RouteProp<RootStackParamList, 'site'>;
+
+type StackProps = NativeStackNavigationProp<any, any>;
 
 const PhotoDetailScreen = () => {
     const { user } = useContext(LoginContext);
-    const scrollViewRef = useRef(null);
-    const route = useRoute<PhotoDetailScreenRouteProp>();
+    const scrollViewRef = useRef<ScrollView>(null);
+    const routePhotoDetails = useRoute<PhotoDetailScreenRouteProp>();
+    const routeSite = useRoute<SiteScreenRouteProp>();
+    const navigation = useNavigation<StackProps>();
 
-    const { photos, index } = route.params;
+
+    const { photos, index } = routePhotoDetails.params;
+    const { site } = routeSite.params;
 
     const [currentIndex, setCurrentIndex] = useState(index);
     const [photosInView, setPhotosInView] = useState<Photo[]>(photos)
+    const [newPlace, setNewPlace] = useState<Site>(site);
+    const [isModified, setIsModified] = useState<boolean>(false);
 
     const imageUris = usePhotos(photosInView);
 
+    const onGoBack = useCallback(() => {
+        if (isModified) {
+            navigation.navigate('site', { site: newPlace });
+        } else {
+            navigation.goBack();
+        }
+    }, [isModified, navigation, newPlace]);
+
     useEffect(() => {
-        console.log(photosInView)
-    }, [photosInView])
+        const onBackPress = () => {
+            onGoBack();
+            return true;
+        }
+
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }
+    }, [onGoBack]);
+
+    useEffect(() => {
+        if (scrollViewRef.current && index !== undefined) {
+            const x = index * width;
+            scrollViewRef.current.scrollTo({ x, animated: false });
+        }
+    }, [index, width]);
 
     const handleDeletePhoto = (photoIndex: number) => {
         Alert.alert(
@@ -46,16 +82,35 @@ const PhotoDetailScreen = () => {
                 },
                 {
                     text: "Eliminar",
-                    onPress: () => {
-                        // Aquí puedes implementar la lógica para eliminar la foto del servidor
-                        console.log(`Foto en el índice ${photoIndex} eliminada`);
-                        // Después de eliminar la foto del servidor, puedes actualizar el estado local para reflejar los cambios
-                        const updatedPhotos = [...photosInView];
-                        if (updatedPhotos.length == 1)
-                            setPhotosInView([])
-                        else {
-                            updatedPhotos.splice(photoIndex, 1);
-                            setPhotosInView(updatedPhotos)
+                    onPress: async () => {
+
+                        const deleteResponse = await deletePhoto(photosInView[photoIndex]._id);
+                        Snackbar.show({
+                            text: deleteResponse.message,
+                            duration: Snackbar.LENGTH_SHORT,
+                        });
+                        // Si la foto se eliminó correctamente, actualizar el estado
+                        if (deleteResponse.success && 'newPlace' in deleteResponse) {
+                            setIsModified(true);
+                            setNewPlace(deleteResponse.newPlace);
+
+
+                            if (photosInView.length === 1)
+                                setPhotosInView([]);
+                            else {
+                                const updatedPhotos = [...photosInView];
+
+                                updatedPhotos.splice(photoIndex, 1);
+                                setPhotosInView(updatedPhotos)
+                            }
+
+                            // moverse de foto
+                            let newCurrentIndex = photoIndex === 0 ? 0 : photoIndex - 1;
+                            setCurrentIndex(newCurrentIndex);
+                            if (scrollViewRef.current) {
+                                const x = newCurrentIndex * width;
+                                scrollViewRef.current.scrollTo({ x, animated: true });
+                            }
                         }
                     },
                     style: "destructive"
@@ -68,7 +123,7 @@ const PhotoDetailScreen = () => {
     return (
         <GestureHandlerRootView style={styles.flexFull}>
             <SafeAreaView style={styles.safeArea}>
-                <StackHeader />
+                <StackHeader onPressLeft={onGoBack} />
                 <ScrollView
                     horizontal
                     pagingEnabled

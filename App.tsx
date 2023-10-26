@@ -18,6 +18,7 @@ import { MyComments } from './src/screens/Profile/MyComments';
 import { MyRatings } from './src/screens/Profile/MyRatings';
 import AddPhoto from './src/screens/AddPhoto';
 import PhotoDetailScreen from './src/screens/PhotoDetailScreen';
+import MyPhotos from './src/screens/Profile/MyPhotos';
 
 enableLatestRenderer();
 
@@ -47,6 +48,7 @@ function App() {
                         <Stack.Screen name='editProfile' component={EditProfile} />
                         <Stack.Screen name='myComments' component={MyComments} />
                         <Stack.Screen name='myRatings' component={MyRatings} />
+                        <Stack.Screen name='myPhotos' component={MyPhotos} />
                     </Stack.Navigator>
                 </NavigationContainer>
             </SafeAreaProvider>

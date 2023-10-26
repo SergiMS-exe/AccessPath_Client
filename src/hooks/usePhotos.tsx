@@ -5,8 +5,12 @@ export const usePhotos = (photos: Photo[]): string[] => {
     const [imageUris, setImageUris] = useState<string[]>([]);
 
     useEffect(() => {
-        const convertedUris = photos.map(photo => `data:image/jpeg;base64,${photo.base64}`);
-        setImageUris(convertedUris);
+        if (photos.length > 0) {
+            const convertedUris = photos.map(photo => `data:image/jpeg;base64,${photo.base64}`);
+            setImageUris(convertedUris);
+        } else {
+            setImageUris([]);
+        }
     }, [photos]);
 
     return imageUris;

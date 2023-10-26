@@ -15,11 +15,7 @@ type StackProps = NativeStackNavigationProp<any, any>;
 const PhotoCarousel = ({ photos }: Props) => {
     const navigation = useNavigation<StackProps>();
 
-    const imageUris = (photos && photos.length > 0) && usePhotos(photos);
-
-    // useEffect(() => {
-    //     console.log('Photos: ', JSON.stringify(photos));
-    // }, [photos]);
+    const imageUris = usePhotos(photos || []);
 
     const renderContent = () => {
         // Si hay fotos

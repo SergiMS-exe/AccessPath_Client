@@ -11,8 +11,8 @@ import RNFS from 'react-native-fs';
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/place'
 const baseUrlSites = '/sites'
-//const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
-const API_HOST = REMOTE + baseUrlSites;
+const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
+//const API_HOST = REMOTE + baseUrlSites;
 
 
 // export async function getPlacesByLocation(location: Location) {
@@ -183,10 +183,12 @@ export async function sendPhoto(photoUri: string, site: Site, userId: string, al
         const compressedImage = await ImageResizer.createResizedImage(photoUri, 800, 600, 'JPEG', 60);
         const compressedUri = compressedImage.uri;
 
+        console.log(compressedImage.size)
+
         // Convertir la imagen comprimida a base64
         const photoBase64 = await RNFS.readFile(compressedUri, 'base64');
 
-        const photo: Photo = {
+        const photo = {
             base64: photoBase64,
             usuarioId: userId,
             alternativeText: alternativeText
@@ -206,6 +208,14 @@ export async function sendPhoto(photoUri: string, site: Site, userId: string, al
         console.error(error);
         return { success: false, message: "No se pudo enviar la foto" };
     }
+}
+
+export async function deletePhoto(photoId: string) {
+    const deleteResponse = await axios.delete(API_HOST + '/photo/' + photoId).
+        then(res => { return { success: true, message: res.data.msg, newPlace: res.data.newPlace }; }).
+        catch(e => { return { success: false, message: "No se pudo eliminar la foto" } });
+
+    return deleteResponse;
 }
 
 //Funciones auxiliares

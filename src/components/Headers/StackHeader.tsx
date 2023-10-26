@@ -6,15 +6,16 @@ type Props = {
     title?: string;
     iconRight?: string;
     onPressRight?: () => void;
+    onPressLeft?: () => void;
 }
 
-export const StackHeader = ({ title, iconRight, onPressRight }: Props) => {
+export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Props) => {
 
     const navigation = useNavigation();
 
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}>
                 <Icon name='arrow-left' size={40} color='#121212' />
             </TouchableOpacity>
 

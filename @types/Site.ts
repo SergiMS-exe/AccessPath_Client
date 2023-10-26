@@ -1,6 +1,5 @@
 import { CommentType } from "./CommentType";
 import { Valoracion } from "./Valoracion";
-import { Buffer } from "buffer";
 
 export type Location = {
     latitude: number;
@@ -8,6 +7,7 @@ export type Location = {
 };
 
 export type Photo = {
+    _id: string;
     usuarioId: string;
     base64: string;
     alternativeText?: string;
