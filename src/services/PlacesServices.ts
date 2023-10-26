@@ -179,14 +179,8 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
 //Fotos
 export async function sendPhoto(photoUri: string, site: Site, userId: string, alternativeText: string) {
     try {
-        // Comprimir la imagen
-        const compressedImage = await ImageResizer.createResizedImage(photoUri, 800, 600, 'JPEG', 60);
-        const compressedUri = compressedImage.uri;
-
-        console.log(compressedImage.size)
-
-        // Convertir la imagen comprimida a base64
-        const photoBase64 = await RNFS.readFile(compressedUri, 'base64');
+        const compressedImage = await compressImageToTargetSize(photoUri); // Comprimir imagen hasta 15 KB
+        const photoBase64 = compressedImage.base64;
 
         const photo = {
             base64: photoBase64,
@@ -269,6 +263,43 @@ export function removePhotosFromSite(site: Site): Omit<Site, 'fotos'> {
     return siteWithoutPhotos;
 }
 
+async function compressImageToTargetSize(uri: string) {
+    const TARGET_SIZE = 15 * 1024;  // 15 KB
+    const MAX_ITERATIONS = 10;
+    const QUALITY_STEP = 10;
+
+
+    let quality = 60;  // Valor inicial
+    let dimensionsFactor = 1;  // Factor de reducción de dimensiones
+    let iteration = 0;
+
+    while (iteration < MAX_ITERATIONS) {
+        const compressedImage = await ImageResizer.createResizedImage(
+            uri,
+            800 / dimensionsFactor,
+            600 / dimensionsFactor,
+            'JPEG',
+            quality
+        );
+        const compressedUri = compressedImage.uri;
+        const base64 = await RNFS.readFile(compressedUri, 'base64');
+        const size = base64.length * 0.75;  // Aproximación del tamaño en bytes
+
+        if (size > TARGET_SIZE) {
+            if (quality > 10) {
+                quality -= QUALITY_STEP;  // Reducir la calidad
+            } else {
+                dimensionsFactor *= 1.2;  // Reducir las dimensiones
+            }
+        } else {
+            return { uri: compressedUri, base64 };
+        }
+
+        iteration++;
+    }
+
+    throw new Error('No se pudo comprimir la imagen al tamaño objetivo');
+}
 
 export const staticSites: Site[] = convertDataToSites(data);
 
