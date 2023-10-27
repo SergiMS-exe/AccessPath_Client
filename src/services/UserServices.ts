@@ -181,3 +181,16 @@ export async function getUserRatings(user: Person) {
 
     return response;
 }
+
+export async function getUserPhotos(user: Person) {
+    const response = await axios.get(API_HOST + '/photos/' + user._id).
+        then(res => {
+            const sites: Site[] = res.data.sites;
+            return { success: true, sites };
+        }).catch(error => {
+            console.error(error);
+            return { success: false, sites: [], message: "No se pudieron obtener las fotos del usuario" };
+        });
+
+    return response;
+}
