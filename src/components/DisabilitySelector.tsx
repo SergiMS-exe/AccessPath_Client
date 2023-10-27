@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TypesOfDisabilities, TypesOfDisabilitiesKey } from '../../@types/Valoracion';
@@ -10,7 +10,7 @@ type Props = {
 
 const DisabilitySelector = ({ value, onChange }: Props) => {
     const [open, setOpen] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = useState(value || 'Ninguna');
+    const [selectedValue, setSelectedValue] = useState((value || 'Ninguna').toLowerCase());
 
     const disabilityOptions = Object.values(TypesOfDisabilities).map(option => ({
         label: option,
@@ -37,6 +37,7 @@ const DisabilitySelector = ({ value, onChange }: Props) => {
                     onChange && onChange(item.value as any);
                 }}
                 listItemLabelStyle={{ fontSize: 16 }}
+                listMode="SCROLLVIEW"
             />
         </View>
     );
