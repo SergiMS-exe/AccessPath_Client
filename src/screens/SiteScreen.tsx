@@ -89,7 +89,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
-            {showAddEditRating && <AddEditRating isEditing={false} site={site} />}
+            {showAddEditRating && <AddEditRating isEditing={false} site={site} isAbsolute />}
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}

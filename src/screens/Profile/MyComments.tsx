@@ -1,11 +1,12 @@
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { StackHeader } from "../../components/Headers/StackHeader";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../components/Shared/Context";
 import { getUserComments } from "../../services/UserServices";
 import { Site } from "../../../@types/Site";
-import { SiteWMyComments } from '../../components/SiteWMyComments';
+import SiteWMyItems from '../../components/SiteWMyItems';
 import { ResultList } from "../../components/Card/ResultList";
+import CommentList from "../../components/CommentList";
 
 export const MyComments = () => {
     const { user } = useContext(LoginContext);
@@ -37,7 +38,12 @@ export const MyComments = () => {
                 data={sites}
                 noItemsMessage='No has comentado en ningún sitio'
                 isLoading={loading}
-                renderItemComponent={(item) => <SiteWMyComments site={item} deleteSiteFromList={deleteSiteFromList} />} />
+                renderItemComponent={(site) => (
+                    <SiteWMyItems site={site}>
+                        <CommentList site={site} deleteSiteFromList={deleteSiteFromList} />
+                    </SiteWMyItems>
+                )}
+            />
         </SafeAreaView>
     );
 }

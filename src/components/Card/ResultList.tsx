@@ -1,13 +1,11 @@
 import { FlatList, StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Site } from "../../../@types/Site";
-import { Titulo } from "../Titulo";
 
 type Props = {
-    data: Site[];
+    data: any[];
     title?: JSX.Element;
     noItemsMessage: string;
     isLoading?: boolean;
-    renderItemComponent: (item: Site) => JSX.Element;
+    renderItemComponent: (item: any) => JSX.Element;
 }
 
 export const ResultList = ({ data, title, noItemsMessage, isLoading, renderItemComponent }: Props) => {

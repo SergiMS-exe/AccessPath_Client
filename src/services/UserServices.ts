@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
 import { removePhotosFromSite } from './PlacesServices';
+import { Valoracion } from '../../@types/Valoracion';
 
 const baseUrlUsers = '/users'
 
@@ -166,4 +167,17 @@ export async function getUserComments(user: Person) {
         then(res => res.data);
     const comments: Site[] = response.sites;
     return comments
+}
+
+export async function getUserRatings(user: Person) {
+    const response = await axios.get(API_HOST + '/ratings/' + user._id).
+        then(res => {
+            const sitesWRatings: { valoracion: Valoracion, site: Site }[] = res.data.sitesWRating;
+            return { success: true, sitesWRatings: sitesWRatings };
+        }).catch(error => {
+            console.error(error);
+            return { success: false, sitesWRatings: [], message: "No se pudieron obtener las valoraciones del usuario" };
+        });
+
+    return response;
 }

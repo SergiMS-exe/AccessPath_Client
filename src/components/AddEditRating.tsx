@@ -8,15 +8,16 @@ import { useNavigation } from "@react-navigation/native";
 type Props = {
     site: Site;
     isEditing: boolean;
+    isAbsolute?: boolean;
 };
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const AddEditRating = ({ isEditing, site }: Props) => {
+export const AddEditRating = ({ isEditing, site, isAbsolute = false }: Props) => {
     const navigation = useNavigation<StackProps>();
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isAbsolute ? styles.absolutePosition : styles.relativePosition]}>
             {isEditing ? (
                 <>
                     <View style={[styles.aButton, styles.editButton]}>
@@ -39,12 +40,20 @@ export const AddEditRating = ({ isEditing, site }: Props) => {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
         flexDirection: 'row',
+        zIndex: 1,
+
+    },
+    absolutePosition: {
+        position: 'absolute',
         bottom: "5%",
         left: "4%",
-        zIndex: 1,
-        width: '92%'
+        width: '92%',
+    },
+    relativePosition: {
+        marginTop: 10,
+        alignSelf: 'center',
+        width: '100%',
     },
     aButton: {
         borderRadius: 30,

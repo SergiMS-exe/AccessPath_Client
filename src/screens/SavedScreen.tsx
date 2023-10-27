@@ -5,7 +5,6 @@ import { ListCard } from '../components/Card/ListCard';  // Assuming you have th
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSavedSites } from '../services/UserServices';
-import useRef from 'react';
 import { LoginContext } from '../components/Shared/Context';
 
 export const SavedScreen = () => {

@@ -53,6 +53,7 @@ export const ProfileScreen = () => {
             {/* <ProfileButton iconName='universal-access' title='Prefencias de accesibilidad' onPress={() => {}}/> */}
             <MainButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")} />
             <MainButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")} />
+            <MainButton iconName='image' title='Mis Fotos' onPress={() => stackNavigation.navigate("myPhotos")} />
             <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión'
                 onPress={async () => {
                     await logout(setUser)
