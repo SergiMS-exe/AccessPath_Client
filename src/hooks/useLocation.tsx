@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Geolocation from '@react-native-community/geolocation';
+import Snackbar from 'react-native-snackbar';
 
 type Location = {
     latitude: number;
@@ -19,6 +20,7 @@ export const useLocation = () => {
     const resetLocation = () => {
         Geolocation.requestAuthorization(
             () => {
+                setError('');
                 Geolocation.getCurrentPosition(
                     (position) => {
                         if (!loaded) {
@@ -48,5 +50,20 @@ export const useLocation = () => {
         resetLocation();
     }, []);
 
+    useEffect(() => {
+        if (error != '') {
+            Snackbar.show({
+                text: error,
+                duration: Snackbar.LENGTH_INDEFINITE,
+                action: {
+                    text: 'Reintentar',
+                    textColor: 'green',
+                    onPress: () => {
+                        resetLocation();
+                    },
+                },
+            });
+        }
+    }, [error]);
     return { location, error, resetLocation };
 }

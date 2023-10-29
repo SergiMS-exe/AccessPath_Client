@@ -6,7 +6,7 @@ import { StackHeader } from '../components/Headers/StackHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Site } from '../../@types/Site';
 import { ResultList } from '../components/Card/ResultList';
-import { ListCard } from '../components/Card/ListCard';  
+import { ListCard } from '../components/Card/ListCard';
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -16,22 +16,22 @@ export const SearchScreen = ({ route }: Props) => {
 
     useEffect(() => {
         const fetchPlaces = async () => {
-            const response = await getPlacesByText(route.params?.searchText); 
-            setPlaces(response); 
-            setLoading(false); 
+            const response = await getPlacesByText(route.params?.searchText);
+            setPlaces(response.sites);
+            setLoading(false);
         };
 
         fetchPlaces();
-        
+
     }, [route.params?.searchText]);
 
     return (
         <SafeAreaView style={styles.container}>
-            <StackHeader title={"Búsqueda: '"+route.params?.searchText+"'"} />
+            <StackHeader title={"Búsqueda: '" + route.params?.searchText + "'"} />
 
-            <ResultList 
-                data={places} 
-                noItemsMessage="No se encontraron resultados" 
+            <ResultList
+                data={places}
+                noItemsMessage="No se encontraron resultados"
                 isLoading={loading}
                 renderItemComponent={(item) => <ListCard site={item} />}
             />
