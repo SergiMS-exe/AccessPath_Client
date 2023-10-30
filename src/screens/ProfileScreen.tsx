@@ -12,13 +12,13 @@ import MainButton from '../components/MainButton';
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
 
-export const getUserIcon = (dasibily: string) => {
+export const getUserIcon = (dasibily: string = "ninguna") => {
     switch (dasibily) {
-        case "Física":
+        case "fisica":
             return "wheelchair";
-        case "Sensorial":
+        case "sensorial":
             return "eye";
-        case "Psíquica":
+        case "psiquica":
             return "brain";
         default:
             return "user";
@@ -42,7 +42,7 @@ export const ProfileScreen = () => {
     return (
         <SafeAreaView>
             <View style={styles.headerContainer}>
-                <Icon name={getUserIcon(user!.tipoDiscapacidad)} size={60} />
+                <Icon name={getUserIcon(user?.tipoDiscapacidad)} size={60} />
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.name}>{user?.nombre} {user?.apellidos}</Text>
                     <Text style={styles.email}>{user?.email}</Text>
@@ -56,8 +56,8 @@ export const ProfileScreen = () => {
             <MainButton iconName='image' title='Mis Fotos' onPress={() => stackNavigation.navigate("myPhotos")} />
             <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión'
                 onPress={async () => {
-                    await logout(setUser)
                     drawerNavigation.navigate("Feed")
+                    await logout(setUser)
                 }} />
         </SafeAreaView>
     )
