@@ -5,7 +5,7 @@ import { ActivityIndicator, KeyboardAvoidingView, Linking, ScrollView, StyleShee
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { CloseSitesContext, LoginContext } from "../components/Shared/Context";
+import { CloseSitesContext, LoginContext, MySitesContext } from "../components/Shared/Context";
 import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
 import { CommentsInput } from "../components/CommentsInput";
@@ -32,18 +32,18 @@ export const SiteScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
     const { user } = useContext(LoginContext);
     const { sites, setSites, appliedFilters, applyFilters } = useContext(CloseSitesContext);
+    const { myComments, setMyComments } = useContext(MySitesContext);
 
     const [site, setSite] = useState<Site>(route.params.site);
     const [isSaved, setIsSaved] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showAddEditRating, setShowAddEditRating] = useState(true);
-    // const [updatedSite, setUpdatedSite] = useState<Site>(site);
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
     const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataComments = async () => {
             //Obtener el nombre de los usuarios que han comentado 
             const data: CommentType[] = await getComments(site);
             setLoading(false)
@@ -52,7 +52,7 @@ export const SiteScreen = () => {
                 setComments(data);
         };
 
-        fetchData();
+        fetchDataComments();
     }, [])
 
     useEffect(() => {
@@ -96,8 +96,21 @@ export const SiteScreen = () => {
             ...site,
             comentarios: site.comentarios ? [...site.comentarios, newComment] : [newComment]
         };
-
         setSite(updatedSite);
+
+        //Añadir el sitio a myComments o actualizarlo
+        const index = myComments.findIndex((s) => s.placeId === site.placeId);
+        if (index !== -1) { //Si ya existe el sitio en myComments
+            const updatedSite = {
+                ...myComments[index],
+                comentarios: myComments[index].comentarios ? [...myComments[index].comentarios as CommentType[], newComment] : [newComment] //Añadir el comentario al sitio
+            };
+            const newSites = [...myComments];
+            newSites[index] = updatedSite;
+            setMyComments(newSites);
+        } else {
+            setMyComments([...myComments, site]);
+        }
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
@@ -110,6 +123,26 @@ export const SiteScreen = () => {
                     comentarios: updatedComments
                 };
                 setSite(updatedSite);
+
+                //Actualizar el sitio en myComments
+                const index = myComments.findIndex((s) => s.placeId === site.placeId);
+                if (index !== -1) { //Si ya existe el sitio en myComments
+                    //si el comentario eliminado era el ultimo
+                    if (updatedComments.length === 0) {
+                        const newSites = [...myComments];
+                        newSites.splice(index, 1);
+                        setMyComments(newSites);
+                    }
+                    else {
+                        const updatedSite = {
+                            ...myComments[index],
+                            comentarios: updatedComments
+                        };
+                        const newSites = [...myComments];
+                        newSites[index] = updatedSite;
+                        setMyComments(newSites);
+                    }
+                }
             }
         } else {
             updateComment(comment);
@@ -120,6 +153,18 @@ export const SiteScreen = () => {
                     comentarios: updatedComments
                 };
                 setSite(updatedSite);
+
+                //Actualizar el sitio en myComments
+                const index = myComments.findIndex((s) => s.placeId === site.placeId);
+                if (index !== -1) { //Si ya existe el sitio en myComments
+                    const updatedSite = {
+                        ...myComments[index],
+                        comentarios: updatedComments
+                    };
+                    const newSites = [...myComments];
+                    newSites[index] = updatedSite;
+                    setMyComments(newSites);
+                }
             }
         }
     };

@@ -1,24 +1,27 @@
 import { SafeAreaView, StyleSheet } from "react-native";
 import { StackHeader } from "../../components/Headers/StackHeader";
 import { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../../components/Shared/Context";
+import { LoginContext, MySitesContext } from "../../components/Shared/Context";
 import { getUserComments } from "../../services/UserServices";
 import { Site } from "../../../@types/Site";
 import SiteWMyItems from '../../components/SiteWMyItems';
 import { ResultList } from "../../components/Card/ResultList";
 import CommentList from "../../components/CommentList";
+import { useIsFocused } from "@react-navigation/native";
 
 export const MyComments = () => {
     const { user } = useContext(LoginContext);
+    const { myComments, setMyComments } = useContext(MySitesContext);
 
-    const [sites, setSites] = useState<Site[]>([]);
+    const isFocused = useIsFocused();
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             const sites: Site[] = await getUserComments(user!)
             console.log(JSON.stringify(sites, null, 2));
-            setSites(sites);
+            setMyComments(sites);
             setLoading(false);
         }
         fetchData();
@@ -26,8 +29,8 @@ export const MyComments = () => {
 
     const deleteSiteFromList = (placeId: string) => {
         //Remove site from sites list
-        const newSites = sites.filter(site => site.placeId !== placeId);
-        setSites([...newSites]);
+        const newSites = myComments.filter(site => site.placeId !== placeId);
+        setMyComments([...newSites]);
     }
 
 
@@ -35,7 +38,7 @@ export const MyComments = () => {
         <SafeAreaView style={{ flexGrow: 1 }}>
             <StackHeader title='Mis Comentarios' />
             <ResultList
-                data={sites}
+                data={myComments}
                 noItemsMessage='No has comentado en ningún sitio'
                 isLoading={loading}
                 renderItemComponent={(site) => (
