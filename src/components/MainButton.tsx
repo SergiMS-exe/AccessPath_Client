@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 type Props = {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-        marginLeft: 8
+        // marginLeft: 8
     },
     icon: {
         fontSize: 20,

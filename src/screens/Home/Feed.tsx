@@ -3,7 +3,7 @@ import { MapSitesScreen } from './MapSitesScreen';
 import { ListSitesScreen } from './ListSitesScreen';
 import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { CloseSitesContext } from '../../components/Shared/Context';
 import { getCloseSites } from '../../services/PlacesServices';
 import { useLocation } from '../../hooks/useLocation';
@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 export const Feed = () => {
 
-    const { sites, setSites } = useSitesContext();
+    const { sites, setSites, applyFilters, appliedFilters, filteredSites } = useSitesContext();
     const { location } = useLocation();
 
     // obtiene los sitios cercanos al usuario
@@ -29,7 +29,7 @@ export const Feed = () => {
 
 
     return (
-        <CloseSitesContext.Provider value={{ sites, setSites }}>
+        <CloseSitesContext.Provider value={{ sites, setSites, applyFilters, appliedFilters, filteredSites }}>
             <View style={{ flex: 1 }}>
                 <Stack.Navigator screenOptions={{ headerShown: false }} >
                     <Stack.Screen name="Map" component={MapSitesScreen} />

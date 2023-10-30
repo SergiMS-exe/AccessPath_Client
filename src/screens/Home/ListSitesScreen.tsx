@@ -1,44 +1,54 @@
-import { useContext } from 'react';
-import { SafeAreaView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Titulo } from '../../components/Titulo';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ListCard } from '../../components/Card/ListCard';
 import { ResultList } from '../../components/Card/ResultList';
-import { staticSites } from '../../services/PlacesServices';
-import { AppStyles } from '../../components/Shared/AppStyles';
 import MyFAB from '../../components/FloatingButton';
-import { CloseSitesContext } from '../../components/Shared/Context';
+import { CloseSitesContext, initialFilters } from '../../components/Shared/Context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import FilterModal from '../../components/FilterModal';
+import { Site } from '../../../@types/Site';
 
-interface Props extends NativeStackScreenProps<any, any> { };
+export const ListSitesScreen = () => {
 
-export const ListSitesScreen = ({ navigation }: Props) => {
+    const { sites, filteredSites, appliedFilters } = useContext(CloseSitesContext);
 
-    const { sites } = useContext(CloseSitesContext);
+    const [showModal, setShowModal] = useState(false);
+    const [sitesToShow, setSitesToShow] = useState<Site[]>([]);
+
+    useEffect(() => {
+        if (filteredSites.length > 0 && appliedFilters != initialFilters) {
+            setSitesToShow(filteredSites);
+        } else {
+            setSitesToShow(sites);
+        }
+    }, [sites, filteredSites]);
 
     return (
-        <View style={{ flex: 1 }}>
-            <ResultList
-                data={sites}
-                noItemsMessage='No hay sitios valorados cerca de ti'
-                isLoading={false}  // Asumiendo que staticSites siempre tiene datos y no hay una carga en curso
-                renderItemComponent={(item) => <ListCard site={item} />}
-                title={
-                    <View style={styles.titleContainer}>
-                        <Titulo title='Sitios cercanos' />
-                        <TouchableOpacity style={styles.filterButton} onPress={() => navigation.navigate('Filter')}>
-                            <Icon style={{ marginBottom: 5 }} name='filter-alt' size={30} />
-                        </TouchableOpacity>
-                    </View>
-                }
-            />
-            {/* <FloatingButton onPress={() => navigation.navigate('Map')} text='Ver Mapa' /> */}
-            <MyFAB
-                name='list'
-                loading={false}
-                showing={true}
-            />
-        </View>
+        <>
+            <View style={{ flex: 1 }}>
+                <ResultList
+                    data={sitesToShow}
+                    noItemsMessage='No hay sitios valorados cerca de ti'
+                    isLoading={false}
+                    renderItemComponent={(item) => <ListCard site={item} />}
+                    title={
+                        <View style={styles.titleContainer}>
+                            <Titulo title='Sitios cercanos' />
+                            <TouchableOpacity style={styles.filterButton} onPress={() => setShowModal(true)}>
+                                <Icon style={{ marginBottom: 5 }} name='filter-alt' size={30} />
+                            </TouchableOpacity>
+                        </View>
+                    }
+                />
+                <MyFAB
+                    name='list'
+                    loading={false}
+                    showing={true}
+                />
+            </View>
+            <FilterModal visible={showModal} onClose={() => setShowModal(false)} />
+        </>
     )
 }
 

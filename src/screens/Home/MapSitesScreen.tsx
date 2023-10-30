@@ -4,10 +4,12 @@ import { Map } from '../../components/Map';
 import MyFAB from '../../components/FloatingButton';
 import { FAB } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import FilterModal from '../../components/FilterModal';
 
 export const MapSitesScreen = () => {
 
     const [showButton, setShowButton] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <>
@@ -16,12 +18,14 @@ export const MapSitesScreen = () => {
                 style={[styles.fab, Platform.OS === 'android' && styles.androidFab]}
                 icon={<Icon name='filter-alt' size={30} />}
                 color='white'
+                onPress={() => setShowModal(true)}
             />
             <MyFAB
                 name='map'
                 loading={false}
                 showing={showButton}
             />
+            <FilterModal visible={showModal} onClose={() => setShowModal(false)} />
         </>
     )
 }

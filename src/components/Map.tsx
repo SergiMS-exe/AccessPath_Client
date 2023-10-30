@@ -6,16 +6,26 @@ import { MapCard } from './Card/MapCard';
 import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
 import { Site } from '../../@types/Site';
-import { CloseSitesContext } from './Shared/Context';
+import { CloseSitesContext, initialFilters } from './Shared/Context';
 
 type Props = {
     setShowButton: (show: boolean) => void;
 }
 
 export const Map = ({ setShowButton }: Props) => {
-    const { sites } = useContext(CloseSitesContext);
+    const { sites, filteredSites, appliedFilters } = useContext(CloseSitesContext);
     const { location, error, resetLocation } = useLocation();
     const { cardData, handleShowCard, handleCloseCard } = useCard();
+
+    const [sitesToShow, setSitesToShow] = useState<Site[]>([]);
+
+    useEffect(() => {
+        if (filteredSites.length > 0 && appliedFilters != initialFilters) {
+            setSitesToShow(filteredSites);
+        } else {
+            setSitesToShow(sites);
+        }
+    }, [sites, filteredSites]);
 
     const handlePressMarker = (site: Site) => {
         handleShowCard(site);
@@ -61,7 +71,7 @@ export const Map = ({ setShowButton }: Props) => {
                     handlePressMap();
                 }}
             >
-                {sites.map(site =>
+                {sitesToShow.map(site =>
                     <Marker
                         key={site.placeId}
                         coordinate={{
