@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Site } from "../../@types/Site";
+import { initialFilters } from "../components/Shared/Context";
 
 export interface Filters {
     hasPhotos: boolean;
@@ -12,13 +13,7 @@ export interface Filters {
 const useSitesContext = () => {
     const [sites, setSites] = useState<Site[]>([]);
     const [filteredSites, setFilteredSites] = useState<Site[]>([]);
-    const [appliedFilters, setAppliedFilters] = useState<Filters>({
-        hasPhotos: false,
-        hasComments: false,
-        hasPhysicalRating: false,
-        hasSensorialRating: false,
-        hasPsychicRating: false
-    });
+    const [appliedFilters, setAppliedFilters] = useState<Filters>(initialFilters);
 
     const applyFilters = (filters: Filters) => {
         setAppliedFilters(filters);

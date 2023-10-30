@@ -20,7 +20,8 @@ export const Map = ({ setShowButton }: Props) => {
     const [sitesToShow, setSitesToShow] = useState<Site[]>([]);
 
     useEffect(() => {
-        if (filteredSites.length > 0 && appliedFilters != initialFilters) {
+        console.log(filteredSites.length)
+        if ((filteredSites.length > 0) || (filteredSites.length === 0 && appliedFilters != initialFilters)) {
             setSitesToShow(filteredSites);
         } else {
             setSitesToShow(sites);

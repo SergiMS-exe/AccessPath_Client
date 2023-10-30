@@ -5,7 +5,7 @@ import { ActivityIndicator, KeyboardAvoidingView, Linking, ScrollView, StyleShee
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { LoginContext } from "../components/Shared/Context";
+import { CloseSitesContext, LoginContext } from "../components/Shared/Context";
 import MapView, { Marker } from "react-native-maps";
 import { useSiteSaving } from "../hooks/useSiteSaving";
 import { CommentsInput } from "../components/CommentsInput";
@@ -18,7 +18,6 @@ import { AddEditRating } from "../components/AddEditRating";
 import { AppStyles } from "../components/Shared/AppStyles";
 import DropDownAverages from "../components/DropDownAverages";
 import PhotoCarousel from "../components/PhotoCarousel";
-import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -32,11 +31,13 @@ export const SiteScreen = () => {
     const navigation = useNavigation<StackProps>();
     const route = useRoute<SiteScreenRouteProp>();
     const { user } = useContext(LoginContext);
+    const { sites, setSites, appliedFilters, applyFilters } = useContext(CloseSitesContext);
 
-    const site = route.params.site;
+    const [site, setSite] = useState<Site>(route.params.site);
     const [isSaved, setIsSaved] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showAddEditRating, setShowAddEditRating] = useState(true);
+    // const [updatedSite, setUpdatedSite] = useState<Site>(site);
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
     const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
@@ -62,6 +63,23 @@ export const SiteScreen = () => {
         }
     }, [site.placeId, user?.saved]);
 
+    useEffect(() => {
+        const index = sites.findIndex((s) => s.placeId === site.placeId);
+        if (index !== -1) {
+            const updatedSite = {
+                ...sites[index],
+                comentarios: site.comentarios,
+                valoraciones: site.valoraciones,
+                fotos: site.fotos
+            };
+            const newSites = [...sites];
+            newSites[index] = updatedSite;
+            setSites(newSites);
+            applyFilters(appliedFilters);
+        }
+    }, [site.comentarios, site.valoraciones, site.fotos]);
+
+
     const handleSave = async () => {
         if (isSaved)
             await unSave()
@@ -74,14 +92,38 @@ export const SiteScreen = () => {
     const handleNewComment = (newComment: CommentType) => {
         console.log(newComment)
         addComment(newComment);
+        const updatedSite = {
+            ...site,
+            comentarios: site.comentarios ? [...site.comentarios, newComment] : [newComment]
+        };
+
+        setSite(updatedSite);
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
-        if (wantsToDelete)
+        if (wantsToDelete) {
             deleteComment(comment._id);
-        else
+            if (site.comentarios) {
+                const updatedComments = site.comentarios.filter(c => c._id !== comment._id);
+                const updatedSite = {
+                    ...site,
+                    comentarios: updatedComments
+                };
+                setSite(updatedSite);
+            }
+        } else {
             updateComment(comment);
+            if (site.comentarios) {
+                const updatedComments = site.comentarios.map(c => c._id === comment._id ? comment : c);
+                const updatedSite = {
+                    ...site,
+                    comentarios: updatedComments
+                };
+                setSite(updatedSite);
+            }
+        }
     };
+
 
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
