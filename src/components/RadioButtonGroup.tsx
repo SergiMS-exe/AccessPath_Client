@@ -6,10 +6,11 @@ import { AppStyles } from './Shared/AppStyles';
 type Props = {
     text: string;
     onSelectionChange: (value: number) => void;
-}
+    initialValue?: number;
+};
 
-export const RadioButtonGroup = ({ text, onSelectionChange }: Props) => {
-    const [selected, setSelected] = useState(0);
+export const RadioButtonGroup = ({ text, onSelectionChange, initialValue = 0 }: Props) => {
+    const [selected, setSelected] = useState(initialValue);
 
     const handlePress = (value: number) => {
         setSelected(value);

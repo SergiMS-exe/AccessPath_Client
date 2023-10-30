@@ -5,24 +5,30 @@ import { ListCard } from '../../components/Card/ListCard';
 import { ResultList } from '../../components/Card/ResultList';
 import MyFAB from '../../components/FloatingButton';
 import { CloseSitesContext, initialFilters } from '../../components/Shared/Context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import FilterModal from '../../components/FilterModal';
 import { Site } from '../../../@types/Site';
+import FilterFAB from '../../components/FilterFAB';
 
 export const ListSitesScreen = () => {
 
     const { sites, filteredSites, appliedFilters } = useContext(CloseSitesContext);
 
-    const [showModal, setShowModal] = useState(false);
     const [sitesToShow, setSitesToShow] = useState<Site[]>([]);
+    const [fabStyle, setFabStyle] = useState({} as any);
 
     useEffect(() => {
-        if (filteredSites.length > 0 && appliedFilters != initialFilters) {
+        if ((filteredSites.length > 0) || (filteredSites.length === 0 && appliedFilters != initialFilters)) {
             setSitesToShow(filteredSites);
         } else {
             setSitesToShow(sites);
         }
     }, [sites, filteredSites]);
+
+    useEffect(() => {
+        if (sitesToShow.length === 0)
+            setFabStyle({ top: 45 })
+        else
+            setFabStyle({ top: 0 })
+    }, [sitesToShow]);
 
     return (
         <>
@@ -35,9 +41,6 @@ export const ListSitesScreen = () => {
                     title={
                         <View style={styles.titleContainer}>
                             <Titulo title='Sitios cercanos' />
-                            <TouchableOpacity style={styles.filterButton} onPress={() => setShowModal(true)}>
-                                <Icon style={{ marginBottom: 5 }} name='filter-alt' size={30} />
-                            </TouchableOpacity>
                         </View>
                     }
                 />
@@ -47,7 +50,7 @@ export const ListSitesScreen = () => {
                     showing={true}
                 />
             </View>
-            <FilterModal visible={showModal} onClose={() => setShowModal(false)} />
+            <FilterFAB style={fabStyle} />
         </>
     )
 }
@@ -57,8 +60,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginHorizontal: 10,
-        marginBottom: 10
+        marginLeft: 10,
+        marginRight: 70,
+        marginBottom: 20
     },
     filterButton: {
         marginTop: 10

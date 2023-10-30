@@ -18,6 +18,9 @@ import { AddEditRating } from "../components/AddEditRating";
 import { AppStyles } from "../components/Shared/AppStyles";
 import DropDownAverages from "../components/DropDownAverages";
 import PhotoCarousel from "../components/PhotoCarousel";
+import { getUserRatings } from "../services/UserServices";
+import Snackbar from "react-native-snackbar";
+import { Valoracion } from "../../@types/Valoracion";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -32,12 +35,13 @@ export const SiteScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
     const { user } = useContext(LoginContext);
     const { sites, setSites, appliedFilters, applyFilters } = useContext(CloseSitesContext);
-    const { myComments, setMyComments } = useContext(MySitesContext);
+    const { myComments, setMyComments, myRatings, setMyRatings } = useContext(MySitesContext);
 
     const [site, setSite] = useState<Site>(route.params.site);
     const [isSaved, setIsSaved] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [showAddEditRating, setShowAddEditRating] = useState(true);
+    const [showAddEditRating, setShowAddEditRating] = useState(false);
+    const [rating, setRating] = useState<Valoracion | undefined>(undefined);
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
     const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
@@ -52,8 +56,50 @@ export const SiteScreen = () => {
                 setComments(data);
         };
 
+        const fetchDataRatings = async () => {
+            let data;
+            if (user) {
+                data = await getUserRatings(user);
+                if ('success' in data) {
+                    if (data.success) {
+                        setMyRatings(data.sitesWRatings);
+                        setShowAddEditRating(true)
+                    }
+                    else {
+                        Snackbar.show({
+                            text: data.message,
+                            duration: Snackbar.LENGTH_LONG,
+                            backgroundColor: AppStyles.mainRedColor,
+                            action: {
+                                text: 'Reintentar',
+                                textColor: 'green',
+                                onPress: () => {
+                                    fetchDataRatings();
+                                },
+                            },
+                        });
+                    }
+                }
+            }
+        };
+
         fetchDataComments();
+
+        //si el usuario no ha llamado a getUserRatings
+        fetchDataRatings();
+
+        if (myRatings.length > 0) { // si hay valoraciones en el contexto
+            const index = myRatings.findIndex((s) => s.site.placeId === site.placeId);
+            if (index !== -1) { //si el sitio esta en myRatings
+                setRating(myRatings[index].valoracion);
+            }
+        }
     }, [])
+
+    useEffect(() => {
+        setSite(route.params.site);
+    }, [route.params.site]);
+
 
     useEffect(() => {
         if (user?.saved.includes(site.placeId)) {
@@ -64,6 +110,20 @@ export const SiteScreen = () => {
     }, [site.placeId, user?.saved]);
 
     useEffect(() => {
+        const index = myRatings.findIndex((s) => s.site.placeId === site.placeId);
+        if (index !== -1) { //si el sitio esta en myRatings
+            setRating(myRatings[index].valoracion);
+        } else {
+            setRating(undefined);
+        }
+    }, [myRatings]);
+
+    const handleRatingDeleted = (newPlace: Site) => {
+        // Actualizar el estado del sitio con el nuevo lugar
+        setSite({ ...newPlace });
+    };
+
+    const handleAttributeChange = () => {
         const index = sites.findIndex((s) => s.placeId === site.placeId);
         if (index !== -1) {
             const updatedSite = {
@@ -77,8 +137,7 @@ export const SiteScreen = () => {
             setSites(newSites);
             applyFilters(appliedFilters);
         }
-    }, [site.comentarios, site.valoraciones, site.fotos]);
-
+    };
 
     const handleSave = async () => {
         if (isSaved)
@@ -111,6 +170,8 @@ export const SiteScreen = () => {
         } else {
             setMyComments([...myComments, site]);
         }
+
+        handleAttributeChange();
     }
 
     const updateComments = (comment: CommentType, wantsToDelete: boolean) => {
@@ -167,8 +228,8 @@ export const SiteScreen = () => {
                 }
             }
         }
+        handleAttributeChange();
     };
-
 
 
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
@@ -176,7 +237,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
-            {showAddEditRating && <AddEditRating isEditing={false} site={site} isAbsolute />}
+            {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} />}
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}

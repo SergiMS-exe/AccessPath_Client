@@ -117,6 +117,26 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
     return response;
 }
 
+export async function editRating(valoracion: Valoracion, placeId: string, userId: string) {
+    const response = await axios.put(API_HOST + '/review/' + placeId + '/' + userId, {
+        review: valoracion
+    }).then(res => { return { success: true, message: res.data.msg, newPlace: res.data.newPlace }; }).
+        catch(e => { return { success: false, message: "No se pudo editar la valoración" } });
+
+    return response;
+}
+
+export async function deleteRating(placeId: string, userId: string) {
+
+    const response = await axios.delete(API_HOST + '/review/' + placeId + '/' + userId).
+        then(res => {
+            return { success: true, message: res.data.msg, newPlace: res.data.newPlace };
+        }).
+        catch(e => { return { success: false, message: "No se pudo eliminar la valoración" } });
+
+    return response;
+}
+
 //Fotos
 export async function sendPhoto(photoUri: string, site: Site, userId: string, alternativeText: string) {
     try {

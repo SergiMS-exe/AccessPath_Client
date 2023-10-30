@@ -1,31 +1,88 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { AppStyles } from "./Shared/AppStyles";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Site } from "../../@types/Site";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import { Valoracion } from "../../@types/Valoracion";
+import { deleteRating } from "../services/PlacesServices";
+import Snackbar from "react-native-snackbar";
+import { useContext, useEffect } from "react";
+import { LoginContext, MySitesContext } from "./Shared/Context";
 
 type Props = {
     site: Site;
-    isEditing: boolean;
+    valoracion?: Valoracion;
     isAbsolute?: boolean;
+    onRatingDeleted?: (newPlace: Site) => void;
 };
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const AddEditRating = ({ isEditing, site, isAbsolute = false }: Props) => {
+export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDeleted }: Props) => {
     const navigation = useNavigation<StackProps>();
+
+    const { myRatings, setMyRatings } = useContext(MySitesContext);
+    const { user } = useContext(LoginContext);
+
+    const handleDelete = () => {
+        if (valoracion) {
+            Alert.alert(
+                "Eliminar valoración",
+                "¿Estás seguro de que quieres eliminar esta valoración?",
+                [
+                    {
+                        text: "Cancelar",
+                        style: "cancel"
+                    },
+                    {
+                        text: "Eliminar",
+                        onPress: async () => {
+                            if (!user) {
+                                Snackbar.show({
+                                    text: 'Debes iniciar sesión para eliminar una valoración',
+                                    duration: Snackbar.LENGTH_LONG,
+                                    backgroundColor: 'red',
+                                });
+                                return;
+                            }
+                            const response = await deleteRating(site.placeId, user._id);
+                            if (!response.success) {
+                                Snackbar.show({
+                                    text: response.message,
+                                    duration: Snackbar.LENGTH_LONG,
+                                    backgroundColor: 'red',
+                                });
+                            } else {
+                                // Remove the deleted rating from the list using userId and placeId
+                                const newRatings = myRatings.filter(rating => rating.valoracion.userId !== valoracion.userId || rating.valoracion.placeId !== valoracion.placeId);
+                                setMyRatings(newRatings);
+                                if ('newPlace' in response && onRatingDeleted) {
+                                    onRatingDeleted({ ...response.newPlace });
+                                }
+                            }
+
+                        }
+                    }
+                ]
+            );
+        }
+    };
 
     return (
         <View style={[styles.container, isAbsolute ? styles.absolutePosition : styles.relativePosition]}>
-            {isEditing ? (
+            {valoracion ? (
                 <>
-                    <View style={[styles.aButton, styles.editButton]}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('form', { site, valoracion })}
+                        style={[styles.aButton, styles.editButton]}>
                         <Text style={styles.text}>Editar Valoración</Text>
-                    </View>
-                    <View style={[styles.aButton, styles.deleteButton]}>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={handleDelete}
+                        style={[styles.aButton, styles.deleteButton]}>
                         <Icon name="trash" size={18} color='white' />
-                    </View>
+                    </TouchableOpacity>
                 </>
             ) : (
                 <TouchableOpacity

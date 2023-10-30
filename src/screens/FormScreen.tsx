@@ -4,11 +4,12 @@ import { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
-import { sendRating } from "../services/PlacesServices";
+import { editComment, editRating, sendRating } from "../services/PlacesServices";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { FisicaEnum, SensorialEnum, PsiquicaEnum, Valoracion, FisicaKey, SensorialKey, PsiquicaKey } from '../../@types/Valoracion';
 import { Site } from "../../@types/Site";
-import { LoginContext } from "../components/Shared/Context";
+import { LoginContext, MySitesContext } from "../components/Shared/Context";
+import Snackbar from "react-native-snackbar";
 
 const data = [
     {
@@ -37,11 +38,15 @@ export const FormScreen = () => {
     const route = useRoute<SiteScreenRouteProp>();
 
     const { user } = useContext(LoginContext);
+    const { myRatings, setMyRatings } = useContext(MySitesContext)
+
     let { site, valoracion } = route.params;
 
     const navigation = useNavigation<StackProps>();
 
-    const [selectedValues, setSelectedValues] = useState<Valoracion>({} as Valoracion);
+    const [selectedValues, setSelectedValues] = useState<Valoracion>(
+        valoracion || {} as Valoracion
+    );
     const [hasError, setHasError] = useState(false);
     const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
@@ -93,6 +98,19 @@ export const FormScreen = () => {
         }
     };
 
+    const getInitialValue = (sectionTitle: string, item: string) => {
+        const conversionResult = titleToType(sectionTitle);
+        if (!conversionResult) {
+            return 0;
+        }
+        const enumKey = getKeyFromEnumValue(item, conversionResult.correspondingEnum);
+        if (!enumKey) {
+            return 0;
+        }
+        const value = selectedValues[conversionResult.type]?.[enumKey];
+        return value || 0;
+    };
+
     const processSelectionChange = (type: string, property: string, value: number) => {
         const conversionResult = titleToType(type);
         if (!conversionResult) {
@@ -118,25 +136,33 @@ export const FormScreen = () => {
         return null;
     }
 
-    useEffect(() => {
-        console.log(selectedValues)
-    }, [selectedValues])
 
     const saveChangesAsync = async () => {
         if (Object.keys(selectedValues).length === 0)
-            setHasError(true);
+            Snackbar.show({
+                text: 'Se debe valorar algún campo antes de enviar',
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor: 'red',
+            });
         else {
-            const response = await sendRating(selectedValues, site, user!._id);
+            let response;
+            if (valoracion)
+                response = await editRating(selectedValues, site.placeId, user!._id);
+            else
+                response = await sendRating(selectedValues, site, user!._id);
             if (response.success && "newPlace" in response) {
-                console.log("Nombre en form: " + response.newPlace.nombre);
-                navigation.navigate({
-                    name: 'site',
-                    params: { site: response.newPlace },
-                    merge: true,
-                });
+                const newSite = { ...response.newPlace }
+                const newRatings = [...myRatings];
+                newRatings.push({ site: newSite, valoracion: selectedValues });
+                setMyRatings(newRatings);
+                navigation.navigate('site', { site: newSite });
             }
             else
-                console.log(response.message)
+                Snackbar.show({
+                    text: response.message,
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: 'red',
+                });
         }
     }
 
@@ -149,11 +175,14 @@ export const FormScreen = () => {
                 keyExtractor={(item, index) => item + index}
                 renderItem={({ section, item }) => (
                     expandedSections.includes(section.title) ? (
-                        <RadioButtonGroup text={item}
+                        <RadioButtonGroup
+                            text={item}
+                            initialValue={getInitialValue(section.title, item)}
                             onSelectionChange={(value) => processSelectionChange(section.title, item, value)}
                         />
                     ) : null
                 )}
+
                 renderSectionHeader={({ section: { title } }) => (
                     <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(title)}>
                         <Text style={styles.header}>{title}</Text>

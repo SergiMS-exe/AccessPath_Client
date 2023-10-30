@@ -170,10 +170,13 @@ export async function getUserComments(user: Person) {
 }
 
 export async function getUserRatings(user: Person) {
+    if (await AsyncStorage.getItem("hasCalledGetUserRatings"))
+        return { alreadyCalled: true };
+
     const response = await axios.get(API_HOST + '/ratings/' + user._id).
         then(res => {
             const sitesWRatings: { valoracion: Valoracion, site: Site }[] = res.data.sitesWRating;
-            return { success: true, sitesWRatings: sitesWRatings };
+            return { success: true, sitesWRatings: sitesWRatings, message: "Valoraciones obtenidas correctamente" };
         }).catch(error => {
             console.error(error);
             return { success: false, sitesWRatings: [], message: "No se pudieron obtener las valoraciones del usuario" };
