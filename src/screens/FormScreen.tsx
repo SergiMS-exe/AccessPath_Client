@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackHeader } from "../components/Headers/StackHeader";
-import { editComment, editRating, sendRating } from "../services/PlacesServices";
+import { editRating, sendRating } from "../services/PlacesServices";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { FisicaEnum, SensorialEnum, PsiquicaEnum, Valoracion, FisicaKey, SensorialKey, PsiquicaKey } from '../../@types/Valoracion';
 import { Site } from "../../@types/Site";
@@ -29,7 +29,7 @@ const data = [
 type StackProps = NativeStackNavigationProp<any, any>;
 
 type RootStackParamList = {
-    site: { site: Site, valoracion?: Valoracion };
+    site: { site: Site, valoracion?: Valoracion, calledFrom: 'myRatings' | 'site' };
 };
 
 type SiteScreenRouteProp = RouteProp<RootStackParamList, "site">;
@@ -40,7 +40,7 @@ export const FormScreen = () => {
     const { user } = useContext(LoginContext);
     const { myRatings, setMyRatings } = useContext(MySitesContext)
 
-    let { site, valoracion } = route.params;
+    let { site, valoracion, calledFrom } = route.params;
 
     const navigation = useNavigation<StackProps>();
 
@@ -138,33 +138,38 @@ export const FormScreen = () => {
 
 
     const saveChangesAsync = async () => {
-        if (Object.keys(selectedValues).length === 0)
-            Snackbar.show({
-                text: 'Se debe valorar algún campo antes de enviar',
-                duration: Snackbar.LENGTH_LONG,
-                backgroundColor: 'red',
-            });
-        else {
-            let response;
-            if (valoracion)
-                response = await editRating(selectedValues, site.placeId, user!._id);
-            else
-                response = await sendRating(selectedValues, site, user!._id);
-            if (response.success && "newPlace" in response) {
-                const newSite = { ...response.newPlace }
-                const newRatings = [...myRatings];
-                newRatings.push({ site: newSite, valoracion: selectedValues });
-                setMyRatings(newRatings);
-                navigation.navigate('site', { site: newSite });
-            }
-            else
-                Snackbar.show({
-                    text: response.message,
-                    duration: Snackbar.LENGTH_LONG,
-                    backgroundColor: 'red',
-                });
+        if (Object.keys(selectedValues).length === 0) {
+            Snackbar.show({ text: 'Se debe valorar algún campo antes de enviar', duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
+            return;
+        }
+
+        const response = valoracion
+            ? await editRating(selectedValues, site.placeId, user!._id)
+            : await sendRating(selectedValues, site, user!._id);
+
+        if (!response.success || !("newPlace" in response)) {
+            Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
+            return;
+        }
+
+        const newSite = { ...response.newPlace };
+        let newRatings = [...myRatings];
+
+        if (valoracion) {
+            const index = newRatings.findIndex(rating => rating.site.placeId === site.placeId);
+            if (index !== -1) newRatings[index] = { site: newSite, valoracion: selectedValues };
+        } else {
+            newRatings.push({ site: newSite, valoracion: selectedValues });
+        }
+
+        setMyRatings(newRatings);
+        if (calledFrom === 'site') {
+            navigation.navigate('site', { site: newSite });
+        } else {
+            navigation.navigate('myRatings');
         }
     }
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>

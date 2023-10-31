@@ -170,9 +170,6 @@ export async function getUserComments(user: Person) {
 }
 
 export async function getUserRatings(user: Person) {
-    if (await AsyncStorage.getItem("hasCalledGetUserRatings"))
-        return { alreadyCalled: true };
-
     const response = await axios.get(API_HOST + '/ratings/' + user._id).
         then(res => {
             const sitesWRatings: { valoracion: Valoracion, site: Site }[] = res.data.sitesWRating;

@@ -21,7 +21,6 @@ import PhotoDetailScreen from './src/screens/PhotoDetailScreen';
 import MyPhotos from './src/screens/Profile/MyPhotos';
 import useSitesContext from './src/hooks/useSitesContext';
 import useMySites from './src/hooks/useMySites';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 enableLatestRenderer();
 
@@ -32,14 +31,6 @@ function App() {
     const { user, setUser } = useLoginContext();
     const { sites, setSites, applyFilters, appliedFilters, filteredSites } = useSitesContext();
     const { myComments, setMyComments, myRatings, setMyRatings, myPhotos, setMyPhotos } = useMySites();
-
-    useEffect(() => {
-        const removeItems = async () => {
-            await AsyncStorage.removeItem('hasCalledGetUserRatings');
-        };
-
-        removeItems();
-    }, []);
 
     return (
         <LoginContext.Provider value={{ user, setUser }}>

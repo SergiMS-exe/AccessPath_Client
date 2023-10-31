@@ -15,11 +15,12 @@ type Props = {
     valoracion?: Valoracion;
     isAbsolute?: boolean;
     onRatingDeleted?: (newPlace: Site) => void;
+    calledFrom: 'myRatings' | 'site';
 };
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDeleted }: Props) => {
+export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDeleted, calledFrom }: Props) => {
     const navigation = useNavigation<StackProps>();
 
     const { myRatings, setMyRatings } = useContext(MySitesContext);
@@ -74,7 +75,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
             {valoracion ? (
                 <>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('form', { site, valoracion })}
+                        onPress={() => navigation.navigate('form', { site, valoracion, calledFrom })}
                         style={[styles.aButton, styles.editButton]}>
                         <Text style={styles.text}>Editar Valoración</Text>
                     </TouchableOpacity>
@@ -87,7 +88,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
             ) : (
                 <TouchableOpacity
                     style={[styles.aButton, styles.addButton]}
-                    onPress={() => navigation.navigate('form', { site })}>
+                    onPress={() => navigation.navigate('form', { site, calledFrom })}>
                     <Text style={styles.text}>Añadir Valoración</Text>
                 </TouchableOpacity>
             )}

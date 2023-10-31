@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native";
 import { StackHeader } from "../../components/Headers/StackHeader";
 import { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../../components/Shared/Context";
+import { LoginContext, MySitesContext } from "../../components/Shared/Context";
 import { Valoracion } from "../../../@types/Valoracion";
 import { Site } from "../../../@types/Site";
 import { getUserRatings } from "../../services/UserServices";
@@ -12,24 +12,27 @@ import { AddEditRating } from "../../components/AddEditRating";
 
 export const MyRatings = () => {
     const { user } = useContext(LoginContext);
+    const { myRatings, setMyRatings } = useContext(MySitesContext);
 
-    const [sitesWRatings, setSitesWRatings] = useState<{ valoracion: Valoracion, site: Site }[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
-                const response = await getUserRatings(user);
-                setSitesWRatings(response.sitesWRatings)
-                if (!response.success && "message" in response) {
-                    Snackbar.show({
-                        text: response.message,
-                        duration: Snackbar.LENGTH_LONG,
-                        backgroundColor: "red",
-                    });
-                } else if (response.success) {
+                if (!myRatings || myRatings.length === 0) {
+                    const response = await getUserRatings(user);
+                    setMyRatings(response.sitesWRatings)
+                    if (!response.success && "message" in response) {
+                        Snackbar.show({
+                            text: response.message,
+                            duration: Snackbar.LENGTH_LONG,
+                            backgroundColor: "red",
+                        });
+                    } else if (response.success) {
+                        setLoading(false);
+                    }
+                } else
                     setLoading(false);
-                }
             }
         }
 
@@ -41,12 +44,12 @@ export const MyRatings = () => {
             <StackHeader title='Mis Valoraciones' />
 
             <ResultList
-                data={sitesWRatings}
+                data={myRatings}
                 noItemsMessage="No tienes valoraciones"
-                isLoading={sitesWRatings.length === 0}
+                isLoading={loading}
                 renderItemComponent={(item) => (
                     <SiteWMyItems site={item.site}>
-                        <AddEditRating site={item.site} isEditing />
+                        <AddEditRating site={item.site} valoracion={item.valoracion} calledFrom='myRatings' />
                     </SiteWMyItems>
                 )}
             />

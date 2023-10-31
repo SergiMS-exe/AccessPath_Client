@@ -237,7 +237,7 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
-            {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} />}
+            {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} calledFrom="site" />}
             <ScrollView
                 style={styles.container}
                 automaticallyAdjustKeyboardInsets={true}
