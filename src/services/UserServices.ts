@@ -29,7 +29,7 @@ export async function login(email: string, password: string, navigation: NativeS
         });
 
     if (peticion !== undefined) {
-        const usuario = peticion.user
+        const usuario: Person = peticion.user
 
         if (usuario !== null) {
             console.log("login de usuario: " + JSON.stringify(usuario))
@@ -52,6 +52,7 @@ type RegisterType = {
     apellidos: string;
     email: string;
     password: string;
+    confirmPassword: string;
     tipoDiscapacidad: string;
     navigation: NativeStackNavigationProp<any, any>;
     screen: string;
@@ -59,16 +60,22 @@ type RegisterType = {
 }
 
 export async function register(params: RegisterType) {
+    let success = false;
+    let message = "";
     const peticion = await axios.post(API_HOST + '/register',
         {
             nombre: params.nombre,
             apellidos: params.apellidos,
             email: params.email,
             password: params.password,
+            confirmPassword: params.confirmPassword,
             tipoDiscapacidad: params.tipoDiscapacidad
-        }).then(response => response.data
+        }).then(response => {
+            return { success: true, message: response.data.msg, user: response.data.user };
+        }
         ).catch(error => {
-            console.error(error)
+            //console.error(error)
+            return { success: false, message: error.response.data.msg, user: undefined };
         });
 
     const usuario = peticion.user
@@ -83,6 +90,8 @@ export async function register(params: RegisterType) {
             })
         );
     }
+
+    return { success: peticion.success, message: peticion.message };
 }
 
 export async function logout(setUser: Function) {

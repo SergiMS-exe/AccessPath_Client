@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { TypesOfDisabilities, TypesOfDisabilitiesKey } from '../../@types/Valoracion';
+import { TypesOfDisabilities, TypesOfDisabilitiesValue } from '../../@types/Valoracion';
 
 type Props = {
-    value?: TypesOfDisabilitiesKey;
-    onChange?: (value: TypesOfDisabilitiesKey) => void;
+    value?: TypesOfDisabilitiesValue;
+    onChange?: (value: TypesOfDisabilitiesValue) => void;
 }
 
 const DisabilitySelector = ({ value, onChange }: Props) => {
     const [open, setOpen] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = useState((value || 'Ninguna').toLowerCase());
+    const [selectedValue, setSelectedValue] = useState(value || TypesOfDisabilities.ninguna);
 
     const disabilityOptions = Object.values(TypesOfDisabilities).map(option => ({
         label: option,
-        value: option.toLowerCase() as TypesOfDisabilitiesKey,
+        value: option,
     }));
 
     return (

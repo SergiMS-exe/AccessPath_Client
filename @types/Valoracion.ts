@@ -53,6 +53,7 @@ export type TypesOfDisabilitiesKey = keyof typeof TypesOfDisabilities;
 export type FisicaKey = keyof typeof FisicaEnum;
 export type SensorialKey = keyof typeof SensorialEnum;
 export type PsiquicaKey = keyof typeof PsiquicaEnum;
+export type TypesOfDisabilitiesValue = typeof TypesOfDisabilities[TypesOfDisabilitiesKey];
 
 export const reverseFisicaEnum = Object.entries(FisicaEnum).reduce((acc, [key, value]) => {
     acc[value] = key;

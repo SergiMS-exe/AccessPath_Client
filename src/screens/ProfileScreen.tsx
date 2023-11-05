@@ -8,17 +8,18 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import MainButton from '../components/MainButton';
+import { TypesOfDisabilities } from '../../@types/Valoracion';
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
 
 export const getUserIcon = (dasibily: string = "ninguna") => {
     switch (dasibily) {
-        case "fisica":
+        case TypesOfDisabilities.fisica:
             return "wheelchair";
-        case "sensorial":
+        case TypesOfDisabilities.sensorial:
             return "eye";
-        case "psiquica":
+        case TypesOfDisabilities.psiquica:
             return "brain";
         default:
             return "user";

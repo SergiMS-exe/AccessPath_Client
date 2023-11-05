@@ -1,9 +1,11 @@
+import { TypesOfDisabilitiesValue } from "./Valoracion";
+
 type Props = {
     _id: string;
     nombre: string;
     apellidos: string;
     email: string;
-    tipoDiscapacidad: string;
+    tipoDiscapacidad: TypesOfDisabilitiesValue;
     saved?: string[];
 };
 
@@ -12,7 +14,7 @@ class Person {
     nombre: string;
     apellidos: string;
     email: string;
-    tipoDiscapacidad: string;
+    tipoDiscapacidad: TypesOfDisabilitiesValue;
     saved: string[];
 
     constructor(props: Props) {
@@ -34,7 +36,7 @@ class Person {
 
     unSave(item: string): void {
         const index = this.saved.indexOf(item);
-        
+
         if (index > -1) {
             this.saved.splice(index, 1);
         }

@@ -10,7 +10,8 @@ import Person from "../../../@types/Person";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { TypesOfDisabilitiesKey } from "../../../@types/Valoracion";
+import { TypesOfDisabilitiesValue } from "../../../@types/Valoracion";
+import React from "react";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
@@ -57,7 +58,7 @@ export const EditProfile = () => {
         Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: ' + result.message);
     };
 
-    const handleDisabilityChange = (newValue: TypesOfDisabilitiesKey) => {
+    const handleDisabilityChange = (newValue: TypesOfDisabilitiesValue) => {
         setTipoDiscapacidad(newValue);
     };
 
@@ -111,7 +112,7 @@ export const EditProfile = () => {
                     onChangeText={setEmail}
                 />
                 <DisabilitySelector
-                    value={tipoDiscapacidad as any}
+                    value={tipoDiscapacidad}
                     onChange={handleDisabilityChange}
                 />
 
