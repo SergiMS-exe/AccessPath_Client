@@ -1,6 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { LoginContext } from "../Shared/Context";
+import { useContext } from "react";
+import { AppStyles } from "../Shared/AppStyles";
 
 type Props = {
     title?: string;
@@ -12,7 +15,7 @@ type Props = {
 export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Props) => {
 
     const navigation = useNavigation();
-
+    const { user } = useContext(LoginContext);
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}>
@@ -24,7 +27,7 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
             ) : (
                 <View style={styles.blank} />
             )}
-            {(iconRight && onPressRight) &&
+            {(iconRight && onPressRight && user) &&
                 <TouchableOpacity onPress={onPressRight}>
                     <Icon name={iconRight} size={30} style={{ marginRight: 20 }} />
                 </TouchableOpacity>
@@ -47,10 +50,11 @@ const styles = StyleSheet.create({
         zIndex: 1
     },
     titleText: {
+        color: AppStyles.mainBlueColor,
         fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     blank: {
         marginLeft: 10,

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     title: String,
@@ -15,7 +16,9 @@ export const Titulo = ({ title, containerStyle, textStyle }: Props) => {
         },
         text: {
             fontSize: 30,
-            textAlign: 'center'
+            textAlign: 'center',
+            color: AppStyles.mainBlackColor,
+            fontWeight: 'bold',
         }
     })
 

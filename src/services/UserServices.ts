@@ -13,8 +13,8 @@ import { Valoracion } from '../../@types/Valoracion';
 
 const baseUrlUsers = '/users'
 
-// const API_HOST = 'http://192.168.0.7:3002' + baseUrlUsers;
-const API_HOST = REMOTE + baseUrlUsers;
+const API_HOST = 'http://192.168.0.7:3002' + baseUrlUsers;
+// const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
     screen: string, setUser: Function) {
@@ -34,8 +34,8 @@ export async function login(email: string, password: string, navigation: NativeS
         if (usuario !== null) {
             console.log("login de usuario: " + JSON.stringify(usuario))
             setUser(usuario);
-            const savedSites = await getSavedSites(usuario);
-            await AsyncStorage.setItem("savedSites", JSON.stringify(savedSites));
+            // const savedSites = await getSavedSites(usuario);
+            // await AsyncStorage.setItem("savedSites", JSON.stringify(savedSites));
             navigation.dispatch(
                 CommonActions.reset({
                     routes: [
@@ -166,9 +166,12 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
 
 export async function getSavedSites(user: Person) {
     const response = await axios.get(API_HOST + '/savedSites/' + user._id).
-        then(res => res.data);
-    const sites: Site[] = response.sites;
-    return sites;
+        then(res => { return { success: true, sites: res.data.sites } }).
+        catch((error: Error) => {
+            return { success: false, sites: [], error: error.message };
+        });
+
+    return response;
 }
 
 export async function getUserComments(user: Person) {

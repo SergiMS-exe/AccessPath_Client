@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         fontSize: AppStyles.card.titleSize,
         marginBottom: 4,
         fontWeight: 'bold',
-        flex: 1
+        flex: 1,
+        color: AppStyles.mainBlackColor
     },
     address: {
         marginBottom: 4
@@ -40,7 +41,7 @@ type Props = {
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
-export const ListCard = ({site}: Props) => {
+export const ListCard = ({ site }: Props) => {
 
     const navigation = useNavigation<StackProps>();
 
@@ -48,10 +49,10 @@ export const ListCard = ({site}: Props) => {
         <TouchableOpacity onPress={() => navigation.navigate("site", { site })} style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{site.nombre}</Text>
-                <Icon name='map-marker-alt' size={17} color='red'/>
+                <Icon name='map-marker-alt' size={17} color='red' />
             </View>
             <Text style={styles.address}>{site.direccion}</Text>
-            <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{borderWidth: 0.5, borderColor:'black'}}/></Text>
+            <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={16} name='star' color='#e8e82e' solid style={{ borderWidth: 0.5, borderColor: 'black' }} /></Text>
         </TouchableOpacity>
     );
 }

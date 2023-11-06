@@ -44,7 +44,7 @@ export const SiteScreen = () => {
     const [rating, setRating] = useState<Valoracion | undefined>(undefined);
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
-    const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
+    const { comments, setComments, addComment, deleteComment, updateComment } = useComments(route.params.site.comentarios);
 
     useEffect(() => {
         const fetchDataComments = async () => {
@@ -244,7 +244,7 @@ export const SiteScreen = () => {
                 contentContainerStyle={{ paddingBottom: 110 }}
                 keyboardShouldPersistTaps="handled"
             >
-                <PhotoCarousel photos={site.fotos} />
+                {(site.fotos && site.fotos.length > 0) && <PhotoCarousel photos={site.fotos} />}
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
                     <Text style={{ fontSize: 18 }}>{site.types[2]}, {site.types[3]}</Text>
@@ -298,10 +298,19 @@ export const SiteScreen = () => {
                     {loading ?
                         <ActivityIndicator size="large" style={{ marginTop: 10 }} /> : (
                             <View style={{ marginTop: 12 }}>
-                                {comments && comments.map((comment, index) => (
-                                    <Comment key={index} comment={comment} updateComments={updateComments} placeId={site.placeId} />
+                                {comments && comments.map(comment => (
+                                    <Comment key={comment._id}
+                                        comment={comment}
+                                        updateComments={updateComments}
+                                        placeId={site.placeId}
+                                        onEditFocus={() => setShowAddEditRating(false)} onEditBlur={() => setShowAddEditRating(true)} />
                                 ))}
-                                {user && <CommentsInput user={user} site={site} onCommentSent={handleNewComment} onFocus={() => setShowAddEditRating(false)} onBlur={() => setShowAddEditRating(true)} />}
+                                {user && <CommentsInput
+                                    user={user}
+                                    site={site}
+                                    onCommentSent={handleNewComment}
+                                    onFocus={() => setShowAddEditRating(false)} onBlur={() => setShowAddEditRating(true)}
+                                />}
                             </View>
                         )
                     }

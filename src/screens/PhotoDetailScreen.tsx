@@ -43,11 +43,11 @@ const PhotoDetailScreen = () => {
     const imageUris = usePhotos(photosInView);
 
     const onGoBack = useCallback(() => {
-        if (isModified) {
-            navigation.navigate('site', { site: newPlace });
-        } else {
-            navigation.goBack();
-        }
+        // if (isModified) {
+        //     navigation.navigate('site', { site: newPlace });
+        // } else {
+        navigation.goBack();
+        // }
     }, [isModified, navigation, newPlace]);
 
     useEffect(() => {

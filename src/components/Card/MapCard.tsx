@@ -3,6 +3,8 @@ import { Site } from "../../../@types/Site";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { AppStyles } from "../Shared/AppStyles";
+import App from "../../../App";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
@@ -30,16 +32,15 @@ const styles = StyleSheet.create({
     container: {
         zIndex: 1000,
         marginLeft: '2.5%',
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: AppStyles.border.borderWidth,
+        borderTopColor: AppStyles.border.borderColor,
         backgroundColor: 'white',
         height: '35%',
         width: '95%',
         position: 'absolute',
-        bottom: 0,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        padding: 6,
+        bottom: 10,
+        borderRadius: 20,
+        padding: 15,
     },
     titleContainer: {
         flexDirection: "row",
@@ -47,12 +48,14 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     title: {
-        fontSize: 16,
+        fontSize: 25,
         fontWeight: 'bold',
         flex: 1,
+        color: AppStyles.mainBlackColor
     },
     address: {
         marginBottom: 4,
+        fontSize: 16,
     },
     rating: {
         alignSelf: 'flex-end',

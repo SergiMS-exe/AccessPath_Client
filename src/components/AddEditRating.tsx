@@ -8,7 +8,7 @@ import { Valoracion } from "../../@types/Valoracion";
 import { deleteRating } from "../services/PlacesServices";
 import Snackbar from "react-native-snackbar";
 import { useContext, useEffect } from "react";
-import { LoginContext, MySitesContext } from "./Shared/Context";
+import { CloseSitesContext, LoginContext, MySitesContext } from "./Shared/Context";
 
 type Props = {
     site: Site;
@@ -24,6 +24,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
     const navigation = useNavigation<StackProps>();
 
     const { myRatings, setMyRatings } = useContext(MySitesContext);
+    const { setSites, sites } = useContext(CloseSitesContext);
     const { user } = useContext(LoginContext);
 
     const handleDelete = () => {
@@ -59,6 +60,9 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                                 const newRatings = myRatings.filter(rating => rating.valoracion.userId !== valoracion.userId || rating.valoracion.placeId !== valoracion.placeId);
                                 setMyRatings(newRatings);
                                 if ('newPlace' in response && onRatingDeleted) {
+                                    site.valoraciones = response.newPlace.valoraciones;
+                                    const newSites = sites.map(s => s.placeId === site.placeId ? site : s);
+                                    setSites(newSites);
                                     onRatingDeleted({ ...response.newPlace });
                                 }
                             }

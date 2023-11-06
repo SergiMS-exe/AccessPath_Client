@@ -8,7 +8,7 @@ import { editRating, sendRating } from "../services/PlacesServices";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { FisicaEnum, SensorialEnum, PsiquicaEnum, Valoracion, FisicaKey, SensorialKey, PsiquicaKey } from '../../@types/Valoracion';
 import { Site } from "../../@types/Site";
-import { LoginContext, MySitesContext } from "../components/Shared/Context";
+import { CloseSitesContext, LoginContext, MySitesContext } from "../components/Shared/Context";
 import Snackbar from "react-native-snackbar";
 
 const data = [
@@ -39,6 +39,7 @@ export const FormScreen = () => {
 
     const { user } = useContext(LoginContext);
     const { myRatings, setMyRatings } = useContext(MySitesContext)
+    const { sites, setSites } = useContext(CloseSitesContext);
 
     let { site, valoracion, calledFrom } = route.params;
 
@@ -147,12 +148,19 @@ export const FormScreen = () => {
             ? await editRating(selectedValues, site.placeId, user!._id)
             : await sendRating(selectedValues, site, user!._id);
 
-        if (!response.success || !("newPlace" in response)) {
+        if (!response.success || !("newPlace" in response)) { //Si no se ha podido enviar la valoración
             Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
             return;
         }
 
         const newSite = { ...response.newPlace };
+
+        //Actualizamos el sitio en la lista de sitios cercanos
+        site.valoraciones = response.newPlace.valoraciones;
+        const newSites = sites.map(s => s.placeId === site.placeId ? site : s);
+        setSites(newSites);
+
+
         let newRatings = [...myRatings];
 
         if (valoracion) {

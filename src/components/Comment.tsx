@@ -8,14 +8,15 @@ import { CommentType } from '../../@types/CommentType';
 type CommentProps = {
     comment: CommentType;
     updateComments: (comment: CommentType, wantsToDelete: boolean) => void;
+    onEditFocus: () => void;
+    onEditBlur: () => void;
     placeId: string;
 }
 
-export function Comment({ comment, updateComments, placeId }: CommentProps) {
+export function Comment({ comment, updateComments, placeId, onEditFocus, onEditBlur }: CommentProps) {
     const { user } = useContext(LoginContext)
 
     const [isEditing, setIsEditing] = useState(false);
-    const [mode, setMode] = useState<'view' | 'edit' | 'delete'>('view');
     const [newText, setNewText] = useState(comment.texto);
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -48,128 +49,58 @@ export function Comment({ comment, updateComments, placeId }: CommentProps) {
         ? `${comment.usuario.nombre} ${comment.usuario.apellidos}`
         : 'usuario desconocido';
 
-    const isUserComment = user && user._id === comment.usuario?._id;
-
-    return (
-        <View style={styles.commentContainer}>
-            {mode === 'edit' ? (
-                <EditCommentMode
-                    newText={newText}
-                    setNewText={setNewText}
-                    handleEdit={handleEdit}
-                    cancel={() => setMode('view')}
+    if (isEditing)
+        return (
+            <View style={styles.commentContainer}>
+                <TextInput
+                    style={styles.commentText}
+                    value={newText}
+                    onChangeText={setNewText}
+                    onFocus={onEditFocus}
+                    onBlur={onEditBlur}
                 />
-            ) : mode === 'delete' ? (
-                <DeleteCommentMode
-                    commentText={comment.texto}
-                    displayedName={displayedName}
-                    handleDeleting={handleDeleting}
-                    cancel={() => setMode('view')}
-                />
-            ) : (
-                <ViewCommentMode
-                    commentText={comment.texto}
-                    displayedName={displayedName}
-                    isUserComment={isUserComment}
-                    setMode={setMode}
-                />
-            )}
-        </View>
-    );
-}
 
-type EditCommentModeProps = {
-    newText: string;
-    setNewText: (text: string) => void;
-    handleEdit: () => void;
-    cancel: () => void;
+                <View style={styles.editingbuttonsContainer}>
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, }} onPress={() => { handleEdit(), onEditBlur() }}>
+                        <Icon name="check" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => { setIsEditing(false), onEditBlur() }}>
+                        <Icon name="times" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    else if (isDeleting)
+        return (
+            <View style={styles.commentContainer}>
+                <Text style={styles.commentText}>{comment.texto}</Text>
+                <Text style={styles.commentUser}>{displayedName}</Text>
+                <View style={styles.editingbuttonsContainer}>
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting}>
+                        <Icon name="trash" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsDeleting(false)}>
+                        <Icon name="times" style={styles.sendButtonIcon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    else
+        return (
+            <View style={styles.commentContainer}>
+                <Text style={styles.commentText}>{comment.texto}</Text>
+                <Text style={styles.commentUser}>{displayedName}</Text>
+                {user && user._id === comment.usuario?._id && <View style={styles.editDeleteButtons}>
+                    <TouchableOpacity onPress={() => setIsEditing(true)}>
+                        <Icon name="pen" size={18} style={{ marginRight: 12 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsDeleting(true)}>
+                        <Icon name="trash" size={18} />
+                    </TouchableOpacity>
+                </View>}
+            </View>
+        );
 }
-
-function EditCommentMode({ newText, setNewText, handleEdit, cancel }: EditCommentModeProps) {
-    return (
-        <>
-            <TextInput
-                style={styles.commentText}
-                value={newText}
-                onChangeText={setNewText}
-            />
-            <ActionButtons
-                primaryAction={handleEdit}
-                cancel={cancel}
-            />
-        </>
-    );
-}
-
-type DeleteCommentModeProps = {
-    commentText: string;
-    displayedName: string;
-    handleDeleting: () => void;
-    cancel: () => void;
-}
-
-function DeleteCommentMode({ commentText, displayedName, handleDeleting, cancel }: DeleteCommentModeProps) {
-    return (
-        <>
-            <Text style={styles.commentText}>{commentText}</Text>
-            <Text style={styles.commentUser}>{displayedName}</Text>
-            <ActionButtons
-                primaryAction={handleDeleting}
-                primaryColor='#cf142b'
-                primaryIcon="trash"
-                cancel={cancel}
-            />
-        </>
-    );
-}
-
-type ViewCommentModeProps = {
-    commentText: string;
-    displayedName: string;
-    isUserComment: boolean | undefined;
-    setMode: (mode: 'view' | 'edit' | 'delete') => void;
-}
-
-function ViewCommentMode({ commentText, displayedName, isUserComment, setMode }: ViewCommentModeProps) {
-    return (
-        <>
-            <Text style={styles.commentText}>{commentText}</Text>
-            <Text style={styles.commentUser}>{displayedName}</Text>
-            {isUserComment && <View style={styles.editDeleteButtons}>
-                <TouchableOpacity onPress={() => setMode('edit')}>
-                    <Icon name="pen" size={18} style={{ marginRight: 12 }} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setMode('delete')}>
-                    <Icon name="trash" size={18} />
-                </TouchableOpacity>
-            </View>}
-        </>
-    );
-}
-
-type ActionButtonsProps = {
-    primaryAction: () => void;
-    primaryColor?: string;
-    primaryIcon?: string;
-    cancel: () => void;
-}
-
-function ActionButtons({ primaryAction, primaryColor = '#007AFF', primaryIcon = 'check', cancel }: ActionButtonsProps) {
-    return (
-        <View style={styles.editingbuttonsContainer}>
-            <TouchableOpacity
-                style={{ ...styles.sendButton, marginRight: 5, backgroundColor: primaryColor }}
-                onPress={primaryAction}
-            >
-                <Icon name={primaryIcon} style={styles.sendButtonIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={cancel}>
-                <Icon name="times" style={styles.sendButtonIcon} />
-            </TouchableOpacity>
-        </View>
-    );
-}
-
 
 const styles = StyleSheet.create({
     commentContainer: {

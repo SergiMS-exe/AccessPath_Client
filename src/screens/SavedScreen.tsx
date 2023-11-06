@@ -6,25 +6,30 @@ import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSavedSites } from '../services/UserServices';
 import { LoginContext } from '../components/Shared/Context';
+import Snackbar from 'react-native-snackbar';
 
 export const SavedScreen = () => {
     const { user } = useContext(LoginContext);
 
     const [savedSites, setSavedSites] = useState<Site[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const isFocused = useIsFocused();
 
     useEffect(() => {
         const getSites = async () => {
             try {
-                const savedSitesJson = undefined// await AsyncStorage.getItem("savedSites");
-                if (savedSitesJson) {
-                    const savedSitesFromStorage: Site[] = JSON.parse(savedSitesJson);
-                    setSavedSites(savedSitesFromStorage);
-                } else {
-                    const savedSitesFromAPI: Site[] = await getSavedSites(user!);
-                    setSavedSites(savedSitesFromAPI)
+                const getSavedSitesResponse = await getSavedSites(user!);
+                if (getSavedSitesResponse.success) {
+                    setSavedSites(getSavedSitesResponse.sites)
+                } else if ('error' in getSavedSitesResponse) {
+                    Snackbar.show({
+                        text: getSavedSitesResponse.error,
+                        duration: Snackbar.LENGTH_SHORT,
+                    });
                 }
+                setIsLoading(false);
+
             } catch (error) {
                 console.error("Error al obtener sitios guardados: ", error);
             }
@@ -38,7 +43,7 @@ export const SavedScreen = () => {
         <ResultList
             data={savedSites}
             noItemsMessage="No tienes sitios guardados"
-            isLoading={savedSites.length === 0}
+            isLoading={isLoading}
             renderItemComponent={(item) => <ListCard site={item} />}
         />
     );

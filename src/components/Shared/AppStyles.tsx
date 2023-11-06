@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const AppStyles = {
     border: {
-        borderColor: 'black',
+        borderColor: '#2c3e50',
         borderWidth: 1,
         borderRadius: 10
     },

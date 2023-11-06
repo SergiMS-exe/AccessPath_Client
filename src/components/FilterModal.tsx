@@ -4,6 +4,7 @@ import { Titulo } from "./Titulo";
 import MainButton from "./MainButton";
 import { AppStyles } from "./Shared/AppStyles";
 import { CloseSitesContext, initialFilters } from "./Shared/Context";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 interface FilterModalProps {
     visible: boolean;
@@ -67,7 +68,9 @@ const FilterModal: FC<FilterModalProps> = ({ visible, onClose }) => {
         >
             <View style={styles.centroVista}>
                 <View style={styles.modalVista}>
-                    <Titulo title='Filtros para sitios cercanos' />
+                    <Icon name='times' size={30} color={AppStyles.mainBlackColor} onPress={onClose}
+                        style={{ position: 'absolute', right: 10, top: 10 }} />
+                    <Titulo containerStyle={{ marginBottom: '10%' }} textStyle={{ textAlign: 'left' }} title='Filtros para sitios cercanos' />
 
                     <Text style={styles.subtitle}>Debe tener:</Text>
                     <CustomCheckbox
@@ -122,12 +125,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        alignContent: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
     },
     modalVista: {
         width: '90%',
         height: '70%',
-        margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 35,
@@ -146,12 +149,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         width: '100%',
         position: 'absolute',
+        alignItems: 'center',
+        backgroundColor: 'white',
         bottom: 20,
     },
     checkboxRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        width: '85%'
     },
     checkbox: {
         width: 20,
@@ -174,8 +180,10 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 20,
-        fontWeight: 'bold',
-        marginVertical: 10
+        fontWeight: '700',
+        color: AppStyles.mainBlackColor,
+        marginTop: 20,
+        marginBottom: 10
     }
 });
 

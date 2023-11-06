@@ -15,6 +15,8 @@ import { logout } from '../services/UserServices';
 import { ProfileScreen } from './ProfileScreen';
 import { SearchScreen } from './SearchScreen';
 import { RouteProp } from '@react-navigation/native';
+import { AppStyles } from '../components/Shared/AppStyles';
+import { Divider } from '@rneui/themed';
 
 type DrawerButtonProps = {
     screenName?: string;
@@ -49,22 +51,18 @@ const styles = StyleSheet.create({
         paddingTop: 30
     },
     contentHeader: {
-        borderColor: 'black',
-        borderBottomWidth: 1,
-        marginBottom: 20,
-        paddingBottom: 7
+        marginBottom: 10,
+        paddingBottom: 7,
     },
     contentBody: {
+        marginTop: 25,
         borderColor: 'black',
-        //borderWidth: 0.4,
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
     contentFooter: {
         marginHorizontal: 20,
         justifyContent: 'flex-end',
-        borderTopWidth: 1,
-        borderColor: 'black',
         marginBottom: 20
     },
     button: {
@@ -74,10 +72,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         flexDirection: 'row',
         alignItems: 'center',
-        //backgroundColor: 'purple',
-        borderRadius: 7,
-        borderBottomColor: 'black',
-        borderBottomWidth: 0.4,
     },
     icon: {
         marginRight: 15,
@@ -100,11 +94,15 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
             <DrawerContentScrollView style={styles.contentScrollView}
                 contentContainerStyle={{ paddingTop: 0 }}>
                 {user &&
-                    <View style={styles.contentHeader}>
-                        {/* Nombre y email */}
-                        <Text style={styles.userName}>{user?.nombre} {user?.apellidos}</Text>
-                        <Text style={styles.userEmail}>{user?.email}</Text>
-                    </View>}
+                    <>
+                        <View style={styles.contentHeader}>
+                            {/* Nombre y email */}
+                            <Text style={styles.userName}>{user?.nombre} {user?.apellidos}</Text>
+                            <Text style={styles.userEmail}>{user?.email}</Text>
+                        </View>
+                        <Divider color={AppStyles.mainBlackColor} width={1} />
+                    </>
+                }
                 <View style={styles.contentBody}>
                     <DrawerContentButton
                         navigation={navigation}
@@ -115,12 +113,14 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                     {
                         user && (
                             <>
+                                <Divider />
                                 <DrawerContentButton
                                     navigation={navigation}
                                     screenName='Saved'
                                     text='Sitios Guardados'
                                     iconName='bookmark'
                                 />
+                                <Divider />
                                 <DrawerContentButton
                                     navigation={navigation}
                                     screenName='Perfil'
@@ -133,6 +133,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                 </View>
             </DrawerContentScrollView>
             <View style={styles.contentFooter}>
+                <Divider color={AppStyles.mainBlackColor} width={1} />
                 {user == undefined ? (
                     <>
                         <DrawerContentButton
@@ -161,7 +162,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
 function DrawerContentButton({ navigation, screenName = '', text, iconName }: DrawerButtonProps) {
 
     const { setUser } = useContext(LoginContext)
-    const logoutTernary = iconName == 'sign-out-alt' ? '#E94A47' : 'black'
+    const logoutTernary = iconName == 'sign-out-alt' ? '#E94A47' : AppStyles.mainBlackColor
     return (
         <TouchableOpacity
             onPress={async () => {

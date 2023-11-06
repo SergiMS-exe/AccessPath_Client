@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { AppStyles } from '../Shared/AppStyles';
 
 type DrawerProp = DrawerNavigationProp<any, any>;
 type RoutePropType = RouteProp<any, any>;
@@ -34,6 +35,8 @@ const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Prop
                     <SearchBar
                         containerStyle={styles.searchBar}
                         inputContainerStyle={styles.searchBarInput}
+                        inputStyle={{ color: '#727272' }}
+                        placeholderTextColor={'#727272'}
                         round
                         lightTheme
                         showCancel
@@ -69,10 +72,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     titleText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         flex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: AppStyles.mainBlackColor
     },
     menu: {
         fontSize: 30,
@@ -88,7 +92,9 @@ const styles = StyleSheet.create({
         height: 60
     },
     searchBarInput: {
-        height: 45
+        height: 45,
+        backgroundColor: '#e2e2e2',
+        color: '#727272'
     }
 });
 
