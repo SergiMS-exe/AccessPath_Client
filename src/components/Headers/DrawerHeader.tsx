@@ -27,7 +27,7 @@ const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Prop
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}>
-                    <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} />
+                    <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} color={AppStyles.mainBlackColor} />
                 </TouchableOpacity>
                 {title ? (
                     <Text style={styles.titleText}>{title}</Text>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         backgroundColor: '#f8f8f8',
         paddingLeft: 15,
-        borderBottomWidth: 0.2,
+        //borderBottomWidth: 0.2,
         borderBottomColor: '#000',
         zIndex: 1
     },
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         flex: 1,
         backgroundColor: '#f8f8f8',
-        borderBottomColor: '#000',
-        borderBottomWidth: 0.2,
+        //borderBottomColor: '#000',
+        //borderBottomWidth: 0.2,
         borderTopWidth: 0,
         height: 60
     },

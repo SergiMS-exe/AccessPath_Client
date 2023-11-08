@@ -20,7 +20,6 @@ export const MyComments = () => {
     useEffect(() => {
         const fetchData = async () => {
             const sites: Site[] = await getUserComments(user!)
-            console.log(JSON.stringify(sites, null, 2));
             setMyComments(sites);
             setLoading(false);
         }

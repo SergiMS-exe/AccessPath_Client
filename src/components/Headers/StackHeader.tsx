@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import { LoginContext } from "../Shared/Context";
 import { useContext } from "react";
 import { AppStyles } from "../Shared/AppStyles";
@@ -19,7 +20,7 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}>
-                <Icon name='arrow-left' size={40} color='#121212' />
+                <Icon name='arrow-left' size={35} color={AppStyles.mainBlackColor} />
             </TouchableOpacity>
 
             {title ? (
@@ -29,7 +30,8 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
             )}
             {(iconRight && onPressRight && user) &&
                 <TouchableOpacity onPress={onPressRight}>
-                    <Icon name={iconRight} size={30} style={{ marginRight: 20 }} />
+                    <IconMaterial name={iconRight} size={30} style={{ marginRight: 20 }}
+                        color={AppStyles.mainBlackColor} />
                 </TouchableOpacity>
             }
         </View>
@@ -45,12 +47,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         backgroundColor: '#f8f8f8',
         paddingLeft: 15,
-        borderBottomWidth: 0.2,
+        //borderBottomWidth: 0.2,
         borderBottomColor: '#000',
         zIndex: 1
     },
     titleText: {
-        color: AppStyles.mainBlueColor,
+        color: AppStyles.mainBlackColor,
         fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f8f8f8',
         borderBottomColor: '#000',
-        borderBottomWidth: 0.2,
+        //borderBottomWidth: 0.2,
         borderTopWidth: 0,
         height: 60
     },

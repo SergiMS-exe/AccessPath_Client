@@ -21,6 +21,7 @@ import PhotoCarousel from "../components/PhotoCarousel";
 import { getUserRatings } from "../services/UserServices";
 import Snackbar from "react-native-snackbar";
 import { Valoracion } from "../../@types/Valoracion";
+import GoogleRating from "../components/Card/GoogleRating";
 
 type RootStackParamList = {
     site: { site: Site };
@@ -100,7 +101,6 @@ export const SiteScreen = () => {
         setSite(route.params.site);
     }, [route.params.site]);
 
-
     useEffect(() => {
         if (user?.saved.includes(site.placeId)) {
             setIsSaved(true);
@@ -117,6 +117,15 @@ export const SiteScreen = () => {
             setRating(undefined);
         }
     }, [myRatings]);
+
+    useEffect(() => {
+        //find this site in myPhotos
+        const foundSiteIndex = sites.findIndex((s) => s.placeId === site.placeId);
+        if (foundSiteIndex !== -1) {
+            setSite(sites[foundSiteIndex]);
+        }
+
+    }, [sites]);
 
     const handleRatingDeleted = (newPlace: Site) => {
         // Actualizar el estado del sitio con el nuevo lugar
@@ -247,13 +256,13 @@ export const SiteScreen = () => {
                 {(site.fotos && site.fotos.length > 0) && <PhotoCarousel photos={site.fotos} />}
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
-                    <Text style={{ fontSize: 18 }}>{site.types[2]}, {site.types[3]}</Text>
+                    <Text style={{ fontSize: 18, color: AppStyles.secondaryBlackColor }}>{site.types[2]}, {site.types[3]}</Text>
                     {user &&
                         <TouchableOpacity onPress={handleSave}>
                             <Icon name='heart' size={25} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />
                         </TouchableOpacity>}
                 </View>
-                <Text style={styles.rating}>{site.calificacionGoogle}/5 <Icon size={20} name='star' color='#e8e82e' solid /></Text>
+                <GoogleRating googleRating={site.calificacionGoogle} position="start" />
                 <View style={styles.addressContainer}>
 
                     <View style={styles.addressTextContainer}>
@@ -359,7 +368,8 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     address: {
-        fontSize: 18
+        fontSize: 18,
+        color: AppStyles.secondaryBlackColor,
     },
     addressContainer: {
         width: "100%",
@@ -398,7 +408,7 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: 25,
-        color: '#333',
+        color: AppStyles.mainBlackColor,
         fontWeight: "500"
     },
     sectionButton: {

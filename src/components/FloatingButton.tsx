@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     },
     fabTitle: {
         fontSize: 20,
-        color: 'black',
+        color: '#000000',
         fontWeight: '600',
     }
 });

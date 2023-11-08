@@ -13,41 +13,36 @@ import {
 } from '../../@types/Valoracion';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppStyles } from './Shared/AppStyles';
+import { useRatings } from '../hooks/useRatings';
 
 type Props = {
     media: Valoracion | undefined;
 }
 
 const DropDownAverages = ({ media }: Props) => {
+
+    const { getDisabilitiesIcon, getMainCategoryRating } = useRatings();
+
     const categories = [
         {
             mainCategory: TypesOfDisabilities.fisica,
             subCategories: Object.values(FisicaEnum),
-            icon: 'wheelchair',
+            icon: getDisabilitiesIcon(TypesOfDisabilities.fisica),
         },
         {
             mainCategory: TypesOfDisabilities.sensorial,
             subCategories: Object.values(SensorialEnum),
-            icon: 'deaf',
+            icon: getDisabilitiesIcon(TypesOfDisabilities.sensorial),
         },
         {
             mainCategory: TypesOfDisabilities.psiquica,
             subCategories: Object.values(PsiquicaEnum),
-            icon: 'brain',
+            icon: getDisabilitiesIcon(TypesOfDisabilities.psiquica),
         },
     ];
 
     const [expanded, setExpanded] = useState<string | false>(false);
 
-    const getMainCategoryRating = (categoryKey: string): number | null => {
-        if (media) {
-            const categoryData = media[categoryKey as keyof Valoracion] as any;
-            if (categoryData && categoryData.average) {
-                return categoryData.average;
-            }
-        }
-        return null;
-    }
 
     const getSubCategoryRating = (mainCategoryKey: string, subCategoryValue: string): number | null => {
         if (media) {
@@ -79,7 +74,7 @@ const DropDownAverages = ({ media }: Props) => {
         <View style={styles.container}>
             {media ? categories.map((category) => {
                 const mainCategoryKey = normalizeKey(category.mainCategory);
-                const mainCategoryRating = getMainCategoryRating(mainCategoryKey);
+                const mainCategoryRating = getMainCategoryRating(mainCategoryKey, media);
 
                 return mainCategoryRating !== null ? (
                     <ListItem.Accordion

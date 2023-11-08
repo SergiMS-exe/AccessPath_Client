@@ -8,7 +8,7 @@ import MainButton from '../components/MainButton';
 import { sendPhoto } from '../services/PlacesServices';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Site } from '../../@types/Site';
-import { LoginContext } from '../components/Shared/Context';
+import { CloseSitesContext, LoginContext, MySitesContext } from '../components/Shared/Context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -22,6 +22,8 @@ type StackProps = NativeStackNavigationProp<any, any>;
 const AddPhoto = () => {
 
     const { user } = useContext(LoginContext);
+    const { myPhotos, setMyPhotos } = useContext(MySitesContext);
+    const { sites, setSites } = useContext(CloseSitesContext);
 
     const route = useRoute<SiteScreenRouteProp>();
     const site = route.params.site;
@@ -52,8 +54,29 @@ const AddPhoto = () => {
 
     const handleSendPhoto = async () => {
         const response = await sendPhoto(selectedImage!, site, user!._id, user!.nombre);
-        if (response.success)
+        if (response.success) {
             navigation.navigate('site', { site: response.newPlace });
+            if (response.newPlace) {
+                //first check if the site is already in myPhotos
+                const index = myPhotos.findIndex(s => s.placeId === response.newPlace?.placeId);
+                if (index !== -1) {
+                    const newMyPhotos = [...myPhotos];
+                    newMyPhotos[index] = response.newPlace;
+                    setMyPhotos(newMyPhotos);
+                }
+                else
+                    setMyPhotos([...myPhotos, response.newPlace]);
+                //then check if the site is already in sites
+                const index2 = sites.findIndex(s => s.placeId === response.newPlace?.placeId);
+                if (index2 !== -1) {
+                    const newSites = [...sites];
+                    newSites[index2] = response.newPlace;
+                    setSites(newSites);
+                }
+                else
+                    setSites([...sites, response.newPlace]);
+            }
+        }
         else
             console.log(response.message);
     };

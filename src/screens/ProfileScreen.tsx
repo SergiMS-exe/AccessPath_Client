@@ -9,22 +9,11 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import MainButton from '../components/MainButton';
 import { TypesOfDisabilities } from '../../@types/Valoracion';
+import { useRatings } from '../hooks/useRatings';
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
 
-export const getUserIcon = (dasibily: string = "ninguna") => {
-    switch (dasibily) {
-        case TypesOfDisabilities.fisica:
-            return "wheelchair";
-        case TypesOfDisabilities.sensorial:
-            return "eye";
-        case TypesOfDisabilities.psiquica:
-            return "brain";
-        default:
-            return "user";
-    }
-}
 
 export const ProfileScreen = () => {
 
@@ -32,6 +21,8 @@ export const ProfileScreen = () => {
     const drawerNavigation = useNavigation<DrawerProps>();
 
     const { setUser, user } = useContext(LoginContext)
+
+    const { getDisabilitiesIcon } = useRatings();
 
     useEffect(() => {
         //console.log(user);
@@ -43,7 +34,7 @@ export const ProfileScreen = () => {
     return (
         <SafeAreaView>
             <View style={styles.headerContainer}>
-                <Icon name={getUserIcon(user?.tipoDiscapacidad)} size={60} />
+                <Icon name={getDisabilitiesIcon(user?.tipoDiscapacidad)} size={60} />
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.name}>{user?.nombre} {user?.apellidos}</Text>
                     <Text style={styles.email}>{user?.email}</Text>

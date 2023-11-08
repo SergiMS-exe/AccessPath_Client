@@ -1,5 +1,3 @@
-import { StyleSheet } from "react-native";
-
 export const AppStyles = {
     border: {
         borderColor: '#2c3e50',
@@ -10,11 +8,13 @@ export const AppStyles = {
     black: 'black',
     fontFamily: '',
     card: {
-        titleSize: 20,
+        titleSize: 22,
         subtitleSize: 15,
+        starColor: '#FFEA00'
     },
     mainBlueColor: '#3498db',
     mainRedColor: '#e74c3c',
     mainBlackColor: '#2c3e50',
+    secondaryBlackColor: '#555555',
     fontColorBlack: '#333'
 }

@@ -3,6 +3,7 @@ import { Platform, StyleSheet } from "react-native"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FilterModal from "./FilterModal";
 import { useState } from "react";
+import { AppStyles } from "./Shared/AppStyles";
 
 
 interface Props {
@@ -17,7 +18,7 @@ const FilterFAB = ({ style }: Props) => {
         <>
             <FAB
                 style={[styles.fab, style]}
-                icon={<Icon name='filter-alt' size={30} />}
+                icon={<Icon name='filter-alt' size={30} color={AppStyles.mainBlackColor} />}
                 color='white'
                 onPress={() => setShowModal(true)}
             />

@@ -3,16 +3,16 @@ import { StackHeader } from "../../components/Headers/StackHeader";
 import { useContext, useEffect, useState } from "react";
 import { Site } from "../../../@types/Site";
 import { getUserPhotos } from "../../services/UserServices";
-import { LoginContext } from "../../components/Shared/Context";
+import { LoginContext, MySitesContext } from "../../components/Shared/Context";
 import Snackbar from "react-native-snackbar";
 import { ResultList } from "../../components/Card/ResultList";
 import PhotoCarousel from "../../components/PhotoCarousel";
 import SiteWMyItems from "../../components/SiteWMyItems";
-import { Text } from "@rneui/base";
 
 const MyPhotos = () => {
 
     const { user } = useContext(LoginContext);
+    const { myPhotos } = useContext(MySitesContext)
 
     const [sitesWithPhotos, setSitesWithPhotos] = useState<Site[]>([]);
     const [loading, setLoading] = useState(true);
@@ -42,6 +42,10 @@ const MyPhotos = () => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        setSitesWithPhotos(myPhotos);
+    }, [myPhotos]);
 
     return (
         <SafeAreaView style={{ flexGrow: 1 }}>

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { LoginContext } from './Shared/Context';
 import { deleteComment, editComment } from '../services/PlacesServices';
 import { CommentType } from '../../@types/CommentType';
+import { AppStyles } from './Shared/AppStyles';
 
 type CommentProps = {
     comment: CommentType;
@@ -92,10 +93,10 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                 <Text style={styles.commentUser}>{displayedName}</Text>
                 {user && user._id === comment.usuario?._id && <View style={styles.editDeleteButtons}>
                     <TouchableOpacity onPress={() => setIsEditing(true)}>
-                        <Icon name="pen" size={18} style={{ marginRight: 12 }} />
+                        <Icon name="pen" size={18} style={{ marginRight: 12 }} color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsDeleting(true)}>
-                        <Icon name="trash" size={18} />
+                    <TouchableOpacity onPress={() => setIsDeleting(true)} >
+                        <Icon name="trash" size={18} color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
                 </View>}
             </View>
@@ -104,8 +105,8 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
 
 const styles = StyleSheet.create({
     commentContainer: {
-        borderWidth: 1.5,
-        borderColor: '#ccc',
+        borderWidth: 1,
+        borderColor: AppStyles.border.borderColor,
         borderRadius: 5,
         padding: 10,
         marginVertical: 5,
@@ -114,10 +115,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 5,
+        color: AppStyles.secondaryBlackColor
     },
     commentUser: {
         fontSize: 15,
-        color: 'gray',
+        color: AppStyles.secondaryBlackColor,
     },
     editDeleteButtons: {
         position: 'absolute',

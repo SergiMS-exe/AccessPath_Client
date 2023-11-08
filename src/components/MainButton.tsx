@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-        // marginLeft: 8
     },
     icon: {
         fontSize: 20,
+        marginRight: 7,
         color: 'white',
     }
 });

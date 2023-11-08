@@ -13,8 +13,6 @@ import { LoginScreen } from './LoginScreen';
 import { RegistroScreen } from './RegistroScreen';
 import { logout } from '../services/UserServices';
 import { ProfileScreen } from './ProfileScreen';
-import { SearchScreen } from './SearchScreen';
-import { RouteProp } from '@react-navigation/native';
 import { AppStyles } from '../components/Shared/AppStyles';
 import { Divider } from '@rneui/themed';
 
@@ -41,10 +39,12 @@ const styles = StyleSheet.create({
     userName: {
         fontSize: 20,
         fontWeight: '600',
-        paddingBottom: 3
+        paddingBottom: 3,
+        color: AppStyles.mainBlackColor
     },
     userEmail: {
-        fontSize: 15
+        fontSize: 15,
+        color: AppStyles.mainBlackColor
     },
     contentScrollView: {
         paddingHorizontal: 20,

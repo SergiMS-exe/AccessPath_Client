@@ -29,13 +29,13 @@ const PhotoCarousel = ({ photos }: Props) => {
             ));
         }
         // Si no hay fotos, renderizar 3 skeletons
-        else {
-            return Array(3).fill(null).map((_, index) => (
-                <View key={index} style={styles.slide}>
-                    <Skeleton width={200} height={150} />
-                </View>
-            ));
-        }
+        // else {
+        //     return Array(3).fill(null).map((_, index) => (
+        //         <View key={index} style={styles.slide}>
+        //             <Skeleton width={200} height={150} />
+        //         </View>
+        //     ));
+        // }
     };
 
     return (
@@ -50,7 +50,7 @@ const PhotoCarousel = ({ photos }: Props) => {
 
 const styles = StyleSheet.create({
     slide: {
-        marginRight: 10, // Agrega espacio entre los elementos
+        marginRight: 10,
     },
     image: {
         width: 200,

@@ -7,7 +7,7 @@ import { StackHeader } from '../components/Headers/StackHeader';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MainButton from '../components/MainButton';
 import { AppStyles } from '../components/Shared/AppStyles';
-import { LoginContext } from '../components/Shared/Context';
+import { CloseSitesContext, LoginContext, MySitesContext } from '../components/Shared/Context';
 import { deletePhoto } from '../services/PlacesServices';
 import Snackbar from 'react-native-snackbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -26,6 +26,8 @@ type StackProps = NativeStackNavigationProp<any, any>;
 
 const PhotoDetailScreen = () => {
     const { user } = useContext(LoginContext);
+    const { myPhotos, setMyPhotos } = useContext(MySitesContext)
+    const { sites, setSites } = useContext(CloseSitesContext)
     const scrollViewRef = useRef<ScrollView>(null);
     const routePhotoDetails = useRoute<PhotoDetailScreenRouteProp>();
     const routeSite = useRoute<SiteScreenRouteProp>();
@@ -91,13 +93,32 @@ const PhotoDetailScreen = () => {
                         });
                         // Si la foto se eliminó correctamente, actualizar el estado
                         if (deleteResponse.success && 'newPlace' in deleteResponse) {
+                            const newPlace: Site = deleteResponse.newPlace;
+
                             setIsModified(true);
-                            setNewPlace(deleteResponse.newPlace);
+                            setNewPlace(newPlace);
 
+                            //Update closeSites
+                            setSites(sites.map(site => {
+                                if (site.placeId === newPlace.placeId) {
+                                    return newPlace;
+                                }
+                                return site;
+                            }
+                            ));
 
-                            if (photosInView.length === 1)
+                            if (photosInView.length === 1) {
+                                setMyPhotos(myPhotos.filter(deletedSite => deletedSite.placeId !== site.placeId));
                                 setPhotosInView([]);
+                            }
                             else {
+                                setMyPhotos(myPhotos.map(site => {
+                                    if (site.placeId === newPlace.placeId) {
+                                        return newPlace;
+                                    }
+                                    return site;
+                                }
+                                ));
                                 const updatedPhotos = [...photosInView];
 
                                 updatedPhotos.splice(photoIndex, 1);
@@ -135,7 +156,7 @@ const PhotoDetailScreen = () => {
                     ref={scrollViewRef}
                 >
                     {imageUris.length > 0 ? imageUris.map((uri, idx) => (
-                        <View key={idx} style={styles.page}>
+                        <View key={uri} style={styles.page}>
                             <ScrollView
                                 maximumZoomScale={3}
                                 minimumZoomScale={1}
