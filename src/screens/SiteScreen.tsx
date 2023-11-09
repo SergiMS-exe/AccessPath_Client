@@ -1,7 +1,7 @@
-import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackHeader } from "../components/Headers/StackHeader";
-import { ActivityIndicator, KeyboardAvoidingView, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Site } from "../../@types/Site";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import React, { ReactNode, useContext, useEffect, useState } from "react";

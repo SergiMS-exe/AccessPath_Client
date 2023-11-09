@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackHeader } from '../components/Headers/StackHeader';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MainButton from '../components/MainButton';
 import { sendPhoto } from '../services/PlacesServices';
@@ -10,6 +10,8 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Site } from '../../@types/Site';
 import { CloseSitesContext, LoginContext, MySitesContext } from '../components/Shared/Context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStyles } from '../components/Shared/AppStyles';
+import Snackbar from 'react-native-snackbar';
 
 type RootStackParamList = {
     site: { site: Site };
@@ -31,6 +33,11 @@ const AddPhoto = () => {
     const navigation = useNavigation<StackProps>();
 
     const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
+    const [alternativeText, setAlternativeText] = useState<string>('');
+
+    useEffect(() => {
+        setAlternativeText('');
+    }, [selectedImage])
 
     const openImagePicker = () => {
         const options: ImageLibraryOptions = {
@@ -39,6 +46,8 @@ const AddPhoto = () => {
             maxHeight: 2000,
             maxWidth: 2000,
         };
+
+        dismissKeyboard(); // cierra el teclado si está abierto
 
         launchImageLibrary(options, (response) => {
             if (response.didCancel) {
@@ -53,7 +62,15 @@ const AddPhoto = () => {
     };
 
     const handleSendPhoto = async () => {
-        const response = await sendPhoto(selectedImage!, site, user!._id, user!.nombre);
+        if (alternativeText.length === 0) {
+            Snackbar.show({
+                text: 'Por favor, ingrese un texto alternativo para la foto',
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor: 'red'
+            });
+            return;
+        }
+        const response = await sendPhoto(selectedImage!, site, user!._id, alternativeText);
         if (response.success) {
             navigation.navigate('site', { site: response.newPlace });
             if (response.newPlace) {
@@ -81,41 +98,61 @@ const AddPhoto = () => {
             console.log(response.message);
     };
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StackHeader />
-            <View style={styles.container}>
-                {selectedImage && (
-                    <TouchableOpacity onPress={() => setSelectedImage(undefined)} style={styles.closeButton}>
-                        <Icon name='times' size={30} color="white" />
-                    </TouchableOpacity>
-                )}
-                {selectedImage ? (
-                    <Image
-                        source={{ uri: selectedImage }}
-                        style={{ height: '100%', width: '100%' }}
-                        resizeMode='contain' />
-                ) : (
-                    <View style={styles.noPhotoContainer}>
-                        <Text style={styles.noPhotoText}>No hay foto seleccionada</Text>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+                <StackHeader />
+                <TouchableWithoutFeedback onPress={dismissKeyboard}>
+                    <View style={styles.container}>
+                        {selectedImage && (
+                            <TouchableOpacity onPress={() => setSelectedImage(undefined)} style={styles.closeButton}>
+                                <Icon name='times' size={30} color="white" />
+                            </TouchableOpacity>
+                        )}
+                        {selectedImage ? (
+                            <Image
+                                source={{ uri: selectedImage }}
+                                style={{ height: '100%', width: '100%' }}
+                                resizeMode='contain' />
+                        ) : (
+                            <View style={styles.noPhotoContainer}>
+                                <Text style={styles.noPhotoText}>No hay foto seleccionada</Text>
+                            </View>
+                        )}
                     </View>
-                )}
-            </View>
-            <View style={styles.footerContainer}>
-                <TouchableOpacity onPress={openImagePicker}>
-                    <Icon name='image' size={50} />
-                </TouchableOpacity>
-                {
-                    selectedImage ? (
-                        <MainButton
-                            title='Subir foto' onPress={handleSendPhoto}
-                            titleStyle={{ fontSize: 20, marginLeft: 0 }} />
+                </TouchableWithoutFeedback >
+                <View style={styles.footerContainer}>
+                    <TouchableOpacity onPress={openImagePicker}>
+                        <Icon name='image' size={50} color={AppStyles.mainBlackColor} />
+                    </TouchableOpacity>
+                    {
+                        selectedImage ? (
+                            <MainButton
+                                title='Subir foto' onPress={handleSendPhoto}
+                                titleStyle={{ fontSize: 20, marginLeft: 0 }} />
 
-                    ) : (
-                        <View />
-                    )
+                        ) : (
+                            <View />
+                        )
+                    }
+                </View>
+                {selectedImage &&
+                    <TextInput
+                        style={styles.textInput}
+                        value={alternativeText}
+                        onChangeText={(text) => setAlternativeText(text)}
+                        placeholder='Texto alternativo de la foto...'
+                        placeholderTextColor='white'
+                    />
                 }
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
@@ -146,6 +183,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white'
+    },
+    textInput: {
+        width: '90%',
+        position: 'absolute',
+        bottom: 90,
+        alignSelf: 'center',
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: '#594D59',
+        paddingLeft: 20,
+        color: 'white',
+        fontSize: 18,
+        fontWeight: '600'
     },
     footerContainer: {
         marginVertical: 20,
