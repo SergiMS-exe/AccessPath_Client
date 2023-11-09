@@ -5,13 +5,16 @@ import { LoginContext } from "../../components/Shared/Context";
 import { MyInput } from "../../components/MyInput";
 import DisabilitySelector from "../../components/DisabilitySelector";
 import MainButton from "../../components/MainButton";
-import { updateUserPassword, updateAccount, deleteAccount, logout } from "../../services/UserServices";
+import { updateAccount, deleteAccount, logout } from "../../services/UserServices";
 import Person from "../../../@types/Person";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { TypesOfDisabilitiesValue } from "../../../@types/Valoracion";
 import React from "react";
+import { AppStyles } from "../../components/Shared/AppStyles";
+import { Divider } from "@rneui/themed";
+import Snackbar from "react-native-snackbar";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
@@ -27,19 +30,6 @@ export const EditProfile = () => {
     const [apellidos, setApellidos] = useState(user!.apellidos);
     const [email, setEmail] = useState(user!.email);
     const [tipoDiscapacidad, setTipoDiscapacidad] = useState(user!.tipoDiscapacidad);
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-
-    const handleChangePassword = async () => {
-        if (user && user._id) {
-            const result = await updateUserPassword(user._id, currentPassword, newPassword);
-            Alert.alert(result.success ? 'Contraseña actualizada correctamente' : 'Error: ' + result.message.msg);
-            if (result.success) {
-                setCurrentPassword('');
-                setNewPassword('');
-            }
-        }
-    };
 
     const handleUpdateProfile = async () => {
         //Person con los datos actualizados
@@ -55,7 +45,12 @@ export const EditProfile = () => {
         if (result.success) {
             setUser(updatedUser);
         }
-        Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: ' + result.message);
+        Snackbar.show({
+            text: result.message,
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: result.success ? AppStyles.secondaryBlackColor : AppStyles.mainRedColor,
+        });
+        //Alert.alert(result.success ? 'Perfil actualizado correctamente' : 'Error: ' + result.message);
     };
 
     const handleDisabilityChange = (newValue: TypesOfDisabilitiesValue) => {
@@ -119,31 +114,9 @@ export const EditProfile = () => {
                 {/* Botón Guardar cambios */}
                 <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} />
 
-                {/* Zona de peligro */}
-                <View style={styles.divider}>
-                    <Text style={styles.dividerText}>Zona de peligro</Text>
-                </View>
-                <Text style={styles.changePasswordTitle}>Cambio de contraseña</Text>
-                <View style={styles.changePasswordContainer}>
-                    <MyInput
-                        title="Contraseña actual"
-                        value={currentPassword}
-                        marginHorizontal={17}
-                        onChangeText={setCurrentPassword}
-                    />
-                    <MyInput
-                        title="Nueva contraseña"
-                        value={newPassword}
-                        marginHorizontal={17}
-                        onChangeText={setNewPassword}
-                    />
-                    <MainButton
-                        title='Cambiar contraseña'
-                        color="red"
-                        onPress={() => handleChangePassword()}
-                    />
-                </View>
-                <MainButton title='Borrar cuenta' color="red" onPress={() => handleDeleteAccount()} />
+                <Divider color={AppStyles.mainRedColor} width={1} style={{ marginVertical: 20 }} />
+                <MainButton title='Cambiar contraseña' color={AppStyles.mainRedColor} onPress={() => stackNavigation.navigate('editPassword')} />
+                <MainButton title='Borrar cuenta' color={AppStyles.mainRedColor} onPress={() => handleDeleteAccount()} />
             </ScrollView>
         </SafeAreaView>
     );
@@ -158,7 +131,7 @@ const styles = StyleSheet.create({
     },
     divider: {
         borderBottomWidth: 1,
-        borderBottomColor: 'red',
+        borderBottomColor: AppStyles.mainRedColor,
         marginVertical: 15,
         alignItems: 'center',
     },

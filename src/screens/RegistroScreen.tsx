@@ -12,9 +12,10 @@ interface Props extends NativeStackScreenProps<any, any> { };
 export const RegistroScreen = ({ navigation }: Props) => {
 
     return (
-        <SafeAreaView>
-            <ScrollView automaticallyAdjustKeyboardInsets={true}>
-                <Titulo containerStyle={{ marginTop: 20 }} title='Registro' />
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView automaticallyAdjustKeyboardInsets={true}
+                contentContainerStyle={{ paddingBottom: 30 }}>
+                <Titulo title='Registro' />
 
                 <RegisterForm screenName='home' />
 

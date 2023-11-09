@@ -7,13 +7,10 @@ import { Site } from "../../../@types/Site";
 import SiteWMyItems from '../../components/SiteWMyItems';
 import { ResultList } from "../../components/Card/ResultList";
 import CommentList from "../../components/CommentList";
-import { useIsFocused } from "@react-navigation/native";
 
 export const MyComments = () => {
     const { user } = useContext(LoginContext);
     const { myComments, setMyComments } = useContext(MySitesContext);
-
-    const isFocused = useIsFocused();
 
     const [loading, setLoading] = useState(true);
 

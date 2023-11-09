@@ -118,25 +118,24 @@ export async function updateAccount(person: Person) {
     }).then(() => {
         return { success: true, message: 'Datos actualizados correctamente.' };
     }).catch(error => {
-        console.error(error);
-        return { success: false, message: "No se pudo actualizar el usuario" };
+        return { success: false, message: error.response.data.msg };
     });
 
     return peticion;
 }
 
-export async function updateUserPassword(userId: string, oldPassword: string, newPassword: string) {
+export async function updateUserPassword(userId: string, oldPassword: string, newPassword: string, confirmPassword: string) {
     return axios.put(API_HOST + '/password/' + userId, {
         oldPassword: oldPassword,
-        newPassword: newPassword
+        newPassword: newPassword,
+        confirmNewPassword: confirmPassword
     }).then(() => {
         return { success: true, message: 'Contraseña actualizada correctamente.' };
     }).catch(error => {
         if (error.response && error.response.status === 401) {
-            return { success: false, message: error.response.data };
+            return { success: false, message: error.response.data.msg };
         } else {
-            console.error(error);
-            throw error;
+            return { success: false, message: error.response.data.msg };
         }
     });
 }

@@ -19,6 +19,15 @@ export const AccNoAcc = ({ goTo }: Props) => {
             alignItems: 'center',
             flexDirection: 'column',
             marginTop: 10
+        },
+        text: {
+            fontSize: 16,
+            fontWeight: '500'
+        },
+        coloredText: {
+            fontSize: 16,
+            fontWeight: '500',
+            color: 'blue'
         }
     })
 
@@ -26,16 +35,16 @@ export const AccNoAcc = ({ goTo }: Props) => {
         <View style={styles.accNoAcc}>{
             goTo === 'registro' ? (
                 <>
-                    <Text>¿No tienes cuenta?</Text>
-                    <Text style={{ color: 'blue' }}
+                    <Text style={styles.text}>¿No tienes cuenta?</Text>
+                    <Text style={styles.coloredText}
                         onPress={() => { navigation.navigate('Registro') }}>
                         Registrate
                     </Text>
                 </>
             ) : (
                 <>
-                    <Text>¿Ya tienes una cuenta?</Text>
-                    <Text style={{ color: 'blue' }} onPress={() => { navigation.navigate('Login') }}>
+                    <Text style={styles.text}>¿Ya tienes una cuenta?</Text>
+                    <Text style={styles.coloredText} onPress={() => { navigation.navigate('Login') }}>
                         Inicia Sesion
                     </Text>
                 </>

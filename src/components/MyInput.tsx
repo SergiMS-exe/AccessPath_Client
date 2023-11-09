@@ -1,6 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     title: string;
@@ -18,8 +19,9 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
             marginVertical: 10
         },
         titulo: {
-            fontSize: 15,
-            marginBottom: 7
+            fontSize: 18,
+            marginBottom: 7,
+            color: AppStyles.mainBlackColor
         },
         input: {
             borderColor: '#ccc',

@@ -12,7 +12,7 @@ export const LoginScreen = () => {
     //const user = new Person({_id:1, nombre:'a', apellidos: 'a', email: 'a', tipoDiscapacidad:'a'})
     return (
         <SafeAreaView>
-            <Titulo containerStyle={{ marginTop: 20 }} title='Iniciar Sesion' />
+            <Titulo title='Iniciar Sesion' />
 
             <LoginForm screenName='home' />
 

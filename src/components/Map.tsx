@@ -7,6 +7,7 @@ import { useCard } from '../hooks/useCard';
 import { StyleSheet } from 'react-native';
 import { Site } from '../../@types/Site';
 import { CloseSitesContext, initialFilters } from './Shared/Context';
+import Snackbar from 'react-native-snackbar';
 
 type Props = {
     setShowButton: (show: boolean) => void;
@@ -18,6 +19,7 @@ export const Map = ({ setShowButton }: Props) => {
     const { cardData, handleShowCard, handleCloseCard } = useCard();
 
     const [sitesToShow, setSitesToShow] = useState<Site[]>([]);
+    const [timesPOITouched, setTimesPOITouched] = useState<number>(0);
 
     useEffect(() => {
         if ((filteredSites.length > 0) || (filteredSites.length === 0 && appliedFilters != initialFilters)) {
@@ -37,14 +39,22 @@ export const Map = ({ setShowButton }: Props) => {
         setShowButton(true);
     }
 
+    const handlePressPOI = () => {
+        handlePressMap();
+        setTimesPOITouched(timesPOITouched + 1);
+        if (timesPOITouched >= 2) {
+            Snackbar.show({
+                text: 'Para obtener información de un punto de interés, búscalo en la barra de búsqueda.',
+                duration: Snackbar.LENGTH_SHORT,
+            });
+            setTimesPOITouched(0);
+        }
+    }
+
     return (
         <>
             <MapView
                 onPress={() => {
-                    //Cada vez que se hace click en el mapa se hace llamada api.
-                    //Cuando se hace llamada a api se guardan los resultados en cache junto con un radio.
-                    //Si luego se hace click en otro sitio dentro del radio se usan los datos de cache.
-                    //Si se hace click fuera se hace una nueva llamada
                     handlePressMap();
                 }}
                 provider='google'
@@ -68,7 +78,7 @@ export const Map = ({ setShowButton }: Props) => {
                 //     ]
                 //   }]}
                 onPoiClick={(e) => {
-                    handlePressMap();
+                    handlePressPOI();
                 }}
             >
                 {sitesToShow.map(site =>

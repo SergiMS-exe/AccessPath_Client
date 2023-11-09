@@ -15,6 +15,7 @@ import { logout } from '../services/UserServices';
 import { ProfileScreen } from './ProfileScreen';
 import { AppStyles } from '../components/Shared/AppStyles';
 import { Divider } from '@rneui/themed';
+import { useRatings } from '../hooks/useRatings';
 
 type DrawerButtonProps = {
     screenName?: string;
@@ -51,8 +52,9 @@ const styles = StyleSheet.create({
         paddingTop: 30
     },
     contentHeader: {
-        marginBottom: 10,
-        paddingBottom: 7,
+        marginBottom: 17,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     contentBody: {
         marginTop: 25,
@@ -88,7 +90,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
 
     const { user } = useContext(LoginContext);
 
-
+    const { getDisabilitiesIcon } = useRatings();
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <DrawerContentScrollView style={styles.contentScrollView}
@@ -96,9 +98,11 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                 {user &&
                     <>
                         <View style={styles.contentHeader}>
-                            {/* Nombre y email */}
-                            <Text style={styles.userName}>{user?.nombre} {user?.apellidos}</Text>
-                            <Text style={styles.userEmail}>{user?.email}</Text>
+                            <Icon name={getDisabilitiesIcon(user.tipoDiscapacidad)} size={30} style={{ marginRight: 15 }} solid />
+                            <View>
+                                <Text style={styles.userName}>{user?.nombre} {user?.apellidos}</Text>
+                                <Text style={styles.userEmail}>{user?.email}</Text>
+                            </View>
                         </View>
                         <Divider color={AppStyles.mainBlackColor} width={1} />
                     </>

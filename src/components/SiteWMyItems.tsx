@@ -20,9 +20,11 @@ const SiteWMyItems = ({ site, children }: Props) => {
                 <>
                     <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{site.nombre}</Text>
                     <Text style={styles.address}>{site.direccion}</Text>
+                    <View onStartShouldSetResponder={() => true}>
+                        {children}
+                    </View>
                 </>
             </TouchableOpacity>
-            {children}
         </View>
     );
 };
@@ -34,12 +36,7 @@ const styles = StyleSheet.create({
         borderWidth: AppStyles.border.borderWidth,
         borderRadius: AppStyles.border.borderRadius,
         backgroundColor: AppStyles.white,
-        marginBottom: 12
-    },
-    touchableArea: {
-        backgroundColor: '#f7f7f9',
-        borderRadius: 8,
-        padding: 10,
+        marginBottom: 12,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -47,15 +44,21 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.2,
         shadowRadius: 2,
-        elevation: 2
+        elevation: 5
+    },
+    touchableArea: {
+        borderRadius: 8,
+        padding: 10,
     },
     title: {
         fontSize: AppStyles.card.titleSize,
         marginBottom: 5,
         fontWeight: 'bold',
+        color: AppStyles.mainBlackColor
     },
     address: {
-        marginBottom: 4
+        marginBottom: 4,
+        color: AppStyles.secondaryBlackColor
     },
 });
 

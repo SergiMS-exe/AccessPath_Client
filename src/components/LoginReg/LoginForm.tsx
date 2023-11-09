@@ -2,10 +2,11 @@ import React, { useContext, useRef } from 'react';
 import { MyInput } from '../MyInput';
 import { LoginContext } from '../Shared/Context';
 import { useForm } from '../../hooks/useForm';
-import { Button } from 'react-native';
+import { View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { login } from '../../services/UserServices';
 import { useNavigation } from '@react-navigation/native';
+import MainButton from '../MainButton';
 
 type Props = {
     screenName: string
@@ -17,12 +18,12 @@ export const LoginForm = ({ screenName }: Props) => {
 
     const navigation = useNavigation<StackProps>();
 
-    const { email, password, onChange, valid } = useForm({
+    const { email, password, onChange } = useForm({
         email: "",
         password: ""
     })
 
-    const { setUser, user } = useContext(LoginContext);
+    const { setUser } = useContext(LoginContext);
 
 
     //Refs
@@ -59,8 +60,8 @@ export const LoginForm = ({ screenName }: Props) => {
                 ref={passwordRef}
                 onKeyPress={(event) => handleKeyPress(event, emailRef)} />
 
-            <Button title='Iniciar Sesión'
-                onPress={handleLogin} />
+            <View style={{ height: 30 }} />
+            <MainButton title='Iniciar sesión' onPress={handleLogin} />
         </>
     )
 }

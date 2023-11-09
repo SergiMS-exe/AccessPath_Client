@@ -9,8 +9,8 @@ import { AppStyles } from './Shared/AppStyles';
 type CommentProps = {
     comment: CommentType;
     updateComments: (comment: CommentType, wantsToDelete: boolean) => void;
-    onEditFocus: () => void;
-    onEditBlur: () => void;
+    onEditFocus?: () => void;
+    onEditBlur?: () => void;
     placeId: string;
 }
 
@@ -62,10 +62,20 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                 />
 
                 <View style={styles.editingbuttonsContainer}>
-                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, }} onPress={() => { handleEdit(), onEditBlur() }}>
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, }}
+                        onPress={() => {
+                            handleEdit();
+                            if (onEditBlur)
+                                onEditBlur()
+                        }}>
                         <Icon name="check" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => { setIsEditing(false), onEditBlur() }}>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }}
+                        onPress={() => {
+                            setIsEditing(false);
+                            if (onEditBlur)
+                                onEditBlur()
+                        }}>
                         <Icon name="times" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                 </View>
@@ -110,6 +120,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginVertical: 5,
+        backgroundColor: AppStyles.white
     },
     commentText: {
         fontSize: 18,

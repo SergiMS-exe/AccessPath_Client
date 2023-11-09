@@ -10,6 +10,8 @@ import { FisicaEnum, SensorialEnum, PsiquicaEnum, Valoracion, FisicaKey, Sensori
 import { Site } from "../../@types/Site";
 import { CloseSitesContext, LoginContext, MySitesContext } from "../components/Shared/Context";
 import Snackbar from "react-native-snackbar";
+import { AppStyles } from "../components/Shared/AppStyles";
+import MainButton from "../components/MainButton";
 
 const data = [
     {
@@ -49,15 +51,13 @@ export const FormScreen = () => {
         valoracion || {} as Valoracion
     );
     const [hasError, setHasError] = useState(false);
-    const [expandedSections, setExpandedSections] = useState<string[]>([]);
+    const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
 
     const toggleSection = (sectionTitle: string) => {
-        setExpandedSections(prevSections => {
-            if (prevSections.includes(sectionTitle)) {
-                return prevSections.filter(title => title !== sectionTitle);
-            } else {
-                return [...prevSections, sectionTitle];
-            }
+        setExpandedSection(prevSection => {
+            // Si la sección ya está expandida, la cerramos. Si no, la expandimos.
+            return prevSection === sectionTitle ? null : sectionTitle;
         });
     };
 
@@ -187,7 +187,7 @@ export const FormScreen = () => {
                 sections={data}
                 keyExtractor={(item, index) => item + index}
                 renderItem={({ section, item }) => (
-                    expandedSections.includes(section.title) ? (
+                    expandedSection === section.title ? (
                         <RadioButtonGroup
                             text={item}
                             initialValue={getInitialValue(section.title, item)}
@@ -202,15 +202,14 @@ export const FormScreen = () => {
                         <Icon
                             size={24}
                             style={styles.iconStyle}
-                            name={expandedSections.includes(title) ? 'chevron-up' : 'chevron-down'} />
+                            name={expandedSection === title ? 'chevron-up' : 'chevron-down'}
+                            color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
                 )}
                 stickySectionHeadersEnabled={false}
             />
             {hasError && <Text style={styles.errorMessage}>Se debe valorar algún campo antes de enviar</Text>}
-            <TouchableOpacity style={styles.saveButton} onPress={saveChangesAsync}>
-                <Text style={styles.saveButtonText}>Guardar Cambios</Text>
-            </TouchableOpacity>
+            <MainButton title="Guardar Cambios" onPress={saveChangesAsync} />
         </SafeAreaView>
     );
 };
@@ -227,7 +226,8 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 32,
-        backgroundColor: '#fff',
+        color: AppStyles.mainBlackColor,
+        fontWeight: 'bold',
     },
     sectionHeader: {
         flexDirection: 'row',

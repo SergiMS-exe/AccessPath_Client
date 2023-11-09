@@ -90,6 +90,7 @@ const PhotoDetailScreen = () => {
                         Snackbar.show({
                             text: deleteResponse.message,
                             duration: Snackbar.LENGTH_SHORT,
+                            backgroundColor: deleteResponse.success ? AppStyles.secondaryBlackColor : AppStyles.mainRedColor
                         });
                         // Si la foto se eliminó correctamente, actualizar el estado
                         if (deleteResponse.success && 'newPlace' in deleteResponse) {
@@ -108,7 +109,7 @@ const PhotoDetailScreen = () => {
                             ));
 
                             if (photosInView.length === 1) {
-                                setMyPhotos(myPhotos.filter(deletedSite => deletedSite.placeId !== site.placeId));
+                                setMyPhotos(myPhotos.filter(deletedSite => deletedSite.placeId !== newPlace.placeId));
                                 setPhotosInView([]);
                             }
                             else {

@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: 18,
         fontWeight: '500',
-        color: AppStyles.fontColorBlack,
+        color: AppStyles.secondaryBlackColor,
         paddingBottom: 10,
         textAlign: 'center'
     },

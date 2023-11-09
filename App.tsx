@@ -21,6 +21,7 @@ import PhotoDetailScreen from './src/screens/PhotoDetailScreen';
 import MyPhotos from './src/screens/Profile/MyPhotos';
 import useSitesContext from './src/hooks/useSitesContext';
 import useMySites from './src/hooks/useMySites';
+import EditPassword from './src/screens/EditPassword';
 
 enableLatestRenderer();
 
@@ -52,6 +53,7 @@ function App() {
                                 <Stack.Screen name='form' component={FormScreen} />
                                 {/* Parte del profile */}
                                 <Stack.Screen name='editProfile' component={EditProfile} />
+                                <Stack.Screen name='editPassword' component={EditPassword} />
                                 <Stack.Screen name='myComments' component={MyComments} />
                                 <Stack.Screen name='myRatings' component={MyRatings} />
                                 <Stack.Screen name='myPhotos' component={MyPhotos} />

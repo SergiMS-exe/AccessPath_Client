@@ -30,7 +30,7 @@ export const RadioButtonGroup = ({ text, onSelectionChange, initialValue = 0 }: 
                     </TouchableOpacity>
                 ))}
                 <TouchableOpacity style={styles.radioButton} onPress={() => handlePress(0)}>
-                    <Text style={styles.respuesta}>No sé</Text>
+                    <Text style={{ ...styles.respuesta, fontSize: 16 }}>Ns/Nc</Text>
                     <Icon style={styles.icono} name="dot-circle" solid={selected === 0} />
                 </TouchableOpacity>
             </View>
@@ -50,27 +50,32 @@ const styles = StyleSheet.create({
     },
     radioButton: {
         alignItems: 'center',
-        margin: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
     },
     categoria: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 20,
         flex: 1,
+        color: AppStyles.mainBlackColor,
+        paddingRight: 10,
     },
     respuestas: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        flex: 1,
+        //flex: 1,
+        width: '60%'
     },
     respuesta: {
         alignSelf: 'center',
         marginLeft: 5,
         marginRight: 6,
-        color: '#333', // Dark gray
+        color: AppStyles.mainBlackColor,
+        fontSize: 18
     },
     icono: {
         marginTop: 5,
-        fontSize: 20,
+        fontSize: 22,
         color: AppStyles.mainBlueColor, // Blue color
     }
 })
