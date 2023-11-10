@@ -22,12 +22,14 @@ export const ListCard = ({ site }: Props) => {
 
     const navigation = useNavigation<StackProps>();
 
-    const [siteToShow, setSiteToShow] = useState<Site>({ ...site });
+    const [siteToShow, setSiteToShow] = useState<Site>(site);
 
     const imageUris = usePhotos(siteToShow.fotos);
 
     useFocusEffect(() => {
-        setSiteToShow(sites.find(s => s.placeId === site.placeId)!);
+        const siteFound = sites.find(s => s.placeId === site.placeId);
+        if (siteFound)
+            setSiteToShow(siteFound);
     })
 
     return (
