@@ -69,7 +69,7 @@ export const Map = ({ setShowButton }: Props) => {
                     longitudeDelta: 0.0121,
                 }}
                 maxZoomLevel={19}
-                minZoomLevel={10}
+                minZoomLevel={8}
                 loadingEnabled={true}
                 // customMapStyle={[{
                 //     "featureType": "poi",
