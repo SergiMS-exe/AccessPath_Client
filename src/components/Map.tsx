@@ -78,7 +78,7 @@ export const Map = ({ setShowButton }: Props) => {
                 //     ]
                 //   }]}
                 onPoiClick={(e) => {
-                    handlePressPOI();
+                    //handlePressPOI();
                 }}
             >
                 {sitesToShow.map(site =>
@@ -93,6 +93,7 @@ export const Map = ({ setShowButton }: Props) => {
                             handlePressMarker(site)
                         }}
                         title={site.nombre}
+                        style={{ zIndex: 10 }}
                     />
                 )}
             </MapView>

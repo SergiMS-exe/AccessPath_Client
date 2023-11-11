@@ -7,8 +7,14 @@ import { AppStyles } from '../components/Shared/AppStyles';
 import { LoginContext } from "../components/Shared/Context";
 import { updateUserPassword } from "../services/UserServices";
 import Snackbar from "react-native-snackbar";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type StackProps = NativeStackNavigationProp<any, any>;
 
 const EditPassword = () => {
+
+    const navigation = useNavigation<StackProps>();
 
     const { user } = useContext(LoginContext)
 
@@ -23,13 +29,13 @@ const EditPassword = () => {
                 setCurrentPassword('');
                 setNewPassword('');
                 setConfirmNewPassword('');
-            } else {
-                Snackbar.show({
-                    text: result.message,
-                    duration: Snackbar.LENGTH_LONG,
-                    backgroundColor: AppStyles.mainRedColor,
-                });
+                navigation.goBack();
             }
+            Snackbar.show({
+                text: result.message,
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor: result.success ? AppStyles.secondaryBlackColor : AppStyles.mainRedColor,
+            });
         }
     };
 

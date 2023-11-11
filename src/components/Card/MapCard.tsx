@@ -32,7 +32,7 @@ export const MapCard = ({ site }: Props) => {
     })
 
     return (
-        <TouchableOpacity style={{ ...styles.container, height: heightConditional }} onPress={() => navigation.navigate("site", { site: siteToShow })}>
+        <TouchableOpacity style={{ ...styles.container }} onPress={() => navigation.navigate("site", { site: siteToShow })}>
             {imageUris.length > 0 && <Image source={{ uri: imageUris[0] }} style={styles.image} />}
             <View style={styles.titleContainer}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{siteToShow.nombre}</Text>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 10,
         borderRadius: 20,
-        padding: 15,
+        padding: 12,
     },
     titleContainer: {
         flexDirection: "row",

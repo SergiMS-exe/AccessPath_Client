@@ -7,11 +7,12 @@ type Props = {
     iconName?: string;
     color?: string;
     titleStyle?: Object;
+    containerStyle?: Object;
 }
 
-const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle }: Props) => {
+const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle, containerStyle }: Props) => {
     return (
-        <TouchableOpacity accessible style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
+        <TouchableOpacity accessible style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}>
             {iconName && <Icon name={iconName} style={styles.icon} solid />}
             <Text style={{ ...styles.buttonText, ...titleStyle }}>{title}</Text>
         </TouchableOpacity>

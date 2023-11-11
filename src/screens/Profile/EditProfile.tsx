@@ -44,6 +44,7 @@ export const EditProfile = () => {
         const result = await updateAccount(updatedUser);
         if (result.success) {
             setUser(updatedUser);
+            stackNavigation.goBack();
         }
         Snackbar.show({
             text: result.message,
@@ -115,7 +116,7 @@ export const EditProfile = () => {
                 <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} />
 
                 <Divider color={AppStyles.mainRedColor} width={1} style={{ marginVertical: 20 }} />
-                <MainButton title='Cambiar contraseña' color={AppStyles.mainRedColor} onPress={() => stackNavigation.navigate('editPassword')} />
+                <MainButton containerStyle={{ borderColor: AppStyles.mainRedColor, borderWidth: 2 }} titleStyle={{ color: AppStyles.mainRedColor }} title='Cambiar contraseña' color='white' onPress={() => stackNavigation.navigate('editPassword')} />
                 <MainButton title='Borrar cuenta' color={AppStyles.mainRedColor} onPress={() => handleDeleteAccount()} />
             </ScrollView>
         </SafeAreaView>

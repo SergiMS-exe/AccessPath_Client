@@ -98,7 +98,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                 {user &&
                     <>
                         <View style={styles.contentHeader}>
-                            <Icon name={getDisabilitiesIcon(user.tipoDiscapacidad)} size={30} style={{ marginRight: 15 }} solid />
+                            <Icon name={getDisabilitiesIcon(user.tipoDiscapacidad)} size={30} style={{ marginRight: 15, color: AppStyles.mainBlackColor }} solid />
                             <View>
                                 <Text style={styles.userName}>{user?.nombre} {user?.apellidos}</Text>
                                 <Text style={styles.userEmail}>{user?.email}</Text>
