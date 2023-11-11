@@ -104,7 +104,7 @@ export async function sendRating(valoracion: Valoracion, site: Site, userId: str
     const siteToSend = removePhotosFromSite(site);
 
     const response = await axios.post(API_HOST + '/review', {
-        place: siteToSend,
+        site: siteToSend,
         usuarioId: userId,
         review: valoracion
     }).then((response) => {
