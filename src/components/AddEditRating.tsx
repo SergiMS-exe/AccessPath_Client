@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { AppStyles } from "./Shared/AppStyles";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -79,11 +80,13 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
             {valoracion ? (
                 <>
                     <TouchableOpacity
+                        accessible accessibilityRole='button' accessibilityHint='Editar Valoración'
                         onPress={() => navigation.navigate('form', { site, valoracion, calledFrom })}
                         style={[styles.aButton, styles.editButton]}>
                         <Text style={styles.text}>Editar Valoración</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        accessible accessibilityRole='button' accessibilityHint='Eliminar Valoración'
                         onPress={handleDelete}
                         style={[styles.aButton, styles.deleteButton]}>
                         <Icon name="trash" size={18} color='white' />
@@ -91,6 +94,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                 </>
             ) : (
                 <TouchableOpacity
+                    accessible accessibilityRole='button' accessibilityHint='Añadir Valoración'
                     style={[styles.aButton, styles.addButton]}
                     onPress={() => navigation.navigate('form', { site, calledFrom })}>
                     <Text style={styles.text}>Añadir Valoración</Text>

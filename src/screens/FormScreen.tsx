@@ -142,39 +142,40 @@ export const FormScreen = () => {
         if (Object.keys(selectedValues).length === 0) {
             Snackbar.show({ text: 'Se debe valorar algún campo antes de enviar', duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
             return;
-        }
-
-        const response = valoracion
-            ? await editRating(selectedValues, site.placeId, user!._id)
-            : await sendRating(selectedValues, site, user!._id);
-
-        if (!response.success || !("newPlace" in response)) { //Si no se ha podido enviar la valoración
-            Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
-            return;
-        }
-
-        const newSite = { ...response.newPlace };
-
-        //Actualizamos el sitio en la lista de sitios cercanos
-        site.valoraciones = response.newPlace.valoraciones;
-        const newSites = sites.map(s => s.placeId === site.placeId ? site : s);
-        setSites(newSites);
-
-
-        let newRatings = [...myRatings];
-
-        if (valoracion) {
-            const index = newRatings.findIndex(rating => rating.site.placeId === site.placeId);
-            if (index !== -1) newRatings[index] = { site: newSite, valoracion: selectedValues };
         } else {
-            newRatings.push({ site: newSite, valoracion: selectedValues });
-        }
 
-        setMyRatings(newRatings);
-        if (calledFrom === 'site') {
-            navigation.navigate('site', { site: newSite });
-        } else {
-            navigation.navigate('myRatings');
+            const response = valoracion
+                ? await editRating(selectedValues, site.placeId, user!._id)
+                : await sendRating(selectedValues, site, user!._id);
+
+            if (!response.success || !("newPlace" in response)) { //Si no se ha podido enviar la valoración
+                Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
+                return;
+            }
+
+            const newSite = { ...response.newPlace };
+
+            //Actualizamos el sitio en la lista de sitios cercanos
+            site.valoraciones = response.newPlace.valoraciones;
+            const newSites = sites.map(s => s.placeId === site.placeId ? site : s);
+            setSites(newSites);
+
+
+            let newRatings = [...myRatings];
+
+            if (valoracion) {
+                const index = newRatings.findIndex(rating => rating.site.placeId === site.placeId);
+                if (index !== -1) newRatings[index] = { site: newSite, valoracion: selectedValues };
+            } else {
+                newRatings.push({ site: newSite, valoracion: selectedValues });
+            }
+
+            setMyRatings(newRatings);
+            if (calledFrom === 'site') {
+                navigation.navigate('site', { site: newSite });
+            } else {
+                navigation.navigate('myRatings');
+            }
         }
     }
 

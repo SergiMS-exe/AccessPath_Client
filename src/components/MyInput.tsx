@@ -49,7 +49,9 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
     const isPassword = title.toLowerCase().includes('contraseña')
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container}
+            accessibilityValue={value ? { text: value } : { text: title }} accessibilityHint={'introduzca: ' + title}
+            accessible accessibilityRole='text'>
             <Text style={styles.titulo}>{title}</Text>
             {isPassword ? (
                 <View style={styles.passwordContainer}>

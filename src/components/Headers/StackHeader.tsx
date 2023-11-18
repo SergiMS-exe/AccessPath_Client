@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -19,7 +20,8 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
     const { user } = useContext(LoginContext);
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}>
+            <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}
+                accessible accessibilityRole='button' accessibilityHint="Volver a la pantalla anterior" accessibilityLabel='Volver'>
                 <Icon name='arrow-left' size={35} color={AppStyles.mainBlackColor} />
             </TouchableOpacity>
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -12,7 +13,8 @@ type Props = {
 
 const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle, containerStyle }: Props) => {
     return (
-        <TouchableOpacity accessible style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}>
+        <TouchableOpacity accessible accessibilityRole='button' accessibilityHint={title} accessibilityLabel={title}
+            style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}>
             {iconName && <Icon name={iconName} style={styles.icon} solid />}
             <Text style={{ ...styles.buttonText, ...titleStyle }}>{title}</Text>
         </TouchableOpacity>

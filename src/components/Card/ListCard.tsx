@@ -1,3 +1,4 @@
+import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AppStyles } from "../Shared/AppStyles";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -33,7 +34,9 @@ export const ListCard = ({ site }: Props) => {
     })
 
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("site", { site: siteToShow })} style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate("site", { site: siteToShow })} style={styles.container}
+            accessible accessibilityHint={"Ver detalles de " + site.nombre + " en " + site.direccion} accessibilityRole="button"
+            accessibilityLabel={site.nombre}>
             {imageUris.length > 0 && <Image source={{ uri: imageUris[0] }} style={styles.image} />}
             <View style={styles.titleContainer}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{siteToShow.nombre}</Text>

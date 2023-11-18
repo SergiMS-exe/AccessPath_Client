@@ -34,8 +34,8 @@ export const SavedScreen = () => {
                 console.error("Error al obtener sitios guardados: ", error);
             }
         };
-
-        getSites();
+        if (isFocused)
+            getSites();
 
     }, [isFocused]);
 

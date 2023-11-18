@@ -21,7 +21,7 @@ const PhotoCarousel = ({ photos }: Props) => {
         // Si hay fotos
         if (photos && photos.length > 0 && imageUris) {
             return imageUris.map((uri: string, index: number) => (
-                <TouchableOpacity key={index}
+                <TouchableOpacity key={index} accessible accessibilityRole='button' accessibilityLabel={photos[index] && photos[index].alternativeText}
                     onPress={() => navigation.navigate('photoDetail', { photos, index })}
                     style={styles.slide}>
                     <Image source={{ uri: uri }} style={styles.image} />

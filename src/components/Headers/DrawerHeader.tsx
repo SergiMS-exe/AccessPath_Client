@@ -23,16 +23,24 @@ const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Prop
 
     const isInSearch = route.name == 'Search'
 
+    const accessibilityHint = isInSearch ? 'Volver a la pantalla anterior' : 'Abrir el menu lateral';
+    const accessibilityLabel = isInSearch ? 'Volver' : 'Menu lateral';
+
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}>
+                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}
+                    accessible accessibilityHint={accessibilityHint} accessibilityRole='button' accessibilityLabel={accessibilityLabel}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} color={AppStyles.mainBlackColor} />
                 </TouchableOpacity>
                 {title ? (
                     <Text style={styles.titleText}>{title}</Text>
                 ) : searchBar ? (
                     <SearchBar
+                        accessibilityValue={searchText ? { text: searchText } : { text: 'Busca un sitio para valorar...' }}
+                        accessibilityRole='search'
+                        accessible
+                        accessibilityLabel='Buscador de sitios'
                         containerStyle={styles.searchBar}
                         inputContainerStyle={styles.searchBarInput}
                         inputStyle={{ color: '#727272' }}
