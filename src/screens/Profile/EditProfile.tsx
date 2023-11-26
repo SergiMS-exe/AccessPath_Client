@@ -15,6 +15,7 @@ import React from "react";
 import { AppStyles } from "../../components/Shared/AppStyles";
 import { Divider } from "@rneui/themed";
 import Snackbar from "react-native-snackbar";
+import { useLoading } from "../../hooks/useLoading";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
@@ -31,7 +32,10 @@ export const EditProfile = () => {
     const [email, setEmail] = useState(user!.email);
     const [tipoDiscapacidad, setTipoDiscapacidad] = useState(user!.tipoDiscapacidad);
 
+    const { isLoading, loading, stopLoading } = useLoading();
+
     const handleUpdateProfile = async () => {
+        loading();
         //Person con los datos actualizados
         const updatedUser = new Person({
             _id: user!._id,
@@ -42,6 +46,7 @@ export const EditProfile = () => {
         });
         //Llamada a la API para actualizar el perfil
         const result = await updateAccount(updatedUser);
+        stopLoading();
         if (result.success) {
             setUser(updatedUser);
             stackNavigation.goBack();
@@ -113,7 +118,7 @@ export const EditProfile = () => {
                 />
 
                 {/* Botón Guardar cambios */}
-                <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} />
+                <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} loading={isLoading} />
 
                 <Divider color={AppStyles.mainRedColor} width={1} style={{ marginVertical: 20 }} />
                 <MainButton containerStyle={{ borderColor: AppStyles.mainRedColor, borderWidth: 2 }} titleStyle={{ color: AppStyles.mainRedColor }} title='Cambiar contraseña' color='white' onPress={() => stackNavigation.navigate('editPassword')} />
@@ -155,5 +160,4 @@ const styles = StyleSheet.create({
     deleteButton: {
         backgroundColor: 'red',
     }
-
 })

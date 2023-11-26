@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Animated, StyleSheet, Keyboard } from 'react-native';
+import { View, TextInput, TouchableOpacity, Animated, StyleSheet, Keyboard, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
 import { sendComment } from '../services/PlacesServices';
+import { useLoading } from '../hooks/useLoading';
 
 type Props = {
     user: Person,
@@ -18,6 +19,8 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent, onFo
     const [height, setHeight] = useState(50);
     const [commentText, setCommentText] = useState('')
     const animatedValue = useRef(new Animated.Value(0)).current;
+
+    const { isLoading, loading, stopLoading } = useLoading();
 
     const handleFocus = () => {
         setIsFocused(true);
@@ -62,8 +65,10 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent, onFo
     };
 
     const sendCommentAndClear = async () => {
+        loading();
         Keyboard.dismiss();
         const newComment = await sendComment(user, site, commentText);
+        stopLoading();
         setCommentText("");
         onCommentSent({ '_id': newComment._id, 'texto': newComment.texto, 'usuario': { '_id': newComment.usuario?._id, 'nombre': newComment.usuario?.nombre, 'apellidos': newComment.usuario?.apellidos } });
     }
@@ -71,8 +76,11 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent, onFo
     return (
         <View style={styles.container}>
             <Animated.View style={[styles.sendButtonContainer, sendButtonContainerStyle]}>
-                <TouchableOpacity style={styles.sendButton} onPress={sendCommentAndClear}>
-                    <Icon name="paper-plane" style={styles.sendButtonIcon} />
+                <TouchableOpacity style={styles.sendButton} onPress={sendCommentAndClear} disabled={isLoading}>
+                    {
+                        isLoading ?
+                            <ActivityIndicator color="white" size='small' /> :
+                            <Icon name="paper-plane" style={styles.sendButtonIcon} />}
                 </TouchableOpacity>
             </Animated.View>
 

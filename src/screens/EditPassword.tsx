@@ -9,6 +9,7 @@ import { updateUserPassword } from "../services/UserServices";
 import Snackbar from "react-native-snackbar";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useLoading } from "../hooks/useLoading";
 
 type StackProps = NativeStackNavigationProp<any, any>;
 
@@ -22,9 +23,13 @@ const EditPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
+    const { isLoading, loading, stopLoading } = useLoading();
+
     const handleChangePassword = async () => {
         if (user && user._id) {
+            loading();
             const result = await updateUserPassword(user._id, currentPassword, newPassword, confirmNewPassword);
+            stopLoading();
             if (result.success) {
                 setCurrentPassword('');
                 setNewPassword('');
@@ -66,7 +71,7 @@ const EditPassword = () => {
                 title='Cambiar contraseña'
                 color={AppStyles.mainRedColor}
                 onPress={() => handleChangePassword()}
-
+                loading={isLoading}
             />
         </SafeAreaView>
     );

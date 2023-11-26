@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 type Props = {
@@ -9,14 +9,23 @@ type Props = {
     color?: string;
     titleStyle?: Object;
     containerStyle?: Object;
+    loading?: boolean;
 }
 
-const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle, containerStyle }: Props) => {
+const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle, containerStyle, loading = false }: Props) => {
     return (
         <TouchableOpacity accessible accessibilityRole='button' accessibilityHint={title} accessibilityLabel={title}
-            style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}>
-            {iconName && <Icon name={iconName} style={styles.icon} solid />}
-            <Text style={{ ...styles.buttonText, ...titleStyle }}>{title}</Text>
+            style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}
+            disabled={loading === true}>
+            {loading ?
+                <ActivityIndicator size="small" color="white" /> :
+                (
+                    <>
+                        {iconName && <Icon name={iconName} style={styles.icon} solid />}
+                        <Text style={{ ...styles.buttonText, ...titleStyle }}>{title}</Text>
+                    </>
+                )
+            }
         </TouchableOpacity>
     );
 }

@@ -11,6 +11,7 @@ import { CloseSitesContext, LoginContext, MySitesContext } from '../components/S
 import { deletePhoto } from '../services/PlacesServices';
 import Snackbar from 'react-native-snackbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useLoading } from '../hooks/useLoading';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,6 +44,7 @@ const PhotoDetailScreen = () => {
     const [isModified, setIsModified] = useState<boolean>(false);
 
     const imageUris = usePhotos(photosInView);
+    const { isLoading, loading, stopLoading } = useLoading();
 
     const onGoBack = useCallback(() => {
         // if (isModified) {
@@ -85,8 +87,9 @@ const PhotoDetailScreen = () => {
                 {
                     text: "Eliminar",
                     onPress: async () => {
-
+                        loading();
                         const deleteResponse = await deletePhoto(photosInView[photoIndex]._id);
+                        stopLoading();
                         Snackbar.show({
                             text: deleteResponse.message,
                             duration: Snackbar.LENGTH_SHORT,
@@ -167,7 +170,7 @@ const PhotoDetailScreen = () => {
                             </ScrollView>
                             {/* Verificar si el usuario es el autor de la foto */}
                             {photos[idx].usuarioId === user?._id && (
-                                <MainButton title='Borrar foto' color={AppStyles.mainRedColor} onPress={() => handleDeletePhoto(idx)} />
+                                <MainButton title='Borrar foto' color={AppStyles.mainRedColor} onPress={() => handleDeletePhoto(idx)} loading={isLoading} />
                             )}
                         </View>
                     )) : (

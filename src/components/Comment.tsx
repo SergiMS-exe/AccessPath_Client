@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { LoginContext } from './Shared/Context';
 import { deleteComment, editComment } from '../services/PlacesServices';
 import { CommentType } from '../../@types/CommentType';
 import { AppStyles } from './Shared/AppStyles';
+import { useLoading } from '../hooks/useLoading';
+import Snackbar from 'react-native-snackbar';
 
 type CommentProps = {
     comment: CommentType;
@@ -22,8 +24,20 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
 
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const { isLoading, loading, stopLoading } = useLoading();
+
     const handleEdit = async () => {
+        if (newText.length <= 0) {
+            Snackbar.show({
+                text: 'El comentario no puede estar vacío',
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor: 'red',
+            });
+            return;
+        }
+        loading();
         const newComment = await editComment(placeId, comment._id, newText); //tiene _id, texto y usuarioId
+        stopLoading();
 
         if (newComment) {
             const realComment: CommentType = new CommentType(
@@ -41,7 +55,9 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
     }
 
     const handleDeleting = async () => {
+        loading();
         await deleteComment(placeId, comment._id)
+        stopLoading();
         setIsDeleting(false)
         updateComments(comment, true)
     }
@@ -67,15 +83,19 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                             handleEdit();
                             if (onEditBlur)
                                 onEditBlur()
-                        }}>
-                        <Icon name="check" style={styles.sendButtonIcon} />
+                        }} disabled={isLoading}>
+                        {
+                            isLoading ?
+                                <ActivityIndicator color="white" size='small' /> :
+                                <Icon name="check" style={styles.sendButtonIcon} />
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }}
                         onPress={() => {
                             setIsEditing(false);
                             if (onEditBlur)
                                 onEditBlur()
-                        }}>
+                        }} disabled={isLoading}>
                         <Icon name="times" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                 </View>
@@ -87,10 +107,13 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                 <Text style={styles.commentText}>{comment.texto}</Text>
                 <Text style={styles.commentUser}>{displayedName}</Text>
                 <View style={styles.editingbuttonsContainer}>
-                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting}>
-                        <Icon name="trash" style={styles.sendButtonIcon} />
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting} disabled={isLoading}>
+                        {isLoading ?
+                            <ActivityIndicator color="white" size='small' /> :
+                            <Icon name="trash" style={styles.sendButtonIcon} />
+                        }
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsDeleting(false)}>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsDeleting(false)} disabled={isLoading}>
                         <Icon name="times" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                 </View>

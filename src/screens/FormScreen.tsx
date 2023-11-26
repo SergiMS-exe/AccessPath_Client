@@ -12,6 +12,7 @@ import { CloseSitesContext, LoginContext, MySitesContext } from "../components/S
 import Snackbar from "react-native-snackbar";
 import { AppStyles } from "../components/Shared/AppStyles";
 import MainButton from "../components/MainButton";
+import { useLoading } from "../hooks/useLoading";
 
 const data = [
     {
@@ -53,6 +54,7 @@ export const FormScreen = () => {
     const [hasError, setHasError] = useState(false);
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
+    const { isLoading, loading, stopLoading } = useLoading();
 
     const toggleSection = (sectionTitle: string) => {
         setExpandedSection(prevSection => {
@@ -143,11 +145,11 @@ export const FormScreen = () => {
             Snackbar.show({ text: 'Se debe valorar algún campo antes de enviar', duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
             return;
         } else {
-
+            loading();
             const response = valoracion
                 ? await editRating(selectedValues, site.placeId, user!._id)
                 : await sendRating(selectedValues, site, user!._id);
-
+            stopLoading();
             if (!response.success || !("newPlace" in response)) { //Si no se ha podido enviar la valoración
                 Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
                 return;
@@ -210,7 +212,7 @@ export const FormScreen = () => {
                 stickySectionHeadersEnabled={false}
             />
             {hasError && <Text style={styles.errorMessage}>Se debe valorar algún campo antes de enviar</Text>}
-            <MainButton title="Guardar Cambios" onPress={saveChangesAsync} />
+            <MainButton title="Guardar Cambios" onPress={saveChangesAsync} loading={isLoading} />
         </SafeAreaView>
     );
 };

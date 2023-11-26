@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { AppStyles } from "./Shared/AppStyles";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Site } from "../../@types/Site";
@@ -10,6 +10,7 @@ import { deleteRating } from "../services/PlacesServices";
 import Snackbar from "react-native-snackbar";
 import { useContext, useEffect } from "react";
 import { CloseSitesContext, LoginContext, MySitesContext } from "./Shared/Context";
+import { useLoading } from '../hooks/useLoading';
 
 type Props = {
     site: Site;
@@ -23,6 +24,8 @@ type StackProps = NativeStackNavigationProp<any, any>;
 
 export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDeleted, calledFrom }: Props) => {
     const navigation = useNavigation<StackProps>();
+
+    const { isLoading, loading, stopLoading } = useLoading();
 
     const { myRatings, setMyRatings } = useContext(MySitesContext);
     const { setSites, sites } = useContext(CloseSitesContext);
@@ -49,7 +52,9 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                                 });
                                 return;
                             }
+                            loading();
                             const response = await deleteRating(site.placeId, user._id);
+                            stopLoading();
                             if (!response.success) {
                                 Snackbar.show({
                                     text: response.message,
@@ -82,14 +87,18 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                     <TouchableOpacity
                         accessible accessibilityRole='button' accessibilityHint='Editar Valoración'
                         onPress={() => navigation.navigate('form', { site, valoracion, calledFrom })}
-                        style={[styles.aButton, styles.editButton]}>
+                        style={[styles.aButton, styles.editButton]} disabled={isLoading}>
                         <Text style={styles.text}>Editar Valoración</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         accessible accessibilityRole='button' accessibilityHint='Eliminar Valoración'
                         onPress={handleDelete}
-                        style={[styles.aButton, styles.deleteButton]}>
-                        <Icon name="trash" size={18} color='white' />
+                        style={[styles.aButton, styles.deleteButton]} disabled={isLoading}>
+                        {
+                            isLoading ?
+                                <ActivityIndicator size="small" color="white" /> :
+                                <Icon name="trash" size={18} color='white' />
+                        }
                     </TouchableOpacity>
                 </>
             ) : (

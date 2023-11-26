@@ -12,6 +12,7 @@ import { CloseSitesContext, LoginContext, MySitesContext } from '../components/S
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStyles } from '../components/Shared/AppStyles';
 import Snackbar from 'react-native-snackbar';
+import { useLoading } from '../hooks/useLoading';
 
 type RootStackParamList = {
     site: { site: Site };
@@ -34,6 +35,8 @@ const AddPhoto = () => {
 
     const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
     const [alternativeText, setAlternativeText] = useState<string>('');
+
+    const { isLoading, loading, stopLoading } = useLoading();
 
     useEffect(() => {
         setAlternativeText('');
@@ -70,7 +73,9 @@ const AddPhoto = () => {
             });
             return;
         }
+        loading();
         const response = await sendPhoto(selectedImage!, site, user!._id, alternativeText);
+        stopLoading();
         if (response.success) {
             navigation.navigate('site', { site: response.newPlace });
             if (response.newPlace) {
@@ -136,7 +141,8 @@ const AddPhoto = () => {
                         selectedImage ? (
                             <MainButton
                                 title='Subir foto' onPress={handleSendPhoto}
-                                titleStyle={{ fontSize: 20, marginLeft: 0 }} />
+                                titleStyle={{ fontSize: 20, marginLeft: 0 }}
+                                loading={isLoading} />
 
                         ) : (
                             <View />
