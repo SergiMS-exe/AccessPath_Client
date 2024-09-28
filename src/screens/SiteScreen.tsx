@@ -241,7 +241,7 @@ export const SiteScreen = () => {
     };
 
 
-    const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
+    const googleMapsLink = site.link || `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

@@ -1,9 +1,7 @@
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Location, Photo, Site } from "../../@types/Site";
+import { REMOTE } from "@env";
+import { Location, Site } from "../../@types/Site";
 import Person from "../../@types/Person";
-import { Platform } from "react-native";
-import { LOCALHOST_ANDROID, LOCALHOST_IOS, REMOTE } from "@env";
 import { CommentType } from "../../@types/CommentType";
 import { Valoracion } from "../../@types/Valoracion";
 import ImageResizer from "react-native-image-resizer";
@@ -29,6 +27,7 @@ export async function getCloseSites(location: Location): Promise<Site[]> {
 }
 
 export async function getPlacesByText(text: string) {
+    console.log(API_HOST + '/search');
     const response = await axios.get(API_HOST + '/search', {
         params: {
             text: text
@@ -92,7 +91,11 @@ export async function getComments(site: Site) {
         params: {
             placeId: site.placeId
         }
-    }).then(res => res.data).catch(e => console.error(e))
+    }).then(res => res.data)
+        .catch(e => {
+            console.error(e.message);
+            return { comentarios: [] }
+        });
     const comments: CommentType[] = response.comentarios;
 
     return comments;
