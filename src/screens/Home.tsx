@@ -16,6 +16,8 @@ import { ProfileScreen } from './ProfileScreen';
 import { AppStyles } from '../components/Shared/AppStyles';
 import { Divider } from '@rneui/themed';
 import { useRatings } from '../hooks/useRatings';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type DrawerButtonProps = {
     screenName?: string;
@@ -183,10 +185,12 @@ function DrawerContentButton({ navigation, screenName = '', text, iconName }: Dr
     )
 }
 
+type StackProps = NativeStackNavigationProp<any, any>;
 
 export const Home = () => {
 
     const [searchText, setSearchText] = useState('');
+    const navigation = useNavigation<StackProps>();
 
     return (
         <Drawer.Navigator
@@ -197,7 +201,11 @@ export const Home = () => {
             }}
         >
             <Drawer.Screen name="Feed" component={Feed} options={{
-                header: () => <DrawerHeader searchBar={true} searchText={searchText} onSearchTextChange={setSearchText} />
+                header: () => <DrawerHeader
+                    onSearchTextChange={setSearchText}
+                    iconRight='search'
+                    onPressRight={() => navigation.navigate('search')}
+                />
             }}
             />
             <Drawer.Screen name="Saved" component={SavedScreen} options={{

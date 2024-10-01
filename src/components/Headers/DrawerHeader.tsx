@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerActions, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import IconMaterial from "react-native-vector-icons/FontAwesome";
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -14,10 +15,12 @@ type Props = {
     searchBar?: boolean;
     searchText?: string;
     title?: string;
+    iconRight?: string;
+    onPressRight?: () => void;
     onSearchTextChange?: (text: string) => void;
 }
 
-const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Props) => {
+const DrawerHeader = ({ searchBar, searchText, title, iconRight, onPressRight, onSearchTextChange }: Props) => {
     const navigation = useNavigation<DrawerProp>();
     const route = useRoute<RoutePropType>();
 
@@ -57,6 +60,12 @@ const DrawerHeader = ({ searchBar, searchText, title, onSearchTextChange }: Prop
                     />) : (
                     <View style={styles.searchBar} />
                 )}
+                {(iconRight && onPressRight) &&
+                    <TouchableOpacity onPress={onPressRight}>
+                        <IconMaterial name={iconRight} size={30} style={{ marginRight: 20 }}
+                            color={AppStyles.mainBlackColor} />
+                    </TouchableOpacity>
+                }
             </View>
         </SafeAreaView>
     );
