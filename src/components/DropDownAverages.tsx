@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import {
     FisicaEnum,
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     icon: {
+        color: AppStyles.mainBlackColor,
         marginRight: 10,
     },
     ratingText: {

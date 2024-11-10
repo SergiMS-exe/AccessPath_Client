@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import MainButton from '../components/MainButton';
 import { TypesOfDisabilities } from '../../@types/Valoracion';
 import { useRatings } from '../hooks/useRatings';
+import { AppStyles } from '../components/Shared/AppStyles';
 
 type StackProps = NativeStackNavigationProp<any, any>;
 type DrawerProps = DrawerNavigationProp<any, any>;
@@ -34,7 +35,7 @@ export const ProfileScreen = () => {
     return (
         <SafeAreaView>
             <View style={styles.headerContainer}>
-                <Icon name={getDisabilitiesIcon(user?.tipoDiscapacidad)} size={60} />
+                <Icon name={getDisabilitiesIcon(user?.tipoDiscapacidad)} color={AppStyles.mainBlackColor} size={60} />
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.name}>{user?.nombre} {user?.apellidos}</Text>
                     <Text style={styles.email}>{user?.email}</Text>

@@ -43,6 +43,7 @@ export const SiteScreen = () => {
     const [loading, setLoading] = useState(true);
     const [showAddEditRating, setShowAddEditRating] = useState(false);
     const [rating, setRating] = useState<Valoracion | undefined>(undefined);
+    const [types, setTypes] = useState<string>()
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
     const { comments, setComments, addComment, deleteComment, updateComment } = useComments(route.params.site.comentarios);
@@ -84,7 +85,12 @@ export const SiteScreen = () => {
             }
         };
 
-        fetchDataComments();
+        if (!comments)
+            fetchDataComments();
+        else {
+            setLoading(false)
+            setComments(comments)
+        }
 
         //si el usuario no ha llamado a getUserRatings
         fetchDataRatings();
@@ -95,6 +101,8 @@ export const SiteScreen = () => {
                 setRating(myRatings[index].valoracion);
             }
         }
+        if (site.types)
+            setTypes(site.types.join(", "));
     }, [])
 
     useEffect(() => {
@@ -256,7 +264,7 @@ export const SiteScreen = () => {
                 {(site.fotos && site.fotos.length > 0) && <PhotoCarousel photos={site.fotos} />}
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
-                    <Text style={{ fontSize: 18, color: AppStyles.secondaryBlackColor }}>{site.types[2]}, {site.types[3]}</Text>
+                    <Text style={{ fontSize: 18, color: AppStyles.secondaryBlackColor }}>{types}</Text>
                     {user &&
                         <TouchableOpacity onPress={handleSave}>
                             <Icon name='heart' size={25} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />

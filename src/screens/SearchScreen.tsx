@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Importar AsyncStorage
 import { getPlacesByText } from '../services/PlacesServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackHeader } from '../components/Headers/StackHeader';
@@ -8,35 +9,91 @@ import { SearchBar } from '@rneui/themed';
 import { Site } from '../../@types/Site';
 import { ResultList } from '../components/Card/ResultList';
 import { ListCard } from '../components/Card/ListCard';
+import { AppStyles } from '../components/Shared/AppStyles';
 
 interface Props extends NativeStackScreenProps<any, any> { };
+
+const MAX_HISTORY_LENGTH = 10;  // Máximo de búsquedas en el historial
 
 export const SearchScreen = ({ route, navigation }: Props) => {
     const [places, setPlaces] = useState<Site[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState(route.params?.searchText || '');
     const [requestSent, setRequestSent] = useState(false);
-    const [progress, setProgress] = useState(0);  // Estado para controlar el progreso
+    const [progress, setProgress] = useState(0);  // Progreso de la barra
+    const [searchHistory, setSearchHistory] = useState<any[]>([]);  // Historial de búsquedas
 
+    // Cargar historial al montar el componente
+    useEffect(() => {
+        loadSearchHistory();
+    }, []);
+
+    // Función para cargar el historial del almacenamiento local
+    const loadSearchHistory = async () => {
+        try {
+            const storedHistory = await AsyncStorage.getItem('searchHistory');
+            if (storedHistory !== null) {
+                setSearchHistory(JSON.parse(storedHistory));
+            }
+        } catch (error) {
+            console.error("Error al cargar el historial de búsquedas", error);
+        }
+    };
+
+    // Función para guardar una nueva búsqueda en el historial
+    const saveSearchToHistory = async (query: string, results: Site[]) => {
+        try {
+            const trimmedQuery = query.trim();  // Trimear y convertir a minúsculas
+            const newSearchEntry = { query: trimmedQuery, results };
+
+            // Filtrar el historial para eliminar cualquier entrada con la misma búsqueda (case-insensitive)
+            let updatedHistory = searchHistory.filter(
+                (item) => item.query.trim().toLowerCase() !== trimmedQuery.toLowerCase()
+            );
+
+            // Agregar la nueva búsqueda al principio
+            updatedHistory = [{ ...newSearchEntry, query: query }, ...updatedHistory];
+
+            // Si excede el máximo, eliminar la más antigua
+            if (updatedHistory.length > MAX_HISTORY_LENGTH) {
+                updatedHistory = updatedHistory.slice(0, MAX_HISTORY_LENGTH);
+            }
+
+            // Actualizar estado local y guardar en AsyncStorage
+            setSearchHistory(updatedHistory);
+            await AsyncStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+        } catch (error) {
+            console.error("Error al guardar en el historial de búsquedas", error);
+        }
+    };
+
+
+    // Función para realizar la búsqueda
     const fetchPlaces = async (query: string) => {
         setRequestSent(true);
         setLoading(true);
         setProgress(0);  // Reiniciar el progreso cuando empieza una nueva búsqueda
+
         const response = await getPlacesByText(query);
         setPlaces(response.sites);
         setLoading(false);
+
+        // Guardar la búsqueda y los resultados en el historial
+        saveSearchToHistory(query, response.sites);
     };
 
+    // Efecto para incrementar el progreso poco a poco
     useEffect(() => {
         if (loading && progress < 0.8) {
             const interval = setInterval(() => {
-                setProgress((prevProgress) => Math.min(prevProgress + 0.1, 0.8));
-            }, 1200);
+                setProgress((prevProgress) => Math.min(prevProgress + 0.1, 0.8));  // Incrementa hasta 80%
+            }, 1300);  // Incrementar cada 300ms
 
-            return () => clearInterval(interval);
+            return () => clearInterval(interval);  // Limpiar intervalo cuando se desmonte
         }
     }, [loading, progress]);
 
+    // Efecto para cargar la búsqueda desde la ruta, si existe
     useEffect(() => {
         if (route.params?.searchText) {
             fetchPlaces(route.params.searchText);
@@ -44,8 +101,15 @@ export const SearchScreen = ({ route, navigation }: Props) => {
     }, [route.params?.searchText]);
 
     const handleSearchSubmit = () => {
-        searchText.trim();
-        fetchPlaces(searchText);
+        if (searchText.trim()) {
+            fetchPlaces(searchText.trim());
+        }
+    };
+
+    const handleSelectHistoricItem = (item: { query: string, results: Array<any> }) => {
+        setSearchText(item.query);
+        setPlaces(item.results);
+        setRequestSent(true);
     };
 
     return (
@@ -78,15 +142,31 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                         data={places}
                         noItemsMessage="No se encontraron resultados"
                         isLoading={loading}
-                        progress={progress}
+                        progress={progress}  // Pasar el valor del progreso
                         loadingText='Buscando sitios... Esto puede tardar unos segundos'
                         renderItemComponent={(item) => <ListCard site={item} />}
                     />
                 </View>
             )}
+
+            {/* Mostrar historial de búsquedas */}
+            {!requestSent && searchHistory.length > 0 && (
+                <View style={styles.historyContainer}>
+                    <Text style={styles.historyTitle}>Historial de Búsquedas</Text>
+                    <FlatList
+                        data={searchHistory}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => handleSelectHistoricItem(item)} style={styles.historyItem}>
+                                <Text style={styles.historyText}>{item.query}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </View>
+            )}
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -112,5 +192,31 @@ const styles = StyleSheet.create({
     resultContainer: {
         flex: 1,
         paddingHorizontal: 10,
-    }
+    },
+    historyContainer: {
+        padding: 10,
+        marginHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+    historyTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: AppStyles.mainBlackColor,
+        paddingLeft: 20
+    },
+    historyItem: {
+        backgroundColor: '#c2c2c2',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: '#4a4a4a',
+        marginBottom: 5
+    },
+    historyText: {
+        fontSize: 16,
+        color: AppStyles.mainBlackColor,
+        fontWeight: 'bold',
+    },
 });

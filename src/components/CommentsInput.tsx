@@ -5,6 +5,7 @@ import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
 import { sendComment } from '../services/PlacesServices';
 import { useLoading } from '../hooks/useLoading';
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     user: Person,
@@ -91,6 +92,7 @@ export const CommentsInput: React.FC<Props> = ({ user, site, onCommentSent, onFo
                 blurOnSubmit
                 onChangeText={(text) => handleChangeText(text)}
                 placeholder="Escriba un comentario..."
+                placeholderTextColor={AppStyles.mainBlackColor}
                 onFocus={() => { onFocus && onFocus() }}
                 onBlur={() => { onBlur && onBlur() }}
                 value={commentText}
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     textInput: {
+        color: AppStyles.mainBlackColor,
         height: 50,
         paddingLeft: 10,
         marginRight: 67,

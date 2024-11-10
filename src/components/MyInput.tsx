@@ -29,7 +29,8 @@ export const MyInput = forwardRef<TextInput, Props>(({ title, onChangeText, onKe
             borderRadius: 10,
             padding: 10,
             fontSize: 16,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            color: AppStyles.mainBlackColor
         },
         passwordContainer: {
             flexDirection: 'row',

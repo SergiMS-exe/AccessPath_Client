@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     text: {
+        color: AppStyles.mainBlackColor,
         fontSize: 17,
         marginLeft: 2,
     }
