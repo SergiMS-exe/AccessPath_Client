@@ -16,5 +16,6 @@ export const AppStyles = {
     mainRedColor: '#e74c3c',
     mainBlackColor: '#2c3e50',
     secondaryBlackColor: '#555555',
+    secondaryBlueColor: '#6c98e0',
     fontColorBlack: '#333'
 }

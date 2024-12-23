@@ -10,6 +10,7 @@ import { Site } from '../../@types/Site';
 import { ResultList } from '../components/Card/ResultList';
 import { ListCard } from '../components/Card/ListCard';
 import { AppStyles } from '../components/Shared/AppStyles';
+import App from '../../App';
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -124,8 +125,8 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                     accessibilityLabel='Buscador de sitios'
                     containerStyle={styles.searchBar}
                     inputContainerStyle={styles.searchBarInput}
-                    inputStyle={{ color: '#727272' }}
-                    placeholderTextColor={'#727272'}
+                    inputStyle={{ color: AppStyles.mainBlackColor }}
+                    placeholderTextColor={AppStyles.mainBlackColor}
                     round
                     lightTheme
                     showCancel
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     searchBarInput: {
         height: 45,
         backgroundColor: '#e2e2e2',
-        color: '#727272',
+        color: AppStyles.mainBlackColor,
     },
     resultContainer: {
         flex: 1,
@@ -206,12 +207,12 @@ const styles = StyleSheet.create({
         paddingLeft: 20
     },
     historyItem: {
-        backgroundColor: '#c2c2c2',
+        backgroundColor: AppStyles.secondaryBlueColor,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: '#4a4a4a',
+        borderColor: AppStyles.mainBlackColor,
         marginBottom: 5
     },
     historyText: {

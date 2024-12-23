@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppStyles } from '../Shared/AppStyles';
 
 type Props = {
     goTo: string
@@ -27,7 +28,7 @@ export const AccNoAcc = ({ goTo }: Props) => {
         coloredText: {
             fontSize: 16,
             fontWeight: '500',
-            color: 'blue'
+            color: AppStyles.mainBlueColor
         }
     })
 

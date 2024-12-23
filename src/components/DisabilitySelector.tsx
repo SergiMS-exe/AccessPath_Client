@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TypesOfDisabilities, TypesOfDisabilitiesValue } from '../../@types/Valoracion';
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     value?: TypesOfDisabilitiesValue;
@@ -51,7 +52,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        marginBottom: 7
+        marginBottom: 7,
+        color: AppStyles.mainBlackColor,
     },
     pickerContainer: {
         height: 60,
