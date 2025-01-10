@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { AppStyles } from './Shared/AppStyles';
 
 type Props = {
     onPress: () => void;
@@ -12,7 +13,7 @@ type Props = {
     loading?: boolean;
 }
 
-const MainButton = ({ onPress, title, iconName, color = '#007AFF', titleStyle, containerStyle, loading = false }: Props) => {
+const MainButton = ({ onPress, title, iconName, color = AppStyles.mainBlueColor, titleStyle, containerStyle, loading = false }: Props) => {
     return (
         <TouchableOpacity accessible accessibilityRole='button' accessibilityHint={title} accessibilityLabel={title}
             style={{ ...styles.button, backgroundColor: color, ...containerStyle }} onPress={onPress}

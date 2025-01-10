@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStyles } from '../components/Shared/AppStyles';
 import Snackbar from 'react-native-snackbar';
 import { useLoading } from '../hooks/useLoading';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type RootStackParamList = {
     site: { site: Site };
@@ -113,12 +114,20 @@ const AddPhoto = () => {
                 style={{ flex: 1 }}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
-                <StackHeader />
+                {/* <StackHeader iconRight='upload' onPressRight={handleSendPhoto} /> */}
+                <View style={{
+                    zIndex: 1,
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                }}>
+                    <IconMaterial name='arrow-left-bold' size={45} color={AppStyles.mainBlackColor} />
+                </View>
                 <TouchableWithoutFeedback onPress={dismissKeyboard}>
                     <View style={styles.container}>
                         {selectedImage && (
                             <TouchableOpacity onPress={() => setSelectedImage(undefined)} style={styles.closeButton}>
-                                <Icon name='times' size={30} color="white" />
+                                <Icon name='times' size={35} color="red" />
                             </TouchableOpacity>
                         )}
                         {selectedImage ? (
@@ -127,48 +136,46 @@ const AddPhoto = () => {
                                 style={{ height: '100%', width: '100%' }}
                                 resizeMode='contain' />
                         ) : (
-                            <View style={styles.noPhotoContainer}>
-                                <Text style={styles.noPhotoText}>No hay foto seleccionada</Text>
-                            </View>
+                            <TouchableOpacity onPress={openImagePicker} style={styles.noPhotoContainer}>
+                                <Text style={styles.noPhotoText}>Toca para seleccionar una imagen</Text>
+                            </TouchableOpacity>
                         )}
                     </View>
                 </TouchableWithoutFeedback >
-                <View style={styles.footerContainer}>
-                    <TouchableOpacity onPress={openImagePicker}>
-                        <Icon name='image' size={50} color={AppStyles.mainBlackColor} />
-                    </TouchableOpacity>
-                    {
-                        selectedImage ? (
+                {
+                    selectedImage && (
+                        // <View style={styles.footerContainer}>
+                        <View style={{
+                            zIndex: 1,
+                            position: 'absolute',
+                            bottom: 10,
+                        }}>
+                            <TextInput
+                                style={styles.textInput}
+                                value={alternativeText}
+                                onChangeText={(text) => setAlternativeText(text)}
+                                placeholder='Texto alternativo de la foto...'
+                                placeholderTextColor='white'
+                            />
                             <MainButton
                                 title='Subir foto' onPress={handleSendPhoto}
-                                titleStyle={{ fontSize: 20, marginLeft: 0 }}
+                                titleStyle={{ fontSize: 20, marginLeft: 0, width: '100%', textAlign: 'center' }}
                                 loading={isLoading} />
-
-                        ) : (
-                            <View />
-                        )
-                    }
-                </View>
-                {selectedImage &&
-                    <TextInput
-                        style={styles.textInput}
-                        value={alternativeText}
-                        onChangeText={(text) => setAlternativeText(text)}
-                        placeholder='Texto alternativo de la foto...'
-                        placeholderTextColor='white'
-                    />
+                        </View>
+                        // </View>
+                    )
                 }
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
 
-const containerHeight = Platform.OS === 'ios' ? '85%' : '80%';
+const containerHeight = '100%'//Platform.OS === 'ios' ? '80%' : '78%';
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: containerHeight,
-        backgroundColor: '#c0c0c0',
+        backgroundColor: AppStyles.mainGreyColor,
         flexDirection: 'column',
     },
     closeButton: {
@@ -192,8 +199,8 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: '90%',
-        position: 'absolute',
-        bottom: 90,
+        // position: 'absolute',
+        // bottom: 90,
         alignSelf: 'center',
         borderWidth: 1,
         borderRadius: 30,
@@ -204,8 +211,8 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
     footerContainer: {
-        marginVertical: 20,
-        flexDirection: 'row',
+        marginVertical: '1%',
+        // flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingRight: 10,
