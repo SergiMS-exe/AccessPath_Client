@@ -45,7 +45,7 @@ const EditPassword = () => {
     };
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader title='Cambiar contraseña' />
             <View style={styles.container}>
                 <MyInput

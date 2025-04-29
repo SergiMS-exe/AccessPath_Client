@@ -11,6 +11,8 @@ import { ResultList } from '../components/Card/ResultList';
 import { ListCard } from '../components/Card/ListCard';
 import { AppStyles } from '../components/Shared/AppStyles';
 import App from '../../App';
+import { SearchBarDefault } from '@rneui/base/dist/SearchBar/SearchBar-default';
+import { Icon } from '@rneui/base';
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -128,12 +130,12 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                     inputStyle={{ color: AppStyles.mainBlackColor }}
                     placeholderTextColor={AppStyles.mainBlackColor}
                     round
-                    lightTheme
                     showCancel
                     placeholder='Busca un sitio para valorar...'
                     value={searchText}
                     onSubmitEditing={handleSearchSubmit}
                     onChangeText={setSearchText}
+                    leftIcon={{ name: 'search', color: AppStyles.mainBlackColor }}
                 />
             </View>
 
@@ -172,23 +174,25 @@ export const SearchScreen = ({ route, navigation }: Props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: AppStyles.backgroundColor,
     },
     searchContainer: {
         paddingHorizontal: 10,
-        paddingBottom: 10,
-        backgroundColor: '#f8f8f8',
+        //paddingBottom: 10,
+        backgroundColor: AppStyles.backgroundColor,
     },
     searchBar: {
-        backgroundColor: '#f8f8f8',
+        backgroundColor: AppStyles.backgroundColor,
         borderTopWidth: 0,
         borderBottomWidth: 0,
         height: 60,
     },
     searchBarInput: {
         height: 45,
-        backgroundColor: '#e2e2e2',
+        backgroundColor: AppStyles.white,
         color: AppStyles.mainBlackColor,
+        borderWidth: 2,
+        borderColor: AppStyles.mainBlackColor,
     },
     resultContainer: {
         flex: 1,
@@ -197,7 +201,6 @@ const styles = StyleSheet.create({
     historyContainer: {
         padding: 10,
         marginHorizontal: 10,
-        backgroundColor: '#fff',
     },
     historyTitle: {
         fontSize: 18,

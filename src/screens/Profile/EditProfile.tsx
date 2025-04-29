@@ -130,7 +130,8 @@ export const EditProfile = () => {
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1,
+        flex: 1, 
+        backgroundColor: AppStyles.backgroundColor
     },
     form: {
         marginVertical: 15

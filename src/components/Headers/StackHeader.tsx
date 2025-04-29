@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        backgroundColor: '#f8f8f8',
+        backgroundColor: AppStyles.backgroundColor,
         paddingLeft: 15,
         //borderBottomWidth: 0.2,
         borderBottomColor: '#000',
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
     blank: {
         marginLeft: 10,
         flex: 1,
-        backgroundColor: '#f8f8f8',
         borderBottomColor: '#000',
         //borderBottomWidth: 0.2,
         borderTopWidth: 0,

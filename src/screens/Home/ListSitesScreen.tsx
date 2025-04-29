@@ -7,6 +7,7 @@ import MyFAB from '../../components/FloatingButton';
 import { CloseSitesContext, initialFilters } from '../../components/Shared/Context';
 import { Site } from '../../../@types/Site';
 import FilterFAB from '../../components/FilterFAB';
+import { AppStyles } from '../../components/Shared/AppStyles';
 
 export const ListSitesScreen = () => {
 
@@ -32,7 +33,7 @@ export const ListSitesScreen = () => {
 
     return (
         <>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
                 <ResultList
                     data={sitesToShow}
                     noItemsMessage='No hay sitios valorados cerca de ti'

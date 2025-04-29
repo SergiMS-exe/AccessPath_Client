@@ -8,6 +8,7 @@ import Snackbar from "react-native-snackbar";
 import { ResultList } from "../../components/Card/ResultList";
 import PhotoCarousel from "../../components/PhotoCarousel";
 import SiteWMyItems from "../../components/SiteWMyItems";
+import { AppStyles } from "../../components/Shared/AppStyles";
 
 const MyPhotos = () => {
 
@@ -48,7 +49,7 @@ const MyPhotos = () => {
     }, [myPhotos]);
 
     return (
-        <SafeAreaView style={{ flexGrow: 1 }}>
+        <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader title="Mis fotos" />
             <ResultList
                 data={sitesWithPhotos}

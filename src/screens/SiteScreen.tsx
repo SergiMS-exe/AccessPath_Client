@@ -252,7 +252,7 @@ export const SiteScreen = () => {
     const googleMapsLink = site.link || `https://www.google.com/maps/search/?api=1&query=${site.location?.latitude},${site.location?.longitude}&query=${encodeURIComponent(site.nombre)}`;
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
             {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} calledFrom="site" />}
             <ScrollView

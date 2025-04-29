@@ -33,7 +33,7 @@ export const ProfileScreen = () => {
     }, []);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor }}>
             <View style={styles.headerContainer}>
                 <Icon name={getDisabilitiesIcon(user?.tipoDiscapacidad)} color={AppStyles.mainBlackColor} size={60} />
                 <View style={{ alignItems: 'center' }}>

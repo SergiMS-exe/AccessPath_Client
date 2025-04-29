@@ -7,6 +7,7 @@ import { Site } from "../../../@types/Site";
 import SiteWMyItems from '../../components/SiteWMyItems';
 import { ResultList } from "../../components/Card/ResultList";
 import CommentList from "../../components/CommentList";
+import { AppStyles } from "../../components/Shared/AppStyles";
 
 export const MyComments = () => {
     const { user } = useContext(LoginContext);
@@ -31,7 +32,7 @@ export const MyComments = () => {
 
 
     return (
-        <SafeAreaView style={{ flexGrow: 1 }}>
+        <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader title='Mis Comentarios' />
             <ResultList
                 data={myComments}

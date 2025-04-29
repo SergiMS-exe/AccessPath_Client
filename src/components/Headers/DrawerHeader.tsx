@@ -61,7 +61,7 @@ const DrawerHeader = ({ searchBar, searchText, title, iconRight, onPressRight, o
                     <View style={styles.searchBar} />
                 )}
                 {(iconRight && onPressRight) &&
-                    <TouchableOpacity onPress={onPressRight}>
+                    <TouchableOpacity style={{backgroundColor: AppStyles.backgroundColor}} onPress={onPressRight}>
                         <IconMaterial name={iconRight} size={30} style={{ marginRight: 20 }}
                             color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        backgroundColor: '#f8f8f8',
+        backgroundColor: AppStyles.backgroundColor,
         paddingLeft: 15,
         //borderBottomWidth: 0.2,
         borderBottomColor: '#000',
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     searchBar: {
         marginLeft: 10,
         flex: 1,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: AppStyles.backgroundColor,
         //borderBottomColor: '#000',
         //borderBottomWidth: 0.2,
         borderTopWidth: 0,

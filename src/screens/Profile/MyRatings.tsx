@@ -9,6 +9,7 @@ import Snackbar from "react-native-snackbar";
 import { ResultList } from "../../components/Card/ResultList";
 import SiteWMyItems from "../../components/SiteWMyItems";
 import { AddEditRating } from "../../components/AddEditRating";
+import { AppStyles } from "../../components/Shared/AppStyles";
 
 export const MyRatings = () => {
     const { user } = useContext(LoginContext);
@@ -40,7 +41,7 @@ export const MyRatings = () => {
     }, []);
 
     return (
-        <SafeAreaView style={{ flexGrow: 1 }}>
+        <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader title='Mis Valoraciones' />
 
             <ResultList
