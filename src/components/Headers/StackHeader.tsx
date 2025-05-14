@@ -29,7 +29,7 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
             ) : (
                 <View style={styles.blank} />
             )}
-            {(iconRight && onPressRight && user) &&
+            {(iconRight && onPressRight) &&
                 <TouchableOpacity onPress={onPressRight}>
                     <IconMaterial name={iconRight} size={45} style={{ marginRight: 20 }}
                         color={AppStyles.mainBlackColor} />

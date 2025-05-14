@@ -116,26 +116,21 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
                         text='Inicio'
                         iconName='home'
                     />
-                    {
-                        user && (
-                            <>
-                                <Divider />
-                                <DrawerContentButton
-                                    navigation={navigation}
-                                    screenName='Saved'
-                                    text='Sitios Guardados'
-                                    iconName='bookmark'
-                                />
-                                <Divider />
-                                <DrawerContentButton
-                                    navigation={navigation}
-                                    screenName='Perfil'
-                                    text='Perfil'
-                                    iconName='user-cog'
-                                />
-                            </>
-                        )
-                    }
+                
+                    <Divider />
+                    <DrawerContentButton
+                        navigation={navigation}
+                        screenName='Saved'
+                        text='Sitios Guardados'
+                        iconName='bookmark'
+                    />
+                    <Divider />
+                    <DrawerContentButton
+                        navigation={navigation}
+                        screenName='Perfil'
+                        text='Perfil'
+                        iconName='user-cog'
+                    />
                 </View>
             </DrawerContentScrollView>
             <View style={styles.contentFooter}>

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Text } from '@rneui/base';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import MainButton from '../components/MainButton';
 import { TypesOfDisabilities } from '../../@types/Valoracion';
 import { useRatings } from '../hooks/useRatings';
@@ -25,12 +25,14 @@ export const ProfileScreen = () => {
 
     const { getDisabilitiesIcon } = useRatings();
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
-        //console.log(user);
         if (!user) {
-            drawerNavigation.navigate("Feed")
+            drawerNavigation.navigate('Login', { viewFrom: "Perfil" });
+            return;
         }
-    }, []);
+    }, [isFocused]);
 
     return (
         <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor }}>

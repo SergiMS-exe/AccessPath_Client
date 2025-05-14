@@ -253,7 +253,12 @@ export const SiteScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
-            <StackHeader iconRight="camera-plus" onPressRight={() => navigation.navigate('addPhoto', { site })} />
+            <StackHeader iconRight="camera-plus" onPressRight={() => {
+                if (user) 
+                   navigation.navigate('addPhoto', { site })
+                else 
+                   navigation.navigate('login', { viewFrom: "site", stackHeader: true })
+            }} />
             {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} calledFrom="site" />}
             <ScrollView
                 style={styles.container}
