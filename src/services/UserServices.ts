@@ -10,6 +10,8 @@ import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
 import { removePhotosFromSite } from './PlacesServices';
 import { Valoracion } from '../../@types/Valoracion';
+import Snackbar from 'react-native-snackbar';
+import { AppStyles } from '../components/Shared/AppStyles';
 
 const baseUrlUsers = '/users'
 
@@ -25,7 +27,15 @@ export async function login(email: string, password: string, navigation: NativeS
             password: password
         }).then(response => response.data
         ).catch(error => {
-            console.error(error)
+            if (error.status === 404) {
+                Snackbar.show({
+                    text: "El usuario o la contraseña no son correctos",
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: AppStyles.mainRedColor,
+                    textColor: AppStyles.white 
+                })
+            }
+            else console.error(error)
         });
 
     if (peticion !== undefined) {

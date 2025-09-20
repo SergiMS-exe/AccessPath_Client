@@ -70,7 +70,7 @@ const AddPhoto = () => {
             Snackbar.show({
                 text: 'Por favor, ingrese un texto alternativo para la foto',
                 duration: Snackbar.LENGTH_LONG,
-                backgroundColor: 'red'
+                backgroundColor: AppStyles.mainRedColor
             });
             return;
         }

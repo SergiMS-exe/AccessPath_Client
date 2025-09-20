@@ -117,6 +117,7 @@ export const EditProfile = () => {
                     onChange={handleDisabilityChange}
                 />
 
+                <View style={{width: 100, height: 15}}/>
                 {/* Botón Guardar cambios */}
                 <MainButton title='Guardar cambios' onPress={() => handleUpdateProfile()} loading={isLoading} />
 
@@ -159,6 +160,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     deleteButton: {
-        backgroundColor: 'red',
+        backgroundColor: AppStyles.mainRedColor,
     }
 })

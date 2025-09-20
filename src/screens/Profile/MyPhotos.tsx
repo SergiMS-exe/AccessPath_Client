@@ -29,14 +29,14 @@ const MyPhotos = () => {
                     Snackbar.show({
                         text: response.message,
                         duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: 'red',
+                        backgroundColor: AppStyles.mainRedColor,
                     });
                 }
             } else {
                 Snackbar.show({
                     text: 'Debes iniciar sesión para ver tus fotos',
                     duration: Snackbar.LENGTH_SHORT,
-                    backgroundColor: 'red',
+                    backgroundColor: AppStyles.mainRedColor,
                 });
             }
         }

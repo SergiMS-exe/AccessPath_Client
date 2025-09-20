@@ -18,24 +18,26 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
     const navigation = useNavigation();
     const { user } = useContext(LoginContext);
     return (
-        <View style={styles.header}>
-            <TouchableOpacity onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}
+        <>
+            <View style={styles.header}>
+            <TouchableOpacity style={styles.floatingLeft} onPress={onPressLeft ? onPressLeft : () => navigation.goBack()}
                 accessible accessibilityRole='button' accessibilityHint="Volver a la pantalla anterior" accessibilityLabel='Volver'>
                 <IconMaterial name='arrow-left-bold' size={45} color={AppStyles.mainBlackColor} />
             </TouchableOpacity>
 
-            {title ? (
-                <Text style={styles.titleText}>{title}</Text>
-            ) : (
-                <View style={styles.blank} />
-            )}
-            {(iconRight && onPressRight) &&
-                <TouchableOpacity onPress={onPressRight}>
-                    <IconMaterial name={iconRight} size={45} style={{ marginRight: 20 }}
-                        color={AppStyles.mainBlackColor} />
-                </TouchableOpacity>
-            }
-        </View>
+                {title ? (
+                    <Text style={styles.titleText}>{title}</Text>
+                ) : (
+                    <View style={styles.blank} />
+                )}
+                {(iconRight && onPressRight) &&
+                    <TouchableOpacity onPress={onPressRight}>
+                        <IconMaterial name={iconRight} size={45} style={{ marginRight: 20 }}
+                            color={AppStyles.mainBlackColor} />
+                    </TouchableOpacity>
+                }
+            </View>
+            </>
     )
 }
 
@@ -54,10 +56,10 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: AppStyles.mainBlackColor,
-        fontSize: 18,
+        fontSize: 23,
         fontWeight: 'bold',
         flex: 1,
-        textAlign: 'center',
+        textAlign: 'center'
     },
     blank: {
         marginLeft: 10,
@@ -67,4 +69,10 @@ const styles = StyleSheet.create({
         borderTopWidth: 0,
         height: 60
     },
+    floatingLeft: {
+        position: 'absolute',
+        top: 5,
+        left: 5,
+        zIndex: 2
+    }
 });

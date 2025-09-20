@@ -35,7 +35,7 @@ export const ProfileScreen = () => {
     }, [isFocused]);
 
     return (
-        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor }}>
+        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor, flex: 1 }}>
             <View style={styles.headerContainer}>
                 <Icon name={getDisabilitiesIcon(user?.tipoDiscapacidad)} color={AppStyles.mainBlackColor} size={60} />
                 <View style={{ alignItems: 'center' }}>
@@ -49,7 +49,7 @@ export const ProfileScreen = () => {
             <MainButton iconName='star' title='Mis Valoraciones' onPress={() => stackNavigation.navigate("myRatings")} />
             <MainButton iconName='comment' title='Mis Comentarios' onPress={() => stackNavigation.navigate("myComments")} />
             <MainButton iconName='image' title='Mis Fotos' onPress={() => stackNavigation.navigate("myPhotos")} />
-            <MainButton iconName='sign-out-alt' color='red' title='Cerrar Sesión'
+            <MainButton iconName='sign-out-alt' color={AppStyles.mainRedColor} title='Cerrar Sesión'
                 onPress={async () => {
                     drawerNavigation.navigate("Feed")
                     await logout(setUser)
@@ -64,8 +64,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 200,
         justifyContent: 'space-evenly',
-        borderBottomWidth: 0.3,
-        borderBottomColor: 'black',
         marginBottom: 30
     },
     name: {

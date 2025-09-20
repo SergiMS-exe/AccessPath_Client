@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         minWidth: 100,
         marginVertical: 8,
-        marginHorizontal: 20,
+        marginHorizontal: 30,
         flexDirection: 'row'
     },
     buttonText: {

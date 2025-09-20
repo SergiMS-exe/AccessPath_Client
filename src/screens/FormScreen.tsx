@@ -142,7 +142,7 @@ export const FormScreen = () => {
 
     const saveChangesAsync = async () => {
         if (Object.keys(selectedValues).length === 0) {
-            Snackbar.show({ text: 'Se debe valorar algún campo antes de enviar', duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
+            Snackbar.show({ text: 'Se debe valorar algún campo antes de enviar', duration: Snackbar.LENGTH_LONG, backgroundColor: AppStyles.mainRedColor });
             return;
         } else {
             loading();
@@ -151,7 +151,7 @@ export const FormScreen = () => {
                 : await sendRating(selectedValues, site, user!._id);
             stopLoading();
             if (!response.success || !("newPlace" in response)) { //Si no se ha podido enviar la valoración
-                Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: 'red' });
+                Snackbar.show({ text: response.message, duration: Snackbar.LENGTH_LONG, backgroundColor: AppStyles.mainRedColor });
                 return;
             }
 
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     errorMessage: {
         position: 'relative',
         alignSelf: 'center',
-        color: 'red',
+        color: AppStyles.mainRedColor,
         fontSize: 16
     }
 });

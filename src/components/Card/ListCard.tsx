@@ -40,7 +40,7 @@ export const ListCard = ({ site }: Props) => {
             {imageUris.length > 0 && <Image source={{ uri: imageUris[0] }} style={styles.image} />}
             <View style={styles.titleContainer}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{siteToShow.nombre}</Text>
-                <Icon name='map-marker-alt' size={17} color='red' />
+                <Icon name='map-marker-alt' size={17} color={AppStyles.mainRedColor} />
             </View>
             <Text style={styles.address} numberOfLines={1} ellipsizeMode="tail">{siteToShow.direccion}</Text>
             <View style={styles.footer}>

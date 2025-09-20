@@ -31,7 +31,7 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
             Snackbar.show({
                 text: 'El comentario no puede estar vacío',
                 duration: Snackbar.LENGTH_LONG,
-                backgroundColor: 'red',
+                backgroundColor: AppStyles.mainRedColor,
             });
             return;
         }

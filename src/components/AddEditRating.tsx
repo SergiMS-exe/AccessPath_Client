@@ -48,7 +48,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                                 Snackbar.show({
                                     text: 'Debes iniciar sesión para eliminar una valoración',
                                     duration: Snackbar.LENGTH_LONG,
-                                    backgroundColor: 'red',
+                                    backgroundColor: AppStyles.mainRedColor,
                                 });
                                 return;
                             }
@@ -59,7 +59,7 @@ export const AddEditRating = ({ valoracion, site, isAbsolute = false, onRatingDe
                                 Snackbar.show({
                                     text: response.message,
                                     duration: Snackbar.LENGTH_LONG,
-                                    backgroundColor: 'red',
+                                    backgroundColor: AppStyles.mainRedColor,
                                 });
                             } else {
                                 // Remove the deleted rating from the list using userId and placeId
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     deleteButton: {
-        backgroundColor: 'red',
+        backgroundColor: AppStyles.mainRedColor,
         width: "20%",
     },
     text: {

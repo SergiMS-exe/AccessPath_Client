@@ -45,25 +45,22 @@ const EditPassword = () => {
     };
 
     return (
-        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor }}>
+        <SafeAreaView style={{ backgroundColor: AppStyles.backgroundColor, flex: 1 }}>
             <StackHeader title='Cambiar contraseña' />
             <View style={styles.container}>
                 <MyInput
                     title="Contraseña actual"
                     value={currentPassword}
-                    marginHorizontal={17}
                     onChangeText={setCurrentPassword}
                 />
                 <MyInput
                     title="Nueva contraseña"
                     value={newPassword}
-                    marginHorizontal={17}
                     onChangeText={setNewPassword}
                 />
                 <MyInput
                     title="Confirmar nueva contraseña"
                     value={confirmNewPassword}
-                    marginHorizontal={17}
                     onChangeText={setConfirmNewPassword}
                 />
             </View>

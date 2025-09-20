@@ -11,6 +11,7 @@ import { TypesOfDisabilities, TypesOfDisabilitiesKey, TypesOfDisabilitiesValue }
 import { useNavigation } from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
 import MainButton from '../MainButton';
+import { AppStyles } from '../Shared/AppStyles';
 
 
 type Props = {
@@ -40,8 +41,8 @@ export const RegisterForm = ({ screenName }: Props) => {
             Snackbar.show({
                 text: response.message,
                 duration: Snackbar.LENGTH_LONG,
-                backgroundColor: 'red',
-                textColor: '#ffffff'
+                backgroundColor: AppStyles.mainRedColor,
+                textColor: AppStyles.white
             });
         }
         await AsyncStorage.setItem('savedSites', '[]')
