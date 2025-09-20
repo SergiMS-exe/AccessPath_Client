@@ -31,7 +31,7 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
                     <View style={styles.blank} />
                 )}
                 {(iconRight && onPressRight) &&
-                    <TouchableOpacity onPress={onPressRight}>
+                    <TouchableOpacity style={styles.floatingRight} onPress={onPressRight}>
                         <IconMaterial name={iconRight} size={45} style={{ marginRight: 20 }}
                             color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
@@ -73,6 +73,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 5,
         left: 5,
+        zIndex: 2
+    },
+    floatingRight: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
         zIndex: 2
     }
 });

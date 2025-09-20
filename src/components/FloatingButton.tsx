@@ -22,14 +22,14 @@ const MyFAB = ({ name, loading, showing }: Props) => {
             case 'list':
                 return {
                     title: 'Ver Mapa',
-                    icon: { name: 'map', size: 30 },
+                    icon: { name: 'map', size: 30, color: AppStyles.white },
                     onPress: () => navigation.navigate('Map')
                 };
             case 'map':
             default:
                 return {
                     title: 'Ver Lista',
-                    icon: { name: 'list', size: 30 },
+                    icon: { name: 'list', size: 30, color: AppStyles.white },
                     onPress: () => navigation.navigate('List')
                 };
         }
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     },
     fabTitle: {
         fontSize: 20,
-        color: '#000000',
+        color: AppStyles.white,
         fontWeight: '600',
     }
 });
