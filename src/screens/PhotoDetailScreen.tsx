@@ -198,10 +198,10 @@ const PhotoDetailScreen = () => {
 const styles = StyleSheet.create({
     flexFull: {
         flex: 1,
+        backgroundColor: AppStyles.backgroundColor,
     },
     safeArea: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     page: {
         width: width,

@@ -183,7 +183,7 @@ export const FormScreen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader />
             <SectionList
                 contentContainerStyle={styles.container}
@@ -220,7 +220,7 @@ export const FormScreen = () => {
 const styles = StyleSheet.create({
     container: {
         margin: 16,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
     },
     item: {
         backgroundColor: '#f9c2ff',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
     },
 
     iconStyle: {

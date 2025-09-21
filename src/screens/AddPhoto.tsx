@@ -109,19 +109,19 @@ const AddPhoto = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
             <KeyboardAvoidingView
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
-                {/* <StackHeader iconRight='upload' onPressRight={handleSendPhoto} /> */}
+                <StackHeader/>
                 <View style={{
                     zIndex: 1,
                     position: 'absolute',
                     top: 10,
                     left: 10,
                 }}>
-                    <IconMaterial name='arrow-left-bold' size={45} color={AppStyles.mainBlackColor} />
+                    {/* <IconMaterial name='arrow-left-bold' size={45} color={AppStyles.mainBlackColor} /> */}
                 </View>
                 <TouchableWithoutFeedback onPress={dismissKeyboard}>
                     <View style={styles.container}>
@@ -170,12 +170,12 @@ const AddPhoto = () => {
     );
 };
 
-const containerHeight = '100%'//Platform.OS === 'ios' ? '80%' : '78%';
+const containerHeight = '70%'//Platform.OS === 'ios' ? '80%' : '78%';
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: containerHeight,
-        backgroundColor: AppStyles.mainGreyColor,
+        // backgroundColor: AppStyles.mainGreyColor,
         flexDirection: 'column',
     },
     closeButton: {

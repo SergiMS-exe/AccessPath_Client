@@ -47,7 +47,7 @@ export const SiteScreen = () => {
     const [types, setTypes] = useState<string>()
 
     const { save, unSave, toggleUserContext } = useSiteSaving(site);
-    const { comments, setComments, addComment, deleteComment, updateComment } = useComments(route.params.site.comentarios);
+    const { comments, setComments, addComment, deleteComment, updateComment } = useComments();
 
     useEffect(() => {
         const fetchDataComments = async () => {
@@ -86,12 +86,7 @@ export const SiteScreen = () => {
             }
         };
 
-        if (!comments)
-            fetchDataComments();
-        else {
-            setLoading(false)
-            setComments(comments)
-        }
+        fetchDataComments();
 
         //si el usuario no ha llamado a getUserRatings
         fetchDataRatings();
@@ -336,6 +331,12 @@ export const SiteScreen = () => {
                     {loading ?
                         <ActivityIndicator size="large" style={{ marginTop: 10 }} /> : (
                             <View style={{ marginTop: 12 }}>
+                                {user && <CommentsInput
+                                    user={user}
+                                    site={site}
+                                    onCommentSent={handleNewComment}
+                                    onFocus={() => setShowAddEditRating(false)} onBlur={() => setShowAddEditRating(true)}
+                                />}
                                 {comments && comments.map(comment => (
                                     <Comment key={comment._id}
                                         comment={comment}
@@ -343,12 +344,6 @@ export const SiteScreen = () => {
                                         placeId={site.placeId}
                                         onEditFocus={() => setShowAddEditRating(false)} onEditBlur={() => setShowAddEditRating(true)} />
                                 ))}
-                                {user && <CommentsInput
-                                    user={user}
-                                    site={site}
-                                    onCommentSent={handleNewComment}
-                                    onFocus={() => setShowAddEditRating(false)} onBlur={() => setShowAddEditRating(true)}
-                                />}
                             </View>
                         )
                     }
@@ -394,7 +389,7 @@ const styles = StyleSheet.create({
         fontSize: 34,
         marginBottom: 15,
         color: AppStyles.fontColorBlack,
-        fontWeight: '500'
+        fontWeight: '600'
     },
     address: {
         fontSize: 18,
@@ -408,7 +403,7 @@ const styles = StyleSheet.create({
     },
     addressTextContainer: {
         width: "100%",
-        alignItems: "center",
+        // alignItems: "center",
         marginBottom: 7,
         marginTop: 12
     },
