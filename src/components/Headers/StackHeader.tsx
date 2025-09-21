@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: AppStyles.mainBlackColor,
-        fontSize: 23,
+        fontSize: AppStyles.headerFontWeight,
         fontWeight: 'bold',
         flex: 1,
         textAlign: 'center'

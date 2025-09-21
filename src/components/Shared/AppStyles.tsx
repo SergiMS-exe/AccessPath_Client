@@ -10,6 +10,7 @@ export const AppStyles = {
     white: 'white',
     black: 'black',
     fontFamily: '',
+    headerFontWeight: 23,
     card: {
         titleSize: 22,
         subtitleSize: 15,

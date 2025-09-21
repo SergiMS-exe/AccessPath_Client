@@ -32,7 +32,7 @@ const DrawerHeader = ({ searchBar, searchText, title, iconRight, onPressRight, o
     return (
         <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}
+                <TouchableOpacity style={styles.floatingLeft} onPress={isInSearch ? () => navigation.goBack() : () => { navigation.dispatch(DrawerActions.openDrawer()); }}
                     accessible accessibilityHint={accessibilityHint} accessibilityRole='button' accessibilityLabel={accessibilityLabel}>
                     <Icon name={isInSearch ? 'arrow-left' : 'bars'} size={30} color={AppStyles.mainBlackColor} />
                 </TouchableOpacity>
@@ -61,7 +61,7 @@ const DrawerHeader = ({ searchBar, searchText, title, iconRight, onPressRight, o
                     <View style={styles.searchBar} />
                 )}
                 {(iconRight && onPressRight) &&
-                    <TouchableOpacity style={{backgroundColor: AppStyles.backgroundColor}} onPress={onPressRight}>
+                    <TouchableOpacity style={{backgroundColor: AppStyles.backgroundColor, ...styles.floatingRight}} onPress={onPressRight}>
                         <IconMaterial name={iconRight} size={30} style={{ marginRight: 20 }}
                             color={AppStyles.mainBlackColor} />
                     </TouchableOpacity>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     titleText: {
-        fontSize: 20,
+        fontSize: AppStyles.headerFontWeight,
         fontWeight: 'bold',
         flex: 1,
         textAlign: 'center',
@@ -112,6 +112,18 @@ const styles = StyleSheet.create({
         height: 45,
         backgroundColor: '#e2e2e2',
         color: '#727272'
+    },
+    floatingLeft: {
+        position: 'absolute',
+        top: 12,
+        left: 12,
+        zIndex: 2
+    },
+    floatingRight: {
+        position: 'absolute',
+        top: 12,
+        right: 0,
+        zIndex: 2
     }
 });
 
