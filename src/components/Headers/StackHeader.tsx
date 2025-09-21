@@ -37,7 +37,7 @@ export const StackHeader = ({ title, iconRight, onPressRight, onPressLeft }: Pro
                     </TouchableOpacity>
                 }
             </View>
-            </>
+        </>
     )
 }
 

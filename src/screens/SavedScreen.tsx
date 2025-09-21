@@ -7,6 +7,8 @@ import { getSavedSites } from '../services/UserServices';
 import { LoginContext } from '../components/Shared/Context';
 import Snackbar from 'react-native-snackbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppStyles } from '../components/Shared/AppStyles';
 
 export const SavedScreen = () => {
     const { user } = useContext(LoginContext);
@@ -46,11 +48,13 @@ export const SavedScreen = () => {
     }, [isFocused]);
 
     return (
-        <ResultList
-            data={savedSites}
-            noItemsMessage="No tienes sitios guardados"
-            isLoading={isLoading}
-            renderItemComponent={(item) => <ListCard site={item} />}
-        />
+        <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
+            <ResultList
+                data={savedSites}
+                noItemsMessage="No tienes sitios guardados"
+                isLoading={isLoading}
+                renderItemComponent={(item) => <ListCard site={item} />}
+                />
+        </SafeAreaView>
     );
 }

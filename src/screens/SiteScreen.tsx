@@ -40,6 +40,7 @@ export const SiteScreen = () => {
 
     const [site, setSite] = useState<Site>(route.params.site);
     const [isSaved, setIsSaved] = useState(false);
+    const [loadingSaving, setLoadingSaving] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showAddEditRating, setShowAddEditRating] = useState(false);
     const [rating, setRating] = useState<Valoracion | undefined>(undefined);
@@ -157,10 +158,12 @@ export const SiteScreen = () => {
     };
 
     const handleSave = async () => {
+        setLoadingSaving(true);
         if (isSaved)
             await unSave()
         else
             await save()
+        setLoadingSaving(false);
         setIsSaved(!isSaved)
         toggleUserContext(isSaved);
     }
@@ -270,10 +273,23 @@ export const SiteScreen = () => {
                 <Text style={styles.name}>{site.nombre}</Text>
                 <View style={styles.subContainer}>
                     <Text style={{ fontSize: 18, color: AppStyles.secondaryBlackColor }}>{types}</Text>
-                    {user &&
-                        <TouchableOpacity onPress={handleSave}>
-                            <Icon name='heart' size={25} solid={isSaved} color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} />
-                        </TouchableOpacity>}
+                    {user && (
+                        loadingSaving ? (
+                            <ActivityIndicator 
+                                size="small" 
+                                color={AppStyles.mainRedColor}
+                            />
+                        ) : (
+                            <TouchableOpacity onPress={handleSave}>
+                                <Icon 
+                                    name='heart' 
+                                    size={25} 
+                                    solid={isSaved} 
+                                    color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} 
+                                />
+                            </TouchableOpacity>
+                        )
+                    )}
                 </View>
                 <GoogleRating googleRating={site.calificacionGoogle} position="start" />
                 <View style={styles.addressContainer}>

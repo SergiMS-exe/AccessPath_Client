@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import React from 'react';
 import * as Progress from 'react-native-progress';
+import { AppStyles } from "../Shared/AppStyles";
 
 type Props = {
     data: any[];
@@ -22,14 +23,14 @@ export const ResultList = ({ data, title, noItemsMessage, isLoading, loadingText
                     <Progress.Bar
                         progress={progress}
                         width={200}
-                        color="#0000ff"//"#4caf50"
+                        color={AppStyles.mainBlueColor}//"#4caf50"
                         borderRadius={5}
                         style={styles.progressBar}
                     />
                 </View>
             );
         else
-            return <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />;
+            return <ActivityIndicator size="large" color={AppStyles.mainBlueColor} style={{ marginTop: 20 }} />;
     }
 
     if (data.length === 0) {
@@ -57,7 +58,9 @@ const styles = StyleSheet.create({
     },
     emptyListMessage: {
         fontSize: 20,
+        fontWeight: '700',
         textAlign: 'center',
+        color: AppStyles.black,
         marginTop: 20
     },
     content: {
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
         textAlign: 'center',
-        color: '#000'
+        color: AppStyles.mainBlackColor
     },
     progressBar: {
         marginTop: 10,
