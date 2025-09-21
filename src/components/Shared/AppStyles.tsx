@@ -4,6 +4,9 @@ export const AppStyles = {
         borderRadius: 10,
         borderWidth: 1
     },
+    button: {
+        borderRadius: 10
+    },
     white: 'white',
     black: 'black',
     fontFamily: '',

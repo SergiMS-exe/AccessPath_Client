@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     aButton: {
-        borderRadius: 30,
+        borderRadius: AppStyles.button.borderRadius,
         opacity: 0.8,
         height: 50,
         justifyContent: 'center',

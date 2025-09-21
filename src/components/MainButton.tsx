@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10,
+        borderRadius: AppStyles.button.borderRadius,
         paddingVertical: 12,
         paddingHorizontal: 16,
         minWidth: 100,

@@ -150,13 +150,15 @@ const AddPhoto = () => {
                             position: 'absolute',
                             bottom: 10,
                         }}>
-                            <TextInput
-                                style={styles.textInput}
-                                value={alternativeText}
-                                onChangeText={(text) => setAlternativeText(text)}
-                                placeholder='Texto alternativo de la foto...'
-                                placeholderTextColor='white'
-                            />
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.textInput}
+                                    value={alternativeText}
+                                    onChangeText={(text) => setAlternativeText(text)}
+                                    placeholder='Texto alternativo de la foto...'
+                                    placeholderTextColor='white'
+                                />
+                            </View>
                             <MainButton
                                 title='Subir foto' onPress={handleSendPhoto}
                                 titleStyle={{ fontSize: 20, marginLeft: 0, width: '100%', textAlign: 'center' }}
@@ -198,17 +200,20 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     textInput: {
-        width: '90%',
+        width: '85%',
         // position: 'absolute',
         // bottom: 90,
-        alignSelf: 'center',
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: AppStyles.button.borderRadius,
         backgroundColor: '#594D59',
         paddingLeft: 20,
         color: 'white',
         fontSize: 18,
-        fontWeight: '600'
+        fontWeight: '600',
+    },
+    inputContainer:{
+        width: "100%",
+        alignItems: "center"
     },
     footerContainer: {
         marginVertical: '1%',
