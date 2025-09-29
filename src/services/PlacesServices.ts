@@ -8,7 +8,7 @@ import ImageResizer from "react-native-image-resizer";
 import RNFS from 'react-native-fs';
 
 const baseUrlSites = '/sites'
-// const API_HOST = 'http://192.168.0.7:3002' + baseUrlSites;
+// const API_HOST = 'http://10.0.2.2:3001' + baseUrlSites;
 const API_HOST = REMOTE + baseUrlSites;
 
 //Obtener sitios
@@ -20,7 +20,8 @@ export async function getCloseSites(location: Location): Promise<Site[]> {
     }).then(res => {
         return { success: true, sites: res.data.sites };
     }).catch(e => {
-        console.error("Error en getCloseSites: " + e)
+        if (e.status !== 404)
+            console.error("Error en getCloseSites: " + e)
         return { success: false, sites: [] }
     })
     return response.sites;

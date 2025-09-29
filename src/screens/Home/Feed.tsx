@@ -23,8 +23,7 @@ export const Feed = () => {
         };
 
         fetchSites();
-    }, [location]);  // Añadí location como dependencia para que el efecto se ejecute cuando location cambie
-
+    }, [location]);  
 
     return (
         <View style={{ flex: 1 }}>

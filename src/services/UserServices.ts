@@ -15,7 +15,7 @@ import { AppStyles } from '../components/Shared/AppStyles';
 
 const baseUrlUsers = '/users'
 
-// const API_HOST = 'http://192.168.0.7:3002' + baseUrlUsers;
+// const API_HOST = 'http://10.0.2.2:3001' + baseUrlUsers;
 const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
@@ -196,8 +196,11 @@ export async function getUserRatings(user: Person) {
             const sitesWRatings: { valoracion: Valoracion, site: Site }[] = res.data.sitesWRating;
             return { success: true, sitesWRatings: sitesWRatings, message: "Valoraciones obtenidas correctamente" };
         }).catch(error => {
-            console.error(error);
-            return { success: false, sitesWRatings: [], message: "No se pudieron obtener las valoraciones del usuario" };
+            if (error.status !== 404) {
+                console.error(error);
+                return { success: false, sitesWRatings: [], message: "No se pudieron obtener las valoraciones del usuario" };
+            }
+            return { success: true, sitesWRatings: [], message: "Valoraciones obtenidas correctamente" };
         });
 
     return response;
@@ -209,8 +212,11 @@ export async function getUserPhotos(user: Person) {
             const sites: Site[] = res.data.sites;
             return { success: true, sites };
         }).catch(error => {
-            console.error(error);
-            return { success: false, sites: [], message: "No se pudieron obtener las fotos del usuario" };
+            if (error.status !== 404) {
+                console.error(error);
+                return { success: false, sites: [], message: "No se pudieron obtener las fotos del usuario" };
+            }
+            return { success: true, sites: [] };
         });
 
     return response;

@@ -35,7 +35,7 @@ export const useLocation = () => {
                         console.error(error.code, error.message);
                         setError("Error en la obtención de la localización");
                     },
-                    { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
                 );
             },
             () => {

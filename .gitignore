@@ -64,3 +64,6 @@ use fastlane to re-generate the
 /ios/Pods/
 
 /vendor/**
+
+.env
+key.properties

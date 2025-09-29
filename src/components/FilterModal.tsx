@@ -72,7 +72,9 @@ const FilterModal: FC<FilterModalProps> = ({ visible, onClose }) => {
                         style={{ position: 'absolute', right: 10, top: 10 }} />
                     <Titulo containerStyle={{ marginBottom: '10%' }} textStyle={{ textAlign: 'left' }} title='Filtros para sitios cercanos' />
 
-                    <Text style={styles.subtitle}>Debe tener:</Text>
+                    <View style={{width: '85%'}}>
+                        <Text style={styles.subtitle}>Debe tener:</Text>
+                    </View>
                     <CustomCheckbox
                         checked={hasPhotos}
                         onChange={() => setHasPhotos(!hasPhotos)}
@@ -82,9 +84,11 @@ const FilterModal: FC<FilterModalProps> = ({ visible, onClose }) => {
                         checked={hasComments}
                         onChange={() => setHasComments(!hasComments)}
                         label="Comentarios"
-                    />
+                        />
 
-                    <Text style={styles.subtitle}>Debe estar valorado en:</Text>
+                    <View style={{width: '85%'}}>
+                        <Text style={styles.subtitle}>Debe estar valorado en:</Text>
+                    </View>
                     <CustomCheckbox
                         checked={hasPhysicalRating}
                         onChange={() => setHasPhysicalRating(!hasPhysicalRating)}

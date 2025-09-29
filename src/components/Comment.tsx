@@ -90,7 +90,7 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                                 <Icon name="check" style={styles.sendButtonIcon} />
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }}
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: AppStyles.mainGreyColor }}
                         onPress={() => {
                             setIsEditing(false);
                             if (onEditBlur)
@@ -107,13 +107,13 @@ export function Comment({ comment, updateComments, placeId, onEditFocus, onEditB
                 <Text style={styles.commentText}>{comment.texto}</Text>
                 <Text style={styles.commentUser}>{displayedName}</Text>
                 <View style={styles.editingbuttonsContainer}>
-                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: '#cf142b' }} onPress={handleDeleting} disabled={isLoading}>
+                    <TouchableOpacity style={{ ...styles.sendButton, marginRight: 5, backgroundColor: AppStyles.mainRedColor }} onPress={handleDeleting} disabled={isLoading}>
                         {isLoading ?
                             <ActivityIndicator color="white" size='small' /> :
                             <Icon name="trash" style={styles.sendButtonIcon} />
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: '#808080' }} onPress={() => setIsDeleting(false)} disabled={isLoading}>
+                    <TouchableOpacity style={{ ...styles.sendButton, backgroundColor: AppStyles.mainGreyColor }} onPress={() => setIsDeleting(false)} disabled={isLoading}>
                         <Icon name="times" style={styles.sendButtonIcon} />
                     </TouchableOpacity>
                 </View>
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 5,
+        paddingRight: 10,
         color: AppStyles.secondaryBlackColor
     },
     commentUser: {

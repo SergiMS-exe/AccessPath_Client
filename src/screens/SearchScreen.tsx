@@ -12,7 +12,8 @@ import { ListCard } from '../components/Card/ListCard';
 import { AppStyles } from '../components/Shared/AppStyles';
 import App from '../../App';
 import { SearchBarDefault } from '@rneui/base/dist/SearchBar/SearchBar-default';
-import { Icon } from '@rneui/base';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Divider } from '@rneui/base';
 
 interface Props extends NativeStackScreenProps<any, any> { };
 
@@ -25,12 +26,12 @@ export const SearchScreen = ({ route, navigation }: Props) => {
     const [requestSent, setRequestSent] = useState(false);
     const [progress, setProgress] = useState(0);  // Progreso de la barra
     const [searchHistory, setSearchHistory] = useState<any[]>([]);  // Historial de búsquedas
-
+    
     // Cargar historial al montar el componente
     useEffect(() => {
         loadSearchHistory();
     }, []);
-
+    
     // Función para cargar el historial del almacenamiento local
     const loadSearchHistory = async () => {
         try {
@@ -42,26 +43,26 @@ export const SearchScreen = ({ route, navigation }: Props) => {
             console.error("Error al cargar el historial de búsquedas", error);
         }
     };
-
+    
     // Función para guardar una nueva búsqueda en el historial
-    const saveSearchToHistory = async (query: string, results: Site[]) => {
+    const addSearchToHistory = async (query: string, results: Site[]) => {
         try {
             const trimmedQuery = query.trim();  // Trimear y convertir a minúsculas
             const newSearchEntry = { query: trimmedQuery, results };
-
+            
             // Filtrar el historial para eliminar cualquier entrada con la misma búsqueda (case-insensitive)
             let updatedHistory = searchHistory.filter(
                 (item) => item.query.trim().toLowerCase() !== trimmedQuery.toLowerCase()
             );
-
+            
             // Agregar la nueva búsqueda al principio
             updatedHistory = [{ ...newSearchEntry, query: query }, ...updatedHistory];
-
+            
             // Si excede el máximo, eliminar la más antigua
             if (updatedHistory.length > MAX_HISTORY_LENGTH) {
                 updatedHistory = updatedHistory.slice(0, MAX_HISTORY_LENGTH);
             }
-
+            
             // Actualizar estado local y guardar en AsyncStorage
             setSearchHistory(updatedHistory);
             await AsyncStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
@@ -69,6 +70,19 @@ export const SearchScreen = ({ route, navigation }: Props) => {
             console.error("Error al guardar en el historial de búsquedas", error);
         }
     };
+    
+    const handleDeleteFromHistoric = async (query: string) => {
+        const storedHistory = await AsyncStorage.getItem('searchHistory');
+        if (storedHistory !== null) {
+            let historicParsed: any[] = JSON.parse(storedHistory);
+
+            // cogemos solo los que no coinciden con la query (case-insensitive)
+            historicParsed = historicParsed.filter(item => item.query.toLowerCase() !== query.toLowerCase());
+            
+            setSearchHistory(historicParsed);
+            await AsyncStorage.setItem('searchHistory', JSON.stringify(historicParsed));
+        }
+    }
 
 
     // Función para realizar la búsqueda
@@ -82,7 +96,7 @@ export const SearchScreen = ({ route, navigation }: Props) => {
         setLoading(false);
 
         // Guardar la búsqueda y los resultados en el historial
-        saveSearchToHistory(query, response.sites);
+        addSearchToHistory(query, response.sites);
     };
 
     // Efecto para incrementar el progreso poco a poco
@@ -159,10 +173,16 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                     <FlatList
                         data={searchHistory}
                         keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity onPress={() => handleSelectHistoricItem(item)} style={styles.historyItem}>
-                                <Text style={styles.historyText}>{item.query}</Text>
-                            </TouchableOpacity>
+                        renderItem={({ item, index }) => (
+                            <>
+                                <TouchableOpacity onPress={() => handleSelectHistoricItem(item)} style={styles.historyItem}>
+                                    <Text style={styles.historyText}>{item.query}</Text>
+                                    <TouchableOpacity onPress={() => handleDeleteFromHistoric(item.query)}>
+                                        <Icon name="trash" size={18} color={AppStyles.mainRedColor} style={{padding: 2}} />
+                                    </TouchableOpacity>
+                                </TouchableOpacity>
+                                {index < searchHistory.length - 1 && <Divider width={2.5} color={AppStyles.mainBlackColor}/>}
+                            </>
                         )}
                     />
                 </View>
@@ -203,7 +223,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     historyTitle: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
         color: AppStyles.mainBlackColor,
@@ -211,16 +231,19 @@ const styles = StyleSheet.create({
     },
     historyItem: {
         backgroundColor: AppStyles.secondaryBlueColor,
-        paddingVertical: 10,
+        // paddingBottom: 13,
         paddingHorizontal: 20,
-        borderRadius: 10,
-        borderWidth: 2,
+        borderRadius: 5,
+        //borderBottomWidth: 1,
         borderColor: AppStyles.mainBlackColor,
-        marginBottom: 5
+        paddingVertical: 8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     historyText: {
-        fontSize: 16,
+        fontSize: 18,
         color: AppStyles.mainBlackColor,
-        fontWeight: 'bold',
+        fontWeight: '500',
     },
 });
