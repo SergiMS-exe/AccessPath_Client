@@ -163,7 +163,7 @@ function CustomDrawerContent({ navigation }: DrawerContentComponentProps) {
 function DrawerContentButton({ navigation, screenName = '', text, iconName }: DrawerButtonProps) {
 
     const { setUser } = useContext(LoginContext)
-    const logoutTernary = iconName == 'sign-out-alt' ? '#E94A47' : AppStyles.mainBlackColor
+    const logoutTernary = iconName == 'sign-out-alt' ? AppStyles.mainRedColor : AppStyles.mainBlackColor
     return (
         <TouchableOpacity
             onPress={async () => {
