@@ -26,12 +26,12 @@ export const SearchScreen = ({ route, navigation }: Props) => {
     const [requestSent, setRequestSent] = useState(false);
     const [progress, setProgress] = useState(0);  // Progreso de la barra
     const [searchHistory, setSearchHistory] = useState<any[]>([]);  // Historial de búsquedas
-    
+
     // Cargar historial al montar el componente
     useEffect(() => {
         loadSearchHistory();
     }, []);
-    
+
     // Función para cargar el historial del almacenamiento local
     const loadSearchHistory = async () => {
         try {
@@ -43,26 +43,26 @@ export const SearchScreen = ({ route, navigation }: Props) => {
             console.error("Error al cargar el historial de búsquedas", error);
         }
     };
-    
+
     // Función para guardar una nueva búsqueda en el historial
     const addSearchToHistory = async (query: string, results: Site[]) => {
         try {
             const trimmedQuery = query.trim();  // Trimear y convertir a minúsculas
             const newSearchEntry = { query: trimmedQuery, results };
-            
+
             // Filtrar el historial para eliminar cualquier entrada con la misma búsqueda (case-insensitive)
             let updatedHistory = searchHistory.filter(
                 (item) => item.query.trim().toLowerCase() !== trimmedQuery.toLowerCase()
             );
-            
+
             // Agregar la nueva búsqueda al principio
             updatedHistory = [{ ...newSearchEntry, query: query }, ...updatedHistory];
-            
+
             // Si excede el máximo, eliminar la más antigua
             if (updatedHistory.length > MAX_HISTORY_LENGTH) {
                 updatedHistory = updatedHistory.slice(0, MAX_HISTORY_LENGTH);
             }
-            
+
             // Actualizar estado local y guardar en AsyncStorage
             setSearchHistory(updatedHistory);
             await AsyncStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
@@ -70,7 +70,7 @@ export const SearchScreen = ({ route, navigation }: Props) => {
             console.error("Error al guardar en el historial de búsquedas", error);
         }
     };
-    
+
     const handleDeleteFromHistoric = async (query: string) => {
         const storedHistory = await AsyncStorage.getItem('searchHistory');
         if (storedHistory !== null) {
@@ -78,7 +78,7 @@ export const SearchScreen = ({ route, navigation }: Props) => {
 
             // cogemos solo los que no coinciden con la query (case-insensitive)
             historicParsed = historicParsed.filter(item => item.query.toLowerCase() !== query.toLowerCase());
-            
+
             setSearchHistory(historicParsed);
             await AsyncStorage.setItem('searchHistory', JSON.stringify(historicParsed));
         }
@@ -144,12 +144,19 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                     inputStyle={{ color: AppStyles.mainBlackColor }}
                     placeholderTextColor={AppStyles.mainBlackColor}
                     round
-                    showCancel
                     placeholder='Busca un sitio para valorar...'
                     value={searchText}
                     onSubmitEditing={handleSearchSubmit}
                     onChangeText={setSearchText}
-                    leftIcon={{ name: 'search', color: AppStyles.mainBlackColor }}
+                    // leftIcon={{ name: 'search', color: AppStyles.mainBlackColor }
+                    clearIcon={
+                        searchText && (
+                            <TouchableOpacity onPress={() => setSearchText('')}>
+                                <Icon name="times-circle" style={{ marginRight: 5 }} size={20} color={AppStyles.mainBlackColor} />
+                            </TouchableOpacity>
+                        )
+                    }
+                    searchIcon={<Icon name="search" style={{ marginLeft: 5 }} size={20} color={AppStyles.mainBlackColor} />}
                 />
             </View>
 
@@ -171,17 +178,21 @@ export const SearchScreen = ({ route, navigation }: Props) => {
                 <View style={styles.historyContainer}>
                     <Text style={styles.historyTitle}>Historial de Búsquedas</Text>
                     <FlatList
+                        style={{ backgroundColor: AppStyles.mainGreyColor, borderRadius: 5 }}
                         data={searchHistory}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                             <>
                                 <TouchableOpacity onPress={() => handleSelectHistoricItem(item)} style={styles.historyItem}>
-                                    <Text style={styles.historyText}>{item.query}</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Icon name="clock" size={20} color={AppStyles.mainBlackColor} style={{ marginRight: 15, opacity: 0.7 }} />
+                                        <Text style={styles.historyText}>{item.query}</Text>
+                                    </View>
                                     <TouchableOpacity onPress={() => handleDeleteFromHistoric(item.query)}>
-                                        <Icon name="trash" size={18} color={AppStyles.mainRedColor} style={{padding: 2}} />
+                                        <Icon name="times" size={20} color={AppStyles.mainRedColor} style={{ padding: 2 }} />
                                     </TouchableOpacity>
                                 </TouchableOpacity>
-                                {index < searchHistory.length - 1 && <Divider width={2.5} color={AppStyles.mainBlackColor}/>}
+                                {index < searchHistory.length - 1 && <Divider style={{ marginVertical: 3 }} width={1} color={AppStyles.mainBlackColor} />}
                             </>
                         )}
                     />
@@ -211,7 +222,7 @@ const styles = StyleSheet.create({
         height: 45,
         backgroundColor: AppStyles.white,
         color: AppStyles.mainBlackColor,
-        borderWidth: 2,
+        // borderWidth: 2,
         borderColor: AppStyles.mainBlackColor,
     },
     resultContainer: {
@@ -227,12 +238,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
         color: AppStyles.mainBlackColor,
-        paddingLeft: 20
+        paddingLeft: 15
     },
     historyItem: {
-        backgroundColor: AppStyles.secondaryBlueColor,
+        // backgroundColor: AppStyles.mainGreyColor,//AppStyles.secondaryBlueColor,
         // paddingBottom: 13,
-        paddingHorizontal: 20,
+        paddingRight: 20,
+        paddingLeft: 15,
         borderRadius: 5,
         //borderBottomWidth: 1,
         borderColor: AppStyles.mainBlackColor,
