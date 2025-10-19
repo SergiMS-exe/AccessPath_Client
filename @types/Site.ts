@@ -19,7 +19,7 @@ export class Site {
     public direccion: string;
     public calificacionGoogle: number;
     public comentarios?: CommentType[];
-    public location: Location;
+    public location?: Location;
     public types: string[];
     public link?: string;
     public valoraciones?: Valoracion;

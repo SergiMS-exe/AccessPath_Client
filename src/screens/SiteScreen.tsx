@@ -252,10 +252,10 @@ export const SiteScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
             <StackHeader iconRight="camera-plus" onPressRight={() => {
-                if (user) 
-                   navigation.navigate('addPhoto', { site })
-                else 
-                   navigation.navigate('login', { viewFrom: "site", stackHeader: true })
+                if (user)
+                    navigation.navigate('addPhoto', { site })
+                else
+                    navigation.navigate('login', { viewFrom: "site", stackHeader: true })
             }} />
             {showAddEditRating && <AddEditRating valoracion={rating} site={site} isAbsolute onRatingDeleted={handleRatingDeleted} calledFrom="site" />}
             <ScrollView
@@ -270,17 +270,17 @@ export const SiteScreen = () => {
                     <Text style={{ fontSize: 18, color: AppStyles.secondaryBlackColor }}>{types}</Text>
                     {user && (
                         loadingSaving ? (
-                            <ActivityIndicator 
-                                size="small" 
+                            <ActivityIndicator
+                                size="small"
                                 color={AppStyles.mainRedColor}
                             />
                         ) : (
                             <TouchableOpacity onPress={handleSave}>
-                                <Icon 
-                                    name='heart' 
-                                    size={25} 
-                                    solid={isSaved} 
-                                    color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor} 
+                                <Icon
+                                    name='heart'
+                                    size={25}
+                                    solid={isSaved}
+                                    color={isSaved ? AppStyles.mainRedColor : AppStyles.mainBlackColor}
                                 />
                             </TouchableOpacity>
                         )
@@ -295,7 +295,7 @@ export const SiteScreen = () => {
                     <TouchableOpacity
                         style={styles.mapContainer}
                         onPress={() => Linking.openURL(googleMapsLink)}
-                    >
+                    >{site.location ?
                         <MapView
                             region={{
                                 latitude: site.location.latitude,
@@ -317,7 +317,11 @@ export const SiteScreen = () => {
                                 }}
                             />
                         </MapView>
-
+                        : <View style={{ justifyContent: 'center', alignItems: 'center', height: 110 }}>
+                            <Text style={{ marginBottom: 10, color: AppStyles.secondaryBlackColor }}>No se ha podido cargar el mapa</Text>
+                            <Icon name="map" size={40} color={AppStyles.secondaryBlackColor} />
+                        </View>
+                        }
                     </TouchableOpacity>
                 </View>
 

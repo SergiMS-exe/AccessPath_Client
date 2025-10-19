@@ -26,26 +26,26 @@ export const SavedScreen = () => {
             return;
         }
 
-        const getSites = async () => {
-            try {
-                const getSavedSitesResponse = await getSavedSites(user!);
-                if (getSavedSitesResponse.success) {
-                    setSavedSites(getSavedSitesResponse.sites)
-                } else if ('error' in getSavedSitesResponse) {
-                    Snackbar.show({
-                        text: getSavedSitesResponse.error,
-                        duration: Snackbar.LENGTH_SHORT,
-                    });
-                }
-                setIsLoading(false);
-
-            } catch (error) {
-                console.error("Error al obtener sitios guardados: ", error);
-            }
-        };
-        if (isFocused)
-            getSites();
+        handleLoadSavedSites();
     }, [isFocused]);
+
+    const handleLoadSavedSites = async () => {
+        try {
+            const getSavedSitesResponse = await getSavedSites(user!);
+            if (getSavedSitesResponse.success) {
+                setSavedSites(getSavedSitesResponse.sites)
+            } else if ('error' in getSavedSitesResponse) {
+                Snackbar.show({
+                    text: getSavedSitesResponse.error,
+                    duration: Snackbar.LENGTH_SHORT,
+                });
+            }
+            setIsLoading(false);
+
+        } catch (error) {
+            console.error("Error al obtener sitios guardados: ", error);
+        }
+    }
 
     return (
         <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
@@ -54,7 +54,8 @@ export const SavedScreen = () => {
                 noItemsMessage="No tienes sitios guardados"
                 isLoading={isLoading}
                 renderItemComponent={(item) => <ListCard site={item} />}
-                />
+                onRefresh={handleLoadSavedSites}
+            />
         </SafeAreaView>
     );
 }
