@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Person from '../../@types/Person';
 import { Site } from '../../@types/Site';
 import { removePhotosFromSite } from './PlacesServices';
-import { Valoracion } from '../../@types/Valoracion';
+import { emptyPaginationInfo } from '../../@types/Pagination';
 import Snackbar from 'react-native-snackbar';
 import { AppStyles } from '../components/Shared/AppStyles';
 
@@ -32,7 +32,7 @@ export async function login(email: string, password: string, navigation: NativeS
                     text: "El usuario o la contraseña no son correctos",
                     duration: Snackbar.LENGTH_LONG,
                     backgroundColor: AppStyles.mainRedColor,
-                    textColor: AppStyles.white 
+                    textColor: AppStyles.white
                 })
             }
             else console.error(error)
@@ -173,51 +173,92 @@ export async function toggleSave(site: Site, user: Person, save: boolean) {
     console.log(response.data);
 }
 
-export async function getSavedSites(user: Person) {
-    const response = await axios.get(API_HOST + '/savedSites/' + user._id).
-        then(res => { return { success: true, sites: res.data.sites } }).
-        catch((error: Error) => {
-            return { success: false, sites: [], error: error.message };
-        });
+export async function getSavedSites(user: Person, page: number = 1, limit: number = 10) {
+    try {
+        const response = await axios.get(
+            `${API_HOST}/savedSites/${user._id}?page=${page}&limit=${limit}`
+        );
 
-    return response;
+        return {
+            success: true,
+            sites: response.data.data, // sitios de la página actual
+            pagination: response.data.pagination,
+            message: response.data.msg
+        };
+    } catch (error: any) {
+        return {
+            success: false,
+            sites: [],
+            pagination: emptyPaginationInfo(limit),
+            error: error.message
+        };
+    }
 }
 
-export async function getUserComments(user: Person) {
-    const response = await axios.get(API_HOST + '/comments/' + user._id).
-        then(res => res.data);
-    const comments: Site[] = response.sites;
-    return comments
+export async function getUserComments(user: Person, page: number = 1, limit: number = 10) {
+    try {
+        const response = await axios.get(
+            `${API_HOST}/comments/${user._id}?page=${page}&limit=${limit}`
+        );
+
+        return {
+            success: true,
+            sites: response.data.data,
+            pagination: response.data.pagination,
+            message: response.data.msg
+        };
+    } catch (error: any) {
+        return {
+            success: false,
+            sites: [],
+            pagination: emptyPaginationInfo(limit),
+            error: error.message
+        };
+    }
 }
 
-export async function getUserRatings(user: Person) {
-    const response = await axios.get(API_HOST + '/ratings/' + user._id).
-        then(res => {
-            const sitesWRatings: { valoracion: Valoracion, site: Site }[] = res.data.sitesWRating;
-            return { success: true, sitesWRatings: sitesWRatings, message: "Valoraciones obtenidas correctamente" };
-        }).catch(error => {
-            if (error.status !== 404) {
-                console.error(error);
-                return { success: false, sitesWRatings: [], message: "No se pudieron obtener las valoraciones del usuario" };
-            }
-            return { success: true, sitesWRatings: [], message: "Valoraciones obtenidas correctamente" };
-        });
+export async function getUserRatings(user: Person, page: number = 1, limit: number = 10) {
+    try {
+        const response = await axios.get(
+            `${API_HOST}/ratings/${user._id}?page=${page}&limit=${limit}`
+        );
 
-    return response;
+        return {
+            success: true,
+            sitesWRatings: response.data.data,
+            pagination: response.data.pagination,
+            message: response.data.msg
+        };
+    } catch (error: any) {
+        return {
+            success: false,
+            sitesWRatings: [],
+            pagination: emptyPaginationInfo(limit),
+            error: error.message
+        };
+    }
 }
 
-export async function getUserPhotos(user: Person) {
-    const response = await axios.get(API_HOST + '/photos/' + user._id).
-        then(res => {
-            const sites: Site[] = res.data.sites;
-            return { success: true, sites };
-        }).catch(error => {
-            if (error.status !== 404) {
-                console.error(error);
-                return { success: false, sites: [], message: "No se pudieron obtener las fotos del usuario" };
-            }
-            return { success: true, sites: [] };
-        });
+export async function getUserPhotos(user: Person, page: number = 1, limit: number = 10) {
+    try {
+        const response = await axios.get(
+            `${API_HOST}/photos/${user._id}?page=${page}&limit=${limit}`
+        );
 
-    return response;
+        return {
+            success: true,
+            sites: response.data.data,
+            pagination: response.data.pagination,
+            message: response.data.msg
+        };
+    } catch (error: any) {
+        return {
+            success: false,
+            sites: [],
+            pagination: emptyPaginationInfo(limit),
+            error: error.message
+        };
+    }
 }
+
+

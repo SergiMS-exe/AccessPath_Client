@@ -9,44 +9,49 @@ import { ResultList } from "../../components/Card/ResultList";
 import PhotoCarousel from "../../components/PhotoCarousel";
 import SiteWMyItems from "../../components/SiteWMyItems";
 import { AppStyles } from "../../components/Shared/AppStyles";
+import { usePaginatedData } from "../../hooks/usePaginatedData";
 
 const MyPhotos = () => {
-
     const { user } = useContext(LoginContext);
-    const { myPhotos } = useContext(MySitesContext)
 
-    const [sitesWithPhotos, setSitesWithPhotos] = useState<Site[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (user) {
-                const response = await getUserPhotos(user);
-                if (response.success) {
-                    setSitesWithPhotos(response.sites);
-                    setLoading(false);
-                } else if ('message' in response) {
-                    Snackbar.show({
-                        text: response.message,
-                        duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: AppStyles.mainRedColor,
-                    });
-                }
-            } else {
+    const {
+        data: sitesWithPhotos,
+        loading,
+        loadingMore,
+        hasMoreData,
+        loadMore,
+        refresh,
+        error
+    } = usePaginatedData<Site>({
+        fetchFunction: async (page, limit) => {
+            if (!user) {
                 Snackbar.show({
                     text: 'Debes iniciar sesión para ver tus fotos',
                     duration: Snackbar.LENGTH_SHORT,
                     backgroundColor: AppStyles.mainRedColor,
                 });
+                return { success: false, data: [] };
             }
-        }
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        setSitesWithPhotos(myPhotos);
-    }, [myPhotos]);
+            
+            const response = await getUserPhotos(user, page, limit);
+            
+            if (!response.success && response.error) {
+                Snackbar.show({
+                    text: response.error,
+                    duration: Snackbar.LENGTH_SHORT,
+                    backgroundColor: AppStyles.mainRedColor,
+                });
+            }
+            
+            return {
+                success: response.success,
+                data: response.sites,
+                pagination: response.pagination,
+                error: response.error
+            };
+        },
+        limit: 10
+    });
 
     return (
         <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
@@ -55,6 +60,10 @@ const MyPhotos = () => {
                 data={sitesWithPhotos}
                 noItemsMessage='No has subido ninguna foto'
                 isLoading={loading}
+                isLoadingMore={loadingMore}
+                hasMoreData={hasMoreData}
+                onLoadMore={loadMore}
+                onRefresh={refresh}
                 renderItemComponent={(site) => (
                     <SiteWMyItems site={site}>
                         <View style={{ marginTop: 10 }}>
@@ -65,6 +74,6 @@ const MyPhotos = () => {
             />
         </SafeAreaView>
     );
-}
+};
 
 export default MyPhotos;
