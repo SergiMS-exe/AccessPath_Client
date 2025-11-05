@@ -8,14 +8,17 @@ import ImageResizer from "react-native-image-resizer";
 import RNFS from 'react-native-fs';
 
 const baseUrlSites = '/sites'
-// const API_HOST = 'http://10.0.2.2:3001' + baseUrlSites;
-const API_HOST = REMOTE + baseUrlSites;
+const API_HOST = 'http://10.0.2.2:3001' + baseUrlSites;
+// const API_HOST = REMOTE + baseUrlSites;
 
 //Obtener sitios
 export async function getCloseSites(location: Location): Promise<Site[]> {
     const response = await axios.get(API_HOST + '/close', {
         params: {
-            location: location.latitude + '%' + location.longitude
+            latitude: location.latitude,
+            longitude: location.longitude,
+            page: 1,
+            limit: 3
         }
     }).then(res => {
         return { success: true, sites: res.data.sites };

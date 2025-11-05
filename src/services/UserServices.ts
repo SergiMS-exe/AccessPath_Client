@@ -15,8 +15,8 @@ import { AppStyles } from '../components/Shared/AppStyles';
 
 const baseUrlUsers = '/users'
 
-// const API_HOST = 'http://10.0.2.2:3001' + baseUrlUsers;
-const API_HOST = REMOTE + baseUrlUsers;
+const API_HOST = 'http://10.0.2.2:3001' + baseUrlUsers;
+// const API_HOST = REMOTE + baseUrlUsers;
 
 export async function login(email: string, password: string, navigation: NativeStackNavigationProp<any, any>,
     screen: string, setUser: Function) {
@@ -181,14 +181,14 @@ export async function getSavedSites(user: Person, page: number = 1, limit: numbe
 
         return {
             success: true,
-            sites: response.data.data, // sitios de la página actual
+            sitios: response.data.sites,
             pagination: response.data.pagination,
             message: response.data.msg
         };
     } catch (error: any) {
         return {
             success: false,
-            sites: [],
+            sitios: [],
             pagination: emptyPaginationInfo(limit),
             error: error.message
         };

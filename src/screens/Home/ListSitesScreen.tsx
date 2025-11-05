@@ -35,6 +35,7 @@ export const ListSitesScreen = () => {
         <>
             <View style={{ flex: 1, backgroundColor: AppStyles.backgroundColor }}>
                 <ResultList
+                    hasMoreData
                     data={sitesToShow}
                     noItemsMessage='No hay sitios valorados cerca de ti'
                     isLoading={false}

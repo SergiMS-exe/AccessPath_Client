@@ -33,7 +33,7 @@ export const SavedScreen = () => {
         try {
             const getSavedSitesResponse = await getSavedSites(user!);
             if (getSavedSitesResponse.success) {
-                setSavedSites(getSavedSitesResponse.sites)
+                setSavedSites(getSavedSitesResponse.sitios)
             } else if ('error' in getSavedSitesResponse) {
                 Snackbar.show({
                     text: getSavedSitesResponse.error,
