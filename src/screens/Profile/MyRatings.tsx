@@ -1,34 +1,45 @@
+import { useContext } from "react";
 import { SafeAreaView } from "react-native";
-import { StackHeader } from "../../components/Headers/StackHeader";
-import { useContext, useEffect, useState } from "react";
-import { LoginContext, MySitesContext } from "../../components/Shared/Context";
-import { Valoracion } from "../../../@types/Valoracion";
-import { Site } from "../../../@types/Site";
-import { getSavedSites, getUserRatings } from "../../services/UserServices";
 import Snackbar from "react-native-snackbar";
-import { ResultList } from "../../components/Card/ResultList";
-import SiteWMyItems from "../../components/SiteWMyItems";
+import { Site } from "../../../@types/Site";
+import { Valoracion } from "../../../@types/Valoracion";
 import { AddEditRating } from "../../components/AddEditRating";
+import { ResultList } from "../../components/Card/ResultList";
+import { StackHeader } from "../../components/Headers/StackHeader";
 import { AppStyles } from "../../components/Shared/AppStyles";
+import { LoginContext } from "../../components/Shared/Context";
+import SiteWMyItems from "../../components/SiteWMyItems";
 import { usePaginatedData } from "../../hooks/usePaginatedData";
+import { getUserRatings } from "../../services/UserServices";
 
-export const MySavedSites = () => {
+export const MyRatings = () => {
     const { user } = useContext(LoginContext);
 
     const {
-        data: savedSites,
+        data: myRatings,
         loading,
         loadingMore,
         hasMoreData,
         loadMore,
-        refresh
-    } = usePaginatedData<Site>({
+        refresh,
+        error
+    } = usePaginatedData<{ valoracion: Valoracion, site: Site }>({
         fetchFunction: async (page, limit) => {
             if (!user) return { success: false, data: [] };
-            const response = await getSavedSites(user, page, limit);
+            
+            const response = await getUserRatings(user, page, limit);
+            
+            if (!response.success && response.error) {
+                Snackbar.show({
+                    text: response.error,
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: "red",
+                });
+            }
+            
             return {
                 success: response.success,
-                data: response.sites,
+                data: response.sitesWRatings,
                 pagination: response.pagination,
                 error: response.error
             };
@@ -38,10 +49,10 @@ export const MySavedSites = () => {
 
     return (
         <SafeAreaView style={{ flexGrow: 1, backgroundColor: AppStyles.backgroundColor }}>
-            <StackHeader title='Sitios Guardados' />
+            <StackHeader title='Mis Valoraciones' />
             <ResultList
-                data={savedSites}
-                noItemsMessage='No tienes sitios guardados'
+                data={myRatings}
+                noItemsMessage="No tienes valoraciones"
                 isLoading={loading}
                 isLoadingMore={loadingMore}
                 hasMoreData={hasMoreData}
@@ -49,10 +60,14 @@ export const MySavedSites = () => {
                 onRefresh={refresh}
                 renderItemComponent={(item) => (
                     <SiteWMyItems site={item.site}>
-                        <AddEditRating site={item.site} valoracion={item.valoracion} calledFrom='myRatings' />
+                        <AddEditRating 
+                            site={item.site} 
+                            valoracion={item.valoracion} 
+                            calledFrom='myRatings' 
+                        />
                     </SiteWMyItems>
                 )}
             />
         </SafeAreaView>
     );
-}
+};
